@@ -86,12 +86,20 @@ them out from there.
 - **Architect / spec / hard root-cause** → 🟠 Claude (Fable).
 - **Build a clear fenced spec, cheap** → 🔵 Codex (James) — $0 to Claude meter.
 - **Build, mixed / when Codex is busy** → 🟢 Gemini Flash (proven builder) or 🟠 Claude Sonnet.
-- **Review Claude-built code** → 🔵 Codex (Cassidy) or 🟢 Gemini (James fronts) — never Claude reviewing itself.
-- **Review Codex-built code** → 🟠 Claude (Butch) — never Codex reviewing itself.
+- **Review Claude-built code** → 🔵 Codex or 🟢 Gemini — never Claude reviewing itself.
+- **Review Codex-built code** → 🟠 Claude — never Codex reviewing itself.
+- **Review Grok/Gemini-built code** → 🔵 Codex (the sharpest code reviewer; catches Grok's
+  UI-surface gaps) — or 🟠 Claude for architecture/design. Route the reviewer by the CODE'S
+  TYPE + the cross-vendor rule; ANY model can build, Codex is the default code-reviewer
+  whenever it didn't build the code, Claude reviews Codex + owns architecture review.
+  (In ADD / no-character mode, say it by model+color; in Team Rocket mode, by character.)
 - **UI / skins / concept pages / "make it cool"** → ⚫ Grok (cat-driven).
 - **Generate an IMAGE (art, mascot, render)** → 🟢 Gemini Nano Banana (cat-driven, free on sub).
 - **Wide sweep / log-mine / mechanical** → 🟢 Gemini Flash (cheap) or 🟠 Haiku.
-- **Claude meter running hot** → 🟢 Overflow Valve (Gemini wearing a Claude brain, Google's tab).
+- **Claude meter running hot** → 🟢 Overflow Valve: route Claude-grade work to the GREEN
+  seat — either a real Claude brain on Antigravity (🟠🟢, Google's tab) OR Gemini's own top
+  tier as a capable-if-lesser Claude stand-in (🟢). Dispatch is COST-AWARE, not just
+  capability-aware — the orchestrator weighs the meter, not only the "best" model.
 - **A true independent 4th vote** → 🟢 Gemini (real different lineage).
 
 ## THE IRON RULES (never break)

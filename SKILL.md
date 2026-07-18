@@ -55,8 +55,16 @@ Claude meter hot → Gemini Overflow Valve · true independent vote → Gemini.
    ambiguity, simplicity first, push back when warranted).
 2. **Fence the work.** Split into tickets with named, disjoint file sets. Parallel workers
    never touch the same files. One clean goal per ticket.
-3. **Dispatch right-model-right-job** per the arsenal above. Announce plainly: "Dispatching
-   Codex to build X." / "Gemini Flash generating the render." No characters.
+3. **Dispatch right-model-right-job — AND meter-aware.** Pick by strength per the arsenal,
+   but weigh COST too, not just capability. Key lever: **the green seat (Gemini/Antigravity)
+   can carry Claude-grade work** — either wearing an actual **Claude brain** (Sonnet/Opus
+   via Antigravity = the true Overflow Valve, billed to Google's $4.99 tab), or its own top
+   Gemini tier as a **capable-if-lesser substitute** for Claude-type building. So when the
+   Claude weekly meter is a concern, the orchestrator proactively routes Claude-grade work
+   to green instead of burning the primary plan. Show the banner honestly: 🟠🟢 = a Claude
+   brain on the Gemini seat; 🟢 = Gemini's own model standing in for Claude-type work.
+   Announce plainly: "🔵 Codex building X." / "🟠🟢 Claude-brain-on-Gemini taking the parser
+   to save the meter." / "🟢 Gemini Flash generating the render." No characters.
 4. **Build with any model; route the review by FIT (no characters).** ANY model can be the
    builder — pick by strength: Claude = deep/architectural logic · Codex = precise bounded
    implementation · Grok = UI/art/frontend · Gemini = cheap builds / images / overflow.
