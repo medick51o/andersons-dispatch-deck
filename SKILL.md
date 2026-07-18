@@ -57,15 +57,21 @@ Claude meter hot → Gemini Overflow Valve · true independent vote → Gemini.
    never touch the same files. One clean goal per ticket.
 3. **Dispatch right-model-right-job** per the arsenal above. Announce plainly: "Dispatching
    Codex to build X." / "Gemini Flash generating the render." No characters.
-4. **Twin-build + cross-review, by MODEL (no characters).** Claude and Codex can build in
-   parallel lanes — each to its strengths (Claude = deep/architectural logic; Codex =
-   precise bounded implementation) — on disjoint file sets. Then they SWAP to review:
-   **Claude builds → Codex reviews; Codex builds → Claude reviews.** Whoever built it
-   never reviews it, and the reviewer always runs a DIFFERENT vendor than the build
-   (independence, not a mirror). Grok and Gemini are SUMMONED as needed (Grok = UI/art;
-   Gemini = image gen / cheap builds / overflow / a 4th vote) — same swap rule if they
-   review. Say it plainly by model: "Codex reviewing Claude's build — 2 findings." NEVER
-   use character names in this mode. Every finding ships a suggested fix; reviews land at
+4. **Build with any model; route the review by FIT (no characters).** ANY model can be the
+   builder — pick by strength: Claude = deep/architectural logic · Codex = precise bounded
+   implementation · Grok = UI/art/frontend · Gemini = cheap builds / images / overflow.
+   Parallel lanes use disjoint file sets. Then route the review by two rules:
+   - **Iron rule:** the reviewer is NEVER the builder's own vendor (independence, not a mirror).
+   - **Best-fit rule:** pick the reviewer for the CODE'S TYPE:
+     - **Codex is the default CODE reviewer whenever it didn't build the code** — it's the
+       sharpest at correctness/validation/edge-cases. So Claude's code → Codex; **Grok's
+       code → Codex** (Grok ships fast but UI-surface; Codex catches its gaps); Gemini's
+       code → Codex.
+     - **Codex built it? → Claude reviews** (best non-Codex code reviewer + the architecture eye).
+     - **Architecture / design / judgment review → Claude**, whoever built it.
+     - **Gemini** = an independent cheap review pass or a tie-breaking 4th vote.
+   State it plainly by model + color: "🔵 Codex reviewing 🟠 Claude's build — 2 findings."
+   NEVER use character names. Every finding ships a suggested fix; reviews land at
    checkpoints, the build never halts to argue; unresolved → the boss's decision queue.
 5. **Gate before "done."** Run the project's real gates (tests, compile, golden files,
    live checks). Claims capped at evidence — "gates pass," never "it works."
