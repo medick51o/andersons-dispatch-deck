@@ -117,3 +117,11 @@ Use the weapons you have; the discipline is the same with two as with four.
 Bringing the vendor CLIs online (install, auth, gotchas, the reachability probe) is
 documented in **`SETUP.md`**. The arsenal is optional — no vendor, plan, or price is
 required by the method; use whatever is reachable.
+
+## Inherit the learnings — read FIELD-NOTES
+Before deciding a model "probably can't" do something, read **`FIELD-NOTES.md`** — the
+shop's PROVEN capabilities and hard-won gotchas. Treat it as KNOWN fact, not theory to
+re-discover: e.g. Gemini/Antigravity is a proven builder AND generates images (Nano Banana,
+on the sub), Codex proves bugs, Grok reskins-not-rewires. This is how the method carries
+wisdom forward — the repo is the shared brain, git is the phone-home. When you prove
+something NEW, append it to FIELD-NOTES so every future install inherits it.
