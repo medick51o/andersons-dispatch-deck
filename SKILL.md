@@ -38,16 +38,22 @@ project store (`model-dispatch-cheatsheet.md`). Summary of who to send where:
   `codex exec --sandbox danger-full-access --skip-git-repo-check "<prompt>" < /dev/null`.
 - **Grok** (xAI) — fearless UI / skins / concept pages / "make it feel like X." Surface
   only, never engine. Full path: `C:\Users\andre\.grok\bin\grok.exe --prompt-file <f> --always-approve < /dev/null`. Mandatory trail entry.
-- **Gemini / Antigravity** (Google, $4.99 sub) — proven builder (Flash), IMAGE GEN via
-  Nano Banana (free on the sub, card-off; images land in ~/.gemini/antigravity-cli/brain/
-  <uuid>/*.jpg), cheap reviews/sweeps, independent 4th vote, and the Overflow Valve (rents
-  Claude/GPT brains on Google's tab when the Claude meter runs hot).
+- **Gemini / Antigravity** (Google, via the Antigravity sub) — proven builder (Flash),
+  IMAGE GEN via Nano Banana (runs on the sub, no card; images land in
+  ~/.gemini/antigravity-cli/brain/<uuid>/*.jpg), cheap reviews/sweeps, independent 4th
+  vote, and the Overflow Valve (rents Claude/GPT brains on Google's tab when the Claude
+  meter runs hot).
   `"C:\Users\andre\AppData\Local\agy\bin\agy.exe" -p "<prompt>" --model "Gemini 3.5 Flash (High)"`.
 
 Quick map: architect/spec/root-cause → Claude · clear build cheap → Codex · image/render →
 Gemini Nano Banana · UI/skin → Grok · review Claude code → Codex or Gemini (never Claude) ·
 review Codex code → Claude (never Codex) · sweep/mechanical → Gemini Flash or Haiku ·
 Claude meter hot → Gemini Overflow Valve · true independent vote → Gemini.
+
+**The arsenal is OPTIONAL, not mandatory.** ADD works with whatever vendors are reachable
+this session (Claude alone is a valid, degraded arsenal). No specific vendor, plan, or
+PRICE is part of the method — pricing/promos are current details, never a requirement.
+Use the weapons you have; the discipline is the same with two as with four.
 
 ## The method (TRM's spine, stripped of the show)
 1. **Plan first.** State the goal back, write a short spec for anything substantial
@@ -58,7 +64,7 @@ Claude meter hot → Gemini Overflow Valve · true independent vote → Gemini.
 3. **Dispatch right-model-right-job — AND meter-aware.** Pick by strength per the arsenal,
    but weigh COST too, not just capability. Key lever: **the green seat (Gemini/Antigravity)
    can carry Claude-grade work** — either wearing an actual **Claude brain** (Sonnet/Opus
-   via Antigravity = the true Overflow Valve, billed to Google's $4.99 tab), or its own top
+   via Antigravity = the true Overflow Valve, billed to Google's tab), or its own top
    Gemini tier as a **capable-if-lesser substitute** for Claude-type building. So when the
    Claude weekly meter is a concern, the orchestrator proactively routes Claude-grade work
    to green instead of burning the primary plan. Show the banner honestly: 🟠🟢 = a Claude
@@ -98,6 +104,16 @@ Claude meter hot → Gemini Overflow Valve · true independent vote → Gemini.
 
 ## On invocation
 1. Load the dispatch guide (above).
-2. State which models are actually REACHABLE this session (Claude always; Codex/Grok/
-   Gemini if their CLIs are installed + reachable) — plainly, one line.
-3. Ask: "What's the job?" — then plan, fence, dispatch, review, gate, report.
+2. **PROBE the arsenal, don't assume it.** Run the reachability check (see `SETUP.md` —
+   `--version` on each vendor CLI: codex, grok full-path, agy) and DECLARE the live
+   arsenal plainly, one line: *"Online: 🟠 Claude · 🔵 Codex · ⚫ Grok · 🟢 Gemini."* A
+   model that doesn't answer isn't in the pool this session — point at the SETUP section
+   to bring it online. The method degrades gracefully (Claude alone is valid); but if NO
+   cross-vendor reviewer is reachable, say so — unreviewed work is never reported as done.
+3. Ask: "What's the job?" — then plan, fence, dispatch (right-model + meter-aware),
+   review (by fit, cross-vendor), gate, report in color.
+
+## Setup / onboarding
+Bringing the vendor CLIs online (install, auth, gotchas, the reachability probe) is
+documented in **`SETUP.md`**. The arsenal is optional — no vendor, plan, or price is
+required by the method; use whatever is reachable.
