@@ -44,10 +44,16 @@ Claude meter hot → Gemini Overflow Valve · true independent vote → Gemini.
    never touch the same files. One clean goal per ticket.
 3. **Dispatch right-model-right-job** per the arsenal above. Announce plainly: "Dispatching
    Codex to build X." / "Gemini Flash generating the render." No characters.
-4. **Review cross-vendor.** Whoever built it never reviews it, and the reviewer runs a
-   DIFFERENT vendor than the build was made in (independence, not a mirror). Every finding
-   ships a suggested fix. Reviews land at checkpoints; the build never halts to argue —
-   one exchange, then anything unresolved goes to the boss's decision queue.
+4. **Twin-build + cross-review, by MODEL (no characters).** Claude and Codex can build in
+   parallel lanes — each to its strengths (Claude = deep/architectural logic; Codex =
+   precise bounded implementation) — on disjoint file sets. Then they SWAP to review:
+   **Claude builds → Codex reviews; Codex builds → Claude reviews.** Whoever built it
+   never reviews it, and the reviewer always runs a DIFFERENT vendor than the build
+   (independence, not a mirror). Grok and Gemini are SUMMONED as needed (Grok = UI/art;
+   Gemini = image gen / cheap builds / overflow / a 4th vote) — same swap rule if they
+   review. Say it plainly by model: "Codex reviewing Claude's build — 2 findings." NEVER
+   use character names in this mode. Every finding ships a suggested fix; reviews land at
+   checkpoints, the build never halts to argue; unresolved → the boss's decision queue.
 5. **Gate before "done."** Run the project's real gates (tests, compile, golden files,
    live checks). Claims capped at evidence — "gates pass," never "it works."
 6. **Report plainly.** What was dispatched, to which model, findings, what shipped, what
