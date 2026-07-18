@@ -1,62 +1,100 @@
-# Anderson's Dispatch Deck (ADD)
+<div align="center">
 
-**Heavy multi-model agentic orchestration — from one chat window.**
+# 🟡 Anderson's Dispatch Deck
 
-ADD is a method and a skill for conducting a full arsenal of frontier AI models —
-Anthropic Claude, OpenAI Codex, xAI Grok, and Google Gemini/Antigravity — as a single
-coordinated workforce, all driven from one Claude CLI. One conductor plans the work,
-sends the *right model for each job*, runs honest cross-vendor review, gates the result,
-and reports plainly. No juggling four terminals. No theater. Just the machine.
+### Heavy multi-model agentic orchestration — conducted from a single chat window.
 
-> Reserved future rebrand: **"Agentic Dispatch Director"** (also ADD) — coined 2026-07-17.
+**One conductor. Four AI vendors. Zero terminal-juggling.**
+
+Claude · Codex · Grok · Gemini — dispatched to their strengths, reviewed across vendors,
+gated, and reported plainly. The powerhouse, straight-faced.
+
+`•` no persona `•` no theater `•` right-model-right-job `•` honest cross-vendor review `•` cost-aware
+
+</div>
 
 ---
 
-## The idea
+## What it is
 
-Most people use one AI. ADD treats models as a **toolbox with a foreman**. Each vendor
-has real, different strengths; a conductor (Claude, running the orchestrator role — it
-wears **gold** 🟡, above the players) reads the job and dispatches accordingly:
+Most people talk to one AI. **ADD treats models as a toolbox with a foreman.** A single
+orchestrator (Claude, running the conductor role — it wears **gold** 🟡, above the players)
+reads each job, sends it to the model that's actually best for it, has a *different* vendor
+review the result, runs the gates, and reports back — all from one Claude CLI. No four
+terminals, no guessing, no drift.
 
-| Color | Model | Best at | Send it for |
-|---|---|---|---|
-| 🟠 | **Claude** (Anthropic) | deepest reasoning, architecture, honest judgment | design & specs, root-cause, engine-grade logic, reviewing others |
-| 🔵 | **Codex** (OpenAI) | precise builds, the sharpest code review (proves bugs) | bounded implementation, cross-vendor review of Claude code |
-| ⚫ | **Grok** (xAI) | fearless one-shot visual design | UI, skins, concept pages, "make it feel like X" |
-| 🟢 | **Gemini / Antigravity** (Google) | budget builder + **image generation (Nano Banana)** + overflow capacity | real builds, renders, cheap sweeps, an independent 4th vote |
+It's the straight-faced sibling of *Team Rocket Takes Over*: same engineering spine,
+none of the show.
+
+## How a job flows
+
+```mermaid
+flowchart TD
+    H([👑 Human — the mission]) --> O{{🟡 Orchestrator · Claude<br/>plan → fence → route}}
+    O -->|deep logic / architecture| C[🟠 Claude]
+    O -->|bounded build| X[🔵 Codex]
+    O -->|UI / skins / art| G[⚫ Grok]
+    O -->|images / cheap / overflow| M[🟢 Gemini]
+    C --> R{{Cross-vendor review<br/>never the builder's own vendor}}
+    X --> R
+    G --> R
+    M --> R
+    R -->|findings + fixes| O
+    R -->|clean| GT[✅ Gates — evidence, not vibes]
+    GT --> D([👑 Human rules & merges])
+```
+
+## The arsenal
+
+| | Model | Best at | Dispatch it for |
+|:--:|---|---|---|
+| 🟠 | **Claude** (Anthropic) | deepest reasoning, architecture, honest judgment | design & specs · root-cause · engine-grade logic · reviewing others |
+| 🔵 | **Codex** (OpenAI) | precise builds; the sharpest code review (*proves* bugs) | bounded implementation · reviewing Claude/Grok/Gemini code |
+| ⚫ | **Grok** (xAI) | fearless one-shot visual design | UI · skins · concept pages · "make it feel like X" |
+| 🟢 | **Gemini** (Google / Antigravity) | budget builder · **image gen (Nano Banana)** · overflow capacity | real builds · renders · cheap sweeps · an independent 4th vote |
 
 ## The rules that make it trustworthy
 
-1. **A reviewer never wears the builder's own vendor.** Cross-vendor, or it's just a
-   mirror. Different training → different blind spots → real catches.
-2. **Right model for the job.** The whole point. The dispatch guide is the map.
-3. **The banner never lies.** When one character wears a borrowed brain, the real model
-   is always shown. Theater on top (optional); honest receipts underneath (always).
-4. **Findings ship fixes.** Every review finding comes with a suggested fix; reviews land
-   at checkpoints and never stop the build.
-5. **Gates before "done."** Claims capped at evidence — "gates pass," never "it works."
-   The human is the final gate and the only one who merges.
+1. **A reviewer never wears the builder's own vendor.** Cross-vendor, or it's just a mirror — different training, different blind spots, real catches.
+2. **Right model for the job — and cost-aware.** Dispatch weighs the meter, not just capability (heavy Claude work can fail over to a cheaper lane and keep going).
+3. **The banner never lies.** When a model wears a borrowed brain, both are shown (`🟠🟢`).
+4. **Findings ship fixes.** Every review finding carries a suggested fix; reviews land at checkpoints and never stop the build.
+5. **Gates before "done."** Claims capped at evidence — *"gates pass,"* never *"it works."* The human is the final gate and the only one who merges.
 6. **No unasked fleets.** Multi-agent dispatch is deliberate and bounded, never a swarm.
 
-## What's here
+## In this repo
 
-- **`SKILL.md`** — the `/dispatch` skill: invoke it in a Claude CLI and Claude becomes the
-  straight-faced conductor.
-- **`MODEL-DISPATCH-GUIDE.md`** — the deep playbook: each model's strengths, watch-outs,
-  and the exact command to fire it.
-- **`dispatch-console.html`** — a visual, color-coded quick reference (open in a browser).
+| File | What |
+|---|---|
+| [`SKILL.md`](SKILL.md) | the `/dispatch` skill — drop it in a Claude CLI and Claude becomes the conductor |
+| [`SETUP.md`](SETUP.md) | install · auth · gotchas · the reachability probe |
+| [`FIELD-NOTES.md`](FIELD-NOTES.md) | proven capabilities a fresh install inherits (so it doesn't re-learn what's already known) |
+| [`MODEL-DISPATCH-GUIDE.md`](MODEL-DISPATCH-GUIDE.md) | the deep who-to-send-where playbook |
+| [`dispatch-console.html`](dispatch-console.html) | a color-coded visual quick-reference |
+
+## Quick start
+
+1. Install the vendor CLIs you want in the arsenal (see [`SETUP.md`](SETUP.md)) — **all are
+   optional; Claude alone is a valid, degraded deck.**
+2. Drop [`SKILL.md`](SKILL.md) into `~/.claude/skills/dispatch/`.
+3. In a Claude CLI, run **`/dispatch`** (or just say *"run the dispatch deck"*). It probes
+   what's online, declares the live arsenal, and asks for the job.
 
 ## Lineage
 
-ADD is the **straight-faced sibling** of *Team Rocket Takes Over* — a multi-agent
-"dress-up tool and talking-cat simulator" built to keep a human genuinely engaged with
-agentic orchestration. Both grew from the **Team Rocket Method (TRM)**, the original
-two-model-shop discipline. ADD keeps TRM's engineering spine (fenced tickets, cross-vendor
-review, gates, decision batching) and drops the show — for when you want the powerhouse
-without the persona. Credit to TRM as the trunk this branch grew from. 🫡
+ADD grew from the **Team Rocket Method (TRM)** — the original two-model-shop discipline —
+and is the *straight-faced* cut of its playful successor, *Team Rocket Takes Over*. It keeps
+the engineering (fenced tickets, cross-vendor review, gates, decision batching) and drops
+the persona. Credit to TRM as the trunk this branch grew from. 🫡
 
 ---
 
-*Built with heavy AI collaboration, and honest about it — that's the house rule. The value
-here is the orchestration method: vendor-proof, because the characters (roles) are
-permanent and the models are just the costumes they wear.*
+<div align="center">
+
+*Reserved future rebrand: **Agentic Dispatch Director** (also ADD).*
+
+Built with heavy AI collaboration, and honest about it — that's the house rule.
+The value is the **method**: vendor-proof, because the roles are permanent and the models
+are just the costumes they wear.
+
+</div>
