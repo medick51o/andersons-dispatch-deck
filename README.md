@@ -62,6 +62,10 @@ flowchart TD
 5. **Gates before "done."** Claims capped at evidence — *"gates pass,"* never *"it works."* The human is the final gate and the only one who merges.
 6. **No unasked fleets.** Multi-agent dispatch is deliberate and bounded, never a swarm.
 
+## The Council — every vendor, one question
+
+For a call that has to be *right* — a design fork, a decision, a claim that must survive scrutiny — the Deck convenes **the council**: it dispatches the same question to **every reachable vendor at once**, each handed a distinct lens (correctness · cost · *refute-it*), gathers the independent reads, synthesizes best-of-breed with **every disagreement named**, caps the debate at two rounds, and hands you the verdict. Four vendors mean four sets of blind spots — the special move for when one model's read isn't enough. No cast, no theater: just the panel, reported by model name. It's **stakes-gated** — a two-line ask (*"rewrite this email," "did I send the PO"*) is handled by one seat, **never** a council. *(Same engine move as TRM's crew council and TRTO's set-piece — here it's straight-faced.)*
+
 ## In this repo
 
 | File | What |

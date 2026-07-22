@@ -576,6 +576,44 @@ adversarial read into a confirmatory one. (Then the three lists + disputed-findi
 Part V apply.) Broken tooling does not stop the channel: hand the reviewer the code itself via
 stdin. **The adversarial channel is the last thing you let fail.**
 
+### THE COUNCIL — the multi-vendor panel (the orchestrator's special move)
+The council is the fan-out turned to full width: instead of one builder + one reviewer, the
+orchestrator convenes **every reachable vendor at once** — one per seat, each a genuinely different
+effective-model lineage — for independent reads on a single high-stakes question. It is the SPECIAL
+move (Doctrine 5's right-size still rules — never the default for small work); reach for it when the
+stakes justify the multiples: a design-space-wide fork, a decision that must be right, a bug or claim
+that has to survive real scrutiny.
+
+**When NOT to convene — the guardrail, not the fine print.** A trivial ask — *"rewrite this email,"
+"did I send the PO out," a quick fix, a plain question* — is handled by the orchestrator alone (or a
+single seat), **NEVER a council.** The orchestrator does not *oops* into a token-eating dream team for
+a two-line task. Gate-0 and Doctrine 5 bind absolutely here: no genuine need for N independent
+perspectives → no council. Breadth is not rigor; fan-outs cost multiples, not increments. The default
+for small work is one seat doing it, quietly.
+
+**The procedure the orchestrator runs — a defined path, not an improvisation:**
+1. **Brief.** One page: the question/vision *verbatim*, the hard-won context, the numbered points each
+   seat must answer. Never a blank page.
+2. **Convene + assign lenses.** Dispatch to every reachable vendor, each handed a DISTINCT angle
+   (correctness · cost · security · "try to *refute* this") so no two reads are redundant. Diverse
+   vendors + diverse lenses = maximum coverage. Independence is the point: no seat sees another's
+   answer first.
+3. **Gather.** Each returns a SIGNED read (`docs/*-<vendor>.md` for design; a ranked verdict on Part
+   V's ladder for review). Real outputs from real, *different* models — never invented.
+4. **Synthesize.** The orchestrator writes ONE synthesis: best-of-breed per piece, **every idea
+   attributed, every disagreement NAMED and resolved, never smoothed.** One vendor catching another's
+   load-bearing error is a council WIN.
+5. **Two-round cap** (Principle 8): one exchange per dispute, then the bell; unresolved splits go to
+   the boss's ruling queue. No looping, no token-inferno.
+6. **The boss rules.** The council advises; the human decides and merges — always (the Ladder's top rung).
+
+This is adversarial verification at full width — the one cross-lineage-review law (a reviewer never
+wears the builder's own vendor), scaled to N independent perspectives. Each tier dresses it
+differently — a plain **panel** (report by model name), a signed **crew council**, or a puppeteered
+**set-piece** — but the engine underneath is this single procedure. *(A four-model council once MISSED
+a bug that one real use surfaced instantly — Part I §1. The council widens coverage; it does not
+replace in-hand validation.)*
+
 ### Mission reports (to the boss)
 Phone-readable (Principle 10): outcome first; per-seat one-liners (name, color, status); rulings
 needed as concrete options to react to, never a blank page; a cost note whenever a fan-out ran.
