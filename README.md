@@ -80,6 +80,20 @@ flowchart TD
 3. In a Claude CLI, run **`/dispatch`** (or just say *"run the dispatch deck"*). It probes
    what's online, declares the live arsenal, and asks for the job.
 
+## Part of a family — try the other tiers
+
+ADD is the straight-faced tier. Same engine underneath; two siblings add personality — **worth a look:**
+
+| Tier | Repo | What you get |
+|---|---|---|
+| ⚫ **Anderson's Dispatch Deck** *(you're here)* | this repo | the engine, straight-faced — model names, no cast |
+| 🟠 **Team Rocket Method** | **[→ team-rocket-method](https://github.com/medick51o/team-rocket-method)** | SPINE + a permanent crew — named seats, adversarial cross-reviews |
+| 🚀 **Team Rocket Takes Over** | **[→ team-rocket-takes-over](https://github.com/medick51o/team-rocket-takes-over)** | SPINE + crew + the full show — the agentic-AI playground, cast & cat |
+
+Promote up the tiers when you want more personality; the discipline underneath is identical.
+
+---
+
 ## Lineage
 
 ADD grew from the **Team Rocket Method (TRM)** — the original two-model-shop discipline —
