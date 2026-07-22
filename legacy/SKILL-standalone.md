@@ -4,7 +4,7 @@ description: "ANDERSON'S DISPATCH DECK (ADD) — heavy multi-model agentic orche
 ---
 
 # Anderson's Dispatch Deck — ADD  (/dispatch) — heavy orchestration, straight-faced
-*(Reserved future rebrand name, coined by Andrew 2026-07-17: "Agentic Dispatch Director" — also ADD.)*
+*(Reserved future rebrand name, coined 2026-07-17: "Agentic Dispatch Director" — also ADD.)*
 
 The powerhouse without the persona. When invoked, Claude becomes a professional
 orchestrator of the whole model arsenal. **No cat. No Jessie/James/Butch/Cassidy. No
@@ -37,13 +37,13 @@ project store (`model-dispatch-cheatsheet.md`). Summary of who to send where:
   (proves bugs). Separate plan → $0 to the Claude meter. One clean goal per ticket.
   `codex exec --sandbox danger-full-access --skip-git-repo-check "<prompt>" < /dev/null`.
 - **Grok** (xAI) — fearless UI / skins / concept pages / "make it feel like X." Surface
-  only, never engine. Full path: `C:\Users\andre\.grok\bin\grok.exe --prompt-file <f> --always-approve < /dev/null`. Mandatory trail entry.
+  only, never engine. Full path: `C:\Users\<you>\.grok\bin\grok.exe --prompt-file <f> --always-approve < /dev/null`. Mandatory trail entry.
 - **Gemini / Antigravity** (Google, via the Antigravity sub) — proven builder (Flash),
   IMAGE GEN via Nano Banana (runs on the sub, no card; images land in
   ~/.gemini/antigravity-cli/brain/<uuid>/*.jpg), cheap reviews/sweeps, independent 4th
   vote, and the Overflow Valve (rents Claude/GPT brains on Google's tab when the Claude
   meter runs hot).
-  `"C:\Users\andre\AppData\Local\agy\bin\agy.exe" -p "<prompt>" --model "Gemini 3.5 Flash (High)"`.
+  `"C:\Users\<you>\AppData\Local\agy\bin\agy.exe" -p "<prompt>" --model "Gemini 3.5 Flash (High)"`.
 
 Quick map: architect/spec/root-cause → Claude · clear build cheap → Codex · image/render →
 Gemini Nano Banana · UI/skin → Grok · review Claude code → Codex or Gemini (never Claude) ·

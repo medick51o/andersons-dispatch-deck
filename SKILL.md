@@ -3,7 +3,7 @@ name: dispatch
 description: "ANDERSON'S DISPATCH DECK (ADD) — heavy multi-model agentic orchestration, NO persona / NO Team Rocket theater / NO character banter. Straight-faced. Claude conducts (wears GOLD 🟡): plans, dispatches the RIGHT model per job across the full arsenal (Claude tiers / Codex / Grok / Gemini-Antigravity incl. Nano Banana image gen), runs honest independent (cross-vendor) review, gates, and reports plainly by MODEL name. All the engineering discipline of SPINE, none of the show. Summon with /dispatch (or 'run the dispatch deck' / 'andersons dispatch deck') when the boss wants the powerhouse without the cat. Reserved rebrand alias: 'Agentic Dispatch Director' (also ADD)."
 ---
 # Anderson's Dispatch Deck — ADD  (/dispatch) — heavy orchestration, straight-faced
-*(Reserved future rebrand, coined by Andrew 2026-07-17: "Agentic Dispatch Director" — also ADD.)*
+*(Reserved future rebrand, coined 2026-07-17: "Agentic Dispatch Director" — also ADD.)*
 
 **This SKILL is a thin loader.** The method is not in this file — it is in **SPINE.md**, which this
 tier loads and renders **plain**: no cat, no Jessie/James/Butch/Cassidy, no episodes, no "prepare for

@@ -20,7 +20,7 @@ surgery · root-cause hunts · hard multi-file changes · reviewing other vendor
 **Watch-out:** the expensive seat — ration it; watch the weekly meter. TIER IT:
 - **Fable** = specs, review, orchestration, conversation (heavyweight; the cat's default).
 - **Sonnet** = code + research sub-agents (the workhorse for builds).
-- **Haiku** = mechanical (gate re-runs, log mining, builds). Andrew watches the counter.
+- **Haiku** = mechanical (gate re-runs, log mining, builds). the boss watches the counter.
 **Mechanism:** it's the HOME CLI (Claude Code). Sub-agents via the Agent tool. This is the
 one window everything else hangs off.
 
@@ -48,7 +48,7 @@ feel like a starship" · anything with a screen and a mood.
 **Watch-out:** UI SURFACE ONLY — "Grok reskins, it does not rewire"; keep it off engine
 logic · gate for platform ceilings (e.g. WebKit-16 for the old iPad) · mandatory
 GROK-TRAIL.md entry per job for lineage.
-**Mechanism:** `C:\Users\andre\.grok\bin\grok.exe --prompt-file <file> --always-approve < /dev/null`
+**Mechanism:** `C:\Users\<you>\.grok\bin\grok.exe --prompt-file <file> --always-approve < /dev/null`
 (NOTE: `grok` is on PATH in a normal shell but NOT in the tool's bash — use the full path).
 
 ## 🟢 GEMINI / ANTIGRAVITY (Google) — the value powerhouse (the biggest find)
@@ -75,9 +75,9 @@ Nano Banana) · cheap cold reviews / sweeps · overflow capacity · a 4th indepe
 brain dir + generate images fine) · review-independence only counts when it runs a GEMINI
 model (agy-wearing-Claude is NOT a second Claude opinion) · **promo $4.99/mo → $19.99
 ~mid-Oct 2026** (keep/cancel decision).
-**Mechanism:** `"C:\Users\andre\AppData\Local\agy\bin\agy.exe" -p "<prompt>" --model "Gemini 3.5 Flash (High)"`
+**Mechanism:** `"C:\Users\<you>\AppData\Local\agy\bin\agy.exe" -p "<prompt>" --model "Gemini 3.5 Flash (High)"`
 (tiers: Flash Low/Med/High, Gemini 3.1 Pro Low/High, Claude Sonnet/Opus 4.6, GPT-OSS 120B).
-Generated images land in `C:\Users\andre\.gemini\antigravity-cli\brain\<uuid>\*.jpg` — fish
+Generated images land in `C:\Users\<you>\.gemini\antigravity-cli\brain\<uuid>\*.jpg` — fish
 them out from there.
 
 ---

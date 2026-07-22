@@ -706,12 +706,12 @@ plain = **gold 🟡**. A worn wardrobe shows both (🟠🟢 = a Claude brain on 
 - **Codex (OpenAI)** — bounded implementation of a clear spec; the sharpest code reviewer (proves
   bugs, cites sources). `codex exec --sandbox danger-full-access --skip-git-repo-check "<prompt>" < /dev/null`.
 - **Grok (xAI)** — fearless UI/skins/concept pages; surface only, never engine.
-  `C:\Users\andre\.grok\bin\grok.exe --prompt-file <f> --always-approve < /dev/null`. Mandatory trail entry.
+  `C:\Users\<you>\.grok\bin\grok.exe --prompt-file <f> --always-approve < /dev/null`. Mandatory trail entry.
 - **Gemini / Antigravity (Google)** — proven builder (Flash), IMAGE GEN via Nano Banana (on the sub,
   no card), cheap reviews/sweeps, independent 4th vote, and **the Overflow Valve** (rents Claude/GPT
   brains on Google's tab when the Claude meter runs hot — count agy as the GOOGLE bloodline only when
   wearing a Gemini model; agy-running-Claude is not an independent reviewer of Claude work).
-  `"C:\Users\andre\AppData\Local\agy\bin\agy.exe" -p "<prompt>" --model "Gemini 3.5 Flash (High)"`.
+  `"C:\Users\<you>\AppData\Local\agy\bin\agy.exe" -p "<prompt>" --model "Gemini 3.5 Flash (High)"`.
   agy `--model` strings are exact-match; Claude tiers need the `(Thinking)` suffix.
 - Dispatch ritual for any wardrobe: ticket file → headless dispatch → the orchestrator gates
   independently (render/probe/screenshot) → re-ticket → loop. Trails mandatory where the fence is
@@ -719,7 +719,7 @@ plain = **gold 🟡**. A worn wardrobe shows both (🟠🟢 = a Claude brain on 
 - **The arsenal is OPTIONAL.** The method works with whatever vendors are reachable (Claude alone is
   a valid, degraded arsenal). No specific vendor, plan, or price is part of the method.
 - **This shop's Lineage Ledger location (wiring, NOT law):**
-  `C:\Sync\SecondBrain\_claude-brain\memory\model-lineage-ledger.md`. The engine (Doctrine 6) names
+  `<your-brain>\_claude-brain\memory\model-lineage-ledger.md`. The engine (Doctrine 6) names
   no absolute path — downloaders default to a project-relative `model-lineage-ledger.md`; this is
   merely where THIS box keeps its shared fleet-wide store.
 
