@@ -1,6 +1,6 @@
 # SPINE — the method engine (single owner, all tiers inherit)
 
-**Version line (machine-readable):** `spine v1.0 (2026-07-21)`
+**Version line (machine-readable):** `spine v1.1 (2026-07-22)`
 **One owner per fact.** Everything the method *does* — how work is judged, dispatched, fenced,
 reviewed, and shipped — lives HERE, character-free. The Deck renders this plain; TRM (CREW) adds
 a crew on top; TRTO (SHOW) adds a story on top. **Neither CREW nor SHOW restates SPINE.** Edit the
@@ -711,7 +711,7 @@ plain = **gold 🟡**. A worn wardrobe shows both (🟠🟢 = a Claude brain on 
   no card), cheap reviews/sweeps, independent 4th vote, and **the Overflow Valve** (rents Claude/GPT
   brains on Google's tab when the Claude meter runs hot — count agy as the GOOGLE bloodline only when
   wearing a Gemini model; agy-running-Claude is not an independent reviewer of Claude work).
-  `"C:\Users\<you>\AppData\Local\agy\bin\agy.exe" -p "<prompt>" --model "Gemini 3.5 Flash (High)"`.
+  `"C:\Users\<you>\AppData\Local\agy\bin\agy.exe" -p "<prompt>" --model "Gemini 3.6 Flash (High)"`.
   agy `--model` strings are exact-match; Claude tiers need the `(Thinking)` suffix.
 - Dispatch ritual for any wardrobe: ticket file → headless dispatch → the orchestrator gates
   independently (render/probe/screenshot) → re-ticket → loop. Trails mandatory where the fence is
@@ -738,6 +738,17 @@ plain = **gold 🟡**. A worn wardrobe shows both (🟠🟢 = a Claude brain on 
   reasons. Two-vendor agreement = treat as settled.
 - Claude-tier doc-verification subagent (Sonnet + web) is slow (~10 min) but resolves which claims
   rest on conflicting sources — its "don't publish this number" flags are the payoff.
+- **Gemini 3.6 Flash (High) is live and handled a real analysis ticket clean** (2026-07-22,
+  token-ticker EP10): agy's valid-model roster now carries the 3.6 Flash family (High/Medium/Low).
+  The bad-string probe still works — an invalid `--model` exits 1 and prints the current roster.
+- **agy HEADLESS auto-denies tool permissions** (`read_file` etc. — the run dies with a "jetski"
+  permission error and empty output). Headless dispatches must EMBED the evidence in the prompt
+  (reviews-by-embed); probe auth cheaply first with a one-word `-p` ping.
+- **Secret-gated verification pattern (proven 2026-07-22):** when a reviewer's sandbox denies it a
+  secret the proof needs (e.g. an HMAC key), the reviewer AUTHORS the exact verifier script; a
+  key-holding seat EXECUTES it unmodified (trivial repairs applied openly and logged); the verdict
+  binds to the output. Keeps builder-never-approves intact when secrets gate the evidence — the
+  reviewer's NOT-PROVEN-until-run discipline is the correct half of the handshake.
 
 ---
 *SPINE owns the engine. It names no characters and tells no story — those are CREW's and SHOW's to
