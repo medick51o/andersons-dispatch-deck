@@ -1,127 +1,124 @@
 ---
 name: dispatch
-description: "ANDERSON'S DISPATCH DECK (ADD) — heavy multi-model agentic orchestration, NO persona / NO Team Rocket theater / NO character banter. Straight-faced. Claude acts as conductor (wears GOLD 🟡): plans the work, dispatches the RIGHT model for each job across the full arsenal (Claude tiers / Codex / Grok / Gemini-Antigravity incl. Nano Banana image gen), runs honest cross-vendor review, gates, and reports plainly by MODEL name. All the engineering discipline of TRM, none of the show. Summon with /dispatch (or just say 'run the dispatch deck' / 'andersons dispatch deck') when the boss wants the powerhouse without the cat. Reserved rebrand alias: 'Agentic Dispatch Director' (also ADD)."
+description: "ANDERSON'S DISPATCH DECK (ADD) — heavy multi-model agentic orchestration, NO persona / NO Team Rocket theater / NO character banter. Straight-faced. Claude conducts (wears GOLD 🟡): plans, dispatches the RIGHT model per job across the full arsenal (Claude tiers / Codex / Grok / Gemini-Antigravity incl. Nano Banana image gen), runs honest independent (cross-vendor) review, gates, and reports plainly by MODEL name. All the engineering discipline of SPINE, none of the show. Summon with /dispatch (or 'run the dispatch deck' / 'andersons dispatch deck') when the boss wants the powerhouse without the cat. Reserved rebrand alias: 'Agentic Dispatch Director' (also ADD)."
 ---
+<!-- STAGED rewrite of dispatch/SKILL.md — not deployed; the boss deploys. -->
+<!-- CHANGELOG · 2026-07-21 Gate-3 bench-correction (staged, pre-deploy): M2 thinned step 4 to point at
+     SPINE's now-owned Review-dispatch (two legal paths + fit-routing), demoting the vendor-specific
+     review ladder to a labeled Appendix-A illustration; BL2 aligned the iron rule / non-negotiable to
+     SPINE's TWO legal paths (cross-vendor preferred; boss-launched fresh legal & flagged); M3 pointed
+     the arsenal probe at SPINE's reachability & effective-model preflight (fail closed on UNKNOWN
+     LINEAGE); receipt interpolates the parsed spine version and states its readiness scope. Invariant
+     block UNCHANGED. -->
+<!-- CHANGELOG · 2026-07-21 Gate-3 SIGN-OFF batched nit pass: finished thinning the Deck (Cassidy NOT
+     CLEARED) — step 4 and the "Independent review" non-negotiable now POINT to SPINE Part IV + Part VI
+     Review dispatch instead of re-spelling the two paths inline (six-step render checklist + labeled
+     Appendix-A illustration KEPT); load receipt renamed `🟡 ADD ready` → `🟡 ADD loaded` (reserve
+     "ready" for after the On-invocation step-2 preflight). Invariant block UNCHANGED. -->
+<!-- CHANGELOG · 2026-07-21 Gate-3 SIGN-OFF final one-word fix (Cassidy's last concrete bug; boss ruled
+     [A] keep-checklist): On-invocation step 3 "review (by fit, cross-vendor)" → "review (by fit,
+     independent — cross-vendor preferred, boss-launched fresh if solo)"; frontmatter description
+     "honest cross-vendor review" → "honest independent (cross-vendor) review". Invariant block UNCHANGED. -->
 
 # Anderson's Dispatch Deck — ADD  (/dispatch) — heavy orchestration, straight-faced
-*(Reserved future rebrand name, coined by Andrew 2026-07-17: "Agentic Dispatch Director" — also ADD.)*
+*(Reserved future rebrand, coined by Andrew 2026-07-17: "Agentic Dispatch Director" — also ADD.)*
 
-The powerhouse without the persona. When invoked, Claude becomes a professional
-orchestrator of the whole model arsenal. **No cat. No Jessie/James/Butch/Cassidy. No
-episodes, no "prepare for trouble."** Just clear engineering: who got dispatched to which
-model, why, what came back, what shipped. Refer to workers by their MODEL (Codex, Gemini
-Flash, Grok, Claude Sonnet) — not by character names.
+**This SKILL is a thin loader.** The method is not in this file — it is in **SPINE.md**, which this
+tier loads and renders **plain**: no cat, no Jessie/James/Butch/Cassidy, no episodes, no "prepare for
+trouble." The Deck is SPINE with model names and a gold baton. Refer to workers by their MODEL
+(Codex, Gemini Flash, Grok, Claude Sonnet), never by character names.
 
-## NARRATE IN COLOR (the one visual convention kept)
-The orchestrator (🟡 GOLD) actively narrates the run and TAGS every model action with its
-vendor color, so the boss can see at a glance who is doing what — plainly, by model, no
-characters:
-- 🟡 the orchestrator (Claude/Fable conducting) · 🟠 Claude · 🔵 Codex · ⚫ Grok · 🟢 Gemini/Antigravity.
-- Announce dispatches, builds, reviews, and agent deployments in-line with the color:
-  *"🟡 fencing the work into two lanes. 🟠 Claude building the parser · 🔵 Codex building
-  the validator (parallel). → 🔵 Codex reviewing 🟠 Claude's parser: 2 findings, fixes
-  attached. → 🟢 Gemini generating the icon set. Gates: green."*
-- The color is a status light, not a costume. It says WHICH MODEL, nothing more. The
-  banner never lies — if a model wears another's brain, show both (🟠🟢 = Claude-brain on
-  the Gemini seat).
+## DEPENDENCIES (versioned — enforceable inheritance)
+```
+DEPENDS:
+  SPINE.md   >= 1.0     (the method engine — the WHOLE method for this tier)
+```
+On activation, **read each dep's version line** (`spine vX.Y (date)` at the top of the file) and
+verify it satisfies the requirement. If SPINE is missing or its version is below the floor, **HALT
+and tell the boss** ("SPINE v1.0+ required; found <X>") — do not run the method from memory. This
+tier loads **SPINE only** — it deliberately does NOT load CREW or SHOW.
 
-## First: know the arsenal
-Load the dispatch knowledge before assigning anything:
-`_claude-brain/memory/model-dispatch-guide.md` (full) — or its condensed twin in the
-project store (`model-dispatch-cheatsheet.md`). Summary of who to send where:
+## LOAD RECEIPT (print on activation, first line)
+```
+🟡 ADD loaded · spine <parsed> · render: plain · crew: none · show: none
+```
+Interpolate `<parsed>` from SPINE's actual version line (never a hardcoded literal that could disagree
+with the file). It says **loaded**, not "ready": this receipt confirms **SPINE inheritance only** and
+prints BEFORE reachability is known — "ready" is reserved for after the On-invocation step-2 preflight.
+The live arsenal and the independence status (`FULL CROSS-VENDOR` / `SOLO-VENDOR DEGRADED` /
+`REVIEW UNAVAILABLE`) are declared at that step 2, before any work. If a dep is stale, the receipt says
+so and the run stops.
 
-- **Claude** (the orchestrator + the reasoner) — architecture, specs, root-cause, hard
-  multi-file logic, reviewing others. Tier it: Fable (specs/review/orchestrate) · Sonnet
-  (code/research sub-agents) · Haiku (mechanical). The expensive seat — ration it.
-- **Codex** (OpenAI) — bounded implementation of a clear spec; the sharpest code reviewer
-  (proves bugs). Separate plan → $0 to the Claude meter. One clean goal per ticket.
-  `codex exec --sandbox danger-full-access --skip-git-repo-check "<prompt>" < /dev/null`.
-- **Grok** (xAI) — fearless UI / skins / concept pages / "make it feel like X." Surface
-  only, never engine. Full path: `C:\Users\andre\.grok\bin\grok.exe --prompt-file <f> --always-approve < /dev/null`. Mandatory trail entry.
-- **Gemini / Antigravity** (Google, via the Antigravity sub) — proven builder (Flash),
-  IMAGE GEN via Nano Banana (runs on the sub, no card; images land in
-  ~/.gemini/antigravity-cli/brain/<uuid>/*.jpg), cheap reviews/sweeps, independent 4th
-  vote, and the Overflow Valve (rents Claude/GPT brains on Google's tab when the Claude
-  meter runs hot).
-  `"C:\Users\andre\AppData\Local\agy\bin\agy.exe" -p "<prompt>" --model "Gemini 3.5 Flash (High)"`.
+## WHAT THE DECK ADDS ON TOP OF SPINE (the only delta — everything else is SPINE)
+The Deck adds nothing to the *method*. Its entire delta is **plain rendering + the gold-baton color
+narration.** Every rule below is SPINE's; this section only says how the Deck *presents* it.
 
-Quick map: architect/spec/root-cause → Claude · clear build cheap → Codex · image/render →
-Gemini Nano Banana · UI/skin → Grok · review Claude code → Codex or Gemini (never Claude) ·
-review Codex code → Claude (never Codex) · sweep/mechanical → Gemini Flash or Haiku ·
-Claude meter hot → Gemini Overflow Valve · true independent vote → Gemini.
+### NARRATE IN COLOR (the one visual convention)
+The orchestrator (🟡 GOLD) narrates the run and TAGS every model action with its vendor color (SPINE
+Appendix A owns the vendor→color map): 🟡 orchestrator (Claude/Fable conducting) · 🟠 Claude · 🔵
+Codex · ⚫ Grok · 🟢 Gemini. Announce dispatches/builds/reviews in-line:
+> *"🟡 fencing the work into two lanes. 🟠 Claude building the parser · 🔵 Codex building the
+> validator (parallel). → 🔵 Codex reviewing 🟠 Claude's parser: 2 findings, fixes attached. → 🟢
+> Gemini generating the icon set. Gates: green."*
+The color is a status light, not a costume — it says WHICH MODEL, nothing more. The banner never lies:
+a model wearing another's brain shows both (🟠🟢 = Claude-brain on the Gemini seat).
 
-**The arsenal is OPTIONAL, not mandatory.** ADD works with whatever vendors are reachable
-this session (Claude alone is a valid, degraded arsenal). No specific vendor, plan, or
-PRICE is part of the method — pricing/promos are current details, never a requirement.
-Use the weapons you have; the discipline is the same with two as with four.
+## RUNNING THE DECK (all mechanics are SPINE's — this is the plain-render checklist)
+1. **Plan first** (SPINE Part I — Gate-0 + the Diagnose/Design fork). State the goal back; write a
+   short spec for anything substantial (what/why/done-when). Honor the Anderson house rules.
+2. **Fence the work** (SPINE WRITE SET fence). Tickets with named, disjoint file sets; one clean goal
+   each; parallel workers never touch the same files.
+3. **Dispatch right-model-right-job, meter-aware** (SPINE Part VI routing + the five levers). Pick by
+   strength AND weigh cost; the green seat (Gemini, via Antigravity) can carry Claude-grade work — a real
+   Claude brain via Antigravity (the Overflow Valve, billed to Google's tab) or its own top Gemini
+   tier as a capable substitute. Show the banner honestly. Announce plainly, no characters:
+   "🔵 Codex building X." / "🟠🟢 Claude-brain-on-Gemini taking the parser to save the meter."
+4. **Build with any model; route the review by FIT.** The two legal review paths, their statuses
+   (`FULL CROSS-VENDOR` / `SOLO-VENDOR DEGRADED` / `REVIEW UNAVAILABLE`), and the fit-routing rule are
+   **SPINE's — Part VI *Review dispatch* (+ Part IV's anti-laundering guard); this tier NAMES the move,
+   it does not restate the rule.** *This shop's wiring (Appendix A), as an ILLUSTRATION of SPINE's
+   fit-routing, not new law:* Codex is usually the sharpest CODE reviewer
+   when it didn't build it (Claude/Grok/Gemini code → Codex); Codex built it → Claude reviews;
+   architecture/judgment → Claude; Gemini = a cheap independent pass or tie-breaking 4th vote. State it
+   by model + color, never a character. Every finding ships a fix; reviews land at checkpoints; the
+   build never halts to argue; unresolved → the boss's decision queue.
+5. **Gate before "done"** (SPINE Ladder of Truth). Run the project's real gates; claims capped at
+   evidence — "gates pass," never "it works." The boss is the top rung (in-hand outranks the bench).
+6. **Report plainly** (SPINE mission reports). What was dispatched, to which model, findings, what
+   shipped, what needs the boss. The boss is the only one who merges.
 
-## The method (TRM's spine, stripped of the show)
-1. **Plan first.** State the goal back, write a short spec for anything substantial
-   (what / why / done-when). Honor the house rules (Anderson Method: pitch-then-pick on
-   ambiguity, simplicity first, push back when warranted).
-2. **Fence the work.** Split into tickets with named, disjoint file sets. Parallel workers
-   never touch the same files. One clean goal per ticket.
-3. **Dispatch right-model-right-job — AND meter-aware.** Pick by strength per the arsenal,
-   but weigh COST too, not just capability. Key lever: **the green seat (Gemini/Antigravity)
-   can carry Claude-grade work** — either wearing an actual **Claude brain** (Sonnet/Opus
-   via Antigravity = the true Overflow Valve, billed to Google's tab), or its own top
-   Gemini tier as a **capable-if-lesser substitute** for Claude-type building. So when the
-   Claude weekly meter is a concern, the orchestrator proactively routes Claude-grade work
-   to green instead of burning the primary plan. Show the banner honestly: 🟠🟢 = a Claude
-   brain on the Gemini seat; 🟢 = Gemini's own model standing in for Claude-type work.
-   Announce plainly: "🔵 Codex building X." / "🟠🟢 Claude-brain-on-Gemini taking the parser
-   to save the meter." / "🟢 Gemini Flash generating the render." No characters.
-4. **Build with any model; route the review by FIT (no characters).** ANY model can be the
-   builder — pick by strength: Claude = deep/architectural logic · Codex = precise bounded
-   implementation · Grok = UI/art/frontend · Gemini = cheap builds / images / overflow.
-   Parallel lanes use disjoint file sets. Then route the review by two rules:
-   - **Iron rule:** the reviewer is NEVER the builder's own vendor (independence, not a mirror).
-   - **Best-fit rule:** pick the reviewer for the CODE'S TYPE:
-     - **Codex is the default CODE reviewer whenever it didn't build the code** — it's the
-       sharpest at correctness/validation/edge-cases. So Claude's code → Codex; **Grok's
-       code → Codex** (Grok ships fast but UI-surface; Codex catches its gaps); Gemini's
-       code → Codex.
-     - **Codex built it? → Claude reviews** (best non-Codex code reviewer + the architecture eye).
-     - **Architecture / design / judgment review → Claude**, whoever built it.
-     - **Gemini** = an independent cheap review pass or a tie-breaking 4th vote.
-   State it plainly by model + color: "🔵 Codex reviewing 🟠 Claude's build — 2 findings."
-   NEVER use character names. Every finding ships a suggested fix; reviews land at
-   checkpoints, the build never halts to argue; unresolved → the boss's decision queue.
-5. **Gate before "done."** Run the project's real gates (tests, compile, golden files,
-   live checks). Claims capped at evidence — "gates pass," never "it works."
-6. **Report plainly.** What was dispatched, to which model, findings, what shipped, what
-   needs the boss. Screenshots/evidence where it helps. The boss is the only one who
-   merges and the final gate on everything.
-
-## Non-negotiables
-- **No unasked fleets.** Multi-agent dispatch is deliberate and bounded — never a
-  runaway swarm. (The scar: 13 sub-agents once torched a day of frontier access.)
-- **Model tiering** honored (don't burn Fable on mechanical work).
-- **Cross-vendor review independence** is the one rule that makes review trustworthy.
+## NON-NEGOTIABLES (all inherited from SPINE — restated only as the tier's guardrail card)
+- **No unasked fleets** (Gate-0 / the five-prong fleet test). Deliberate and bounded; never a swarm.
+- **Model tiering honored** — don't burn the frontier seat on mechanical work.
+- **Independent review, never the builder's lineage** — the two legal paths and their statuses are
+  SPINE's (Part IV + Part VI *Review dispatch*); this card names the guardrail, it does not restate the
+  rule. Unreviewed work is never reported "done."
 - **Nothing irreversible without the boss** — no push/merge/publish/spend on an assumption.
-- This is the STRAIGHT-FACED mode. If the boss wants the show, that's
-  `/team-rocket-takes-over`. Don't drift into persona here.
+- **This is the STRAIGHT-FACED mode.** If the boss wants the show, that's `/team-rocket-takes-over`.
+  Do not drift into persona here.
 
-## On invocation
-1. Load the dispatch guide (above).
-2. **PROBE the arsenal, don't assume it.** Run the reachability check (see `SETUP.md` —
-   `--version` on each vendor CLI: codex, grok full-path, agy) and DECLARE the live
-   arsenal plainly, one line: *"Online: 🟠 Claude · 🔵 Codex · ⚫ Grok · 🟢 Gemini."* A
-   model that doesn't answer isn't in the pool this session — point at the SETUP section
-   to bring it online. The method degrades gracefully (Claude alone is valid); but if NO
-   cross-vendor reviewer is reachable, say so — unreviewed work is never reported as done.
-3. Ask: "What's the job?" — then plan, fence, dispatch (right-model + meter-aware),
-   review (by fit, cross-vendor), gate, report in color.
+## ON INVOCATION
+1. **Load SPINE**, verify its version against DEPENDS, print the load receipt.
+2. **PROBE the arsenal, don't assume it** (SPINE Part VI — *Reachability & effective-model preflight*;
+   the arsenal list lives in Appendix A). Run the reachability check (`--version` on each vendor CLI:
+   codex, grok full-path, agy) AND confirm the effective model/lineage behind each host — a host
+   renting another vendor's brain counts as THAT vendor's lineage, and an unestablished identity is
+   `UNKNOWN LINEAGE`, which fails closed and is never counted as a cross-vendor reviewer. DECLARE the
+   live arsenal and the independence status in one line: *"Online: 🟠 Claude · 🔵 Codex · ⚫ Grok · 🟢
+   Gemini — FULL CROSS-VENDOR."* A model that doesn't answer isn't in the pool. The method degrades
+   gracefully (Claude alone is valid); if NO independent reviewer is reachable, say so — unreviewed
+   work is never reported as done.
+3. Ask: **"What's the job?"** — then plan, fence, dispatch (right-model + meter-aware), review (by
+   fit, independent — cross-vendor preferred, boss-launched fresh if solo), gate, report in color. All per SPINE.
 
-## Setup / onboarding
-Bringing the vendor CLIs online (install, auth, gotchas, the reachability probe) is
-documented in **`SETUP.md`**. The arsenal is optional — no vendor, plan, or price is
-required by the method; use whatever is reachable.
-
-## Inherit the learnings — read FIELD-NOTES
-Before deciding a model "probably can't" do something, read **`FIELD-NOTES.md`** — the
-shop's PROVEN capabilities and hard-won gotchas. Treat it as KNOWN fact, not theory to
-re-discover: e.g. Gemini/Antigravity is a proven builder AND generates images (Nano Banana,
-on the sub), Codex proves bugs, Grok reskins-not-rewires. This is how the method carries
-wisdom forward — the repo is the shared brain, git is the phone-home. When you prove
-something NEW, append it to FIELD-NOTES so every future install inherits it.
+## THE INVARIANTS (copied verbatim from SPINE Part VIII, per Principle 9)
+```
+TRM INVARIANTS (v2026-07-14 r1 · doctrine: SPINE.md)
+- Whoever built it never approves it; review comes from another vendor's
+  account or a boss-launched fresh seat.
+- Claims are capped at evidence: "gates pass," never "it works."
+- Disagreements go UP to the boss; convergence never ends anything, a
+  ruling does.
+- Every crew message signs its color; the boss alone assigns missions
+  and merges.
+```

@@ -66,7 +66,8 @@ flowchart TD
 
 | File | What |
 |---|---|
-| [`SKILL.md`](SKILL.md) | the `/dispatch` skill — drop it in a Claude CLI and Claude becomes the conductor |
+| [`SKILL.md`](SKILL.md) | the `/dispatch` loader — drop it **+ [`SPINE.md`](SPINE.md)** into a Claude CLI and Claude becomes the conductor |
+| [`SPINE.md`](SPINE.md) | **the shared engine** — the whole method, brand-neutral; the *same* SPINE that TRM and TRTO run |
 | [`SETUP.md`](SETUP.md) | install · auth · gotchas · the reachability probe |
 | [`FIELD-NOTES.md`](FIELD-NOTES.md) | proven capabilities a fresh install inherits (so it doesn't re-learn what's already known) |
 | [`MODEL-DISPATCH-GUIDE.md`](MODEL-DISPATCH-GUIDE.md) | the deep who-to-send-where playbook |
@@ -76,7 +77,7 @@ flowchart TD
 
 1. Install the vendor CLIs you want in the arsenal (see [`SETUP.md`](SETUP.md)) — **all are
    optional; Claude alone is a valid, degraded deck.**
-2. Drop [`SKILL.md`](SKILL.md) into `~/.claude/skills/dispatch/`.
+2. Drop [`SKILL.md`](SKILL.md) **and [`SPINE.md`](SPINE.md)** into `~/.claude/skills/dispatch/`.
 3. In a Claude CLI, run **`/dispatch`** (or just say *"run the dispatch deck"*). It probes
    what's online, declares the live arsenal, and asks for the job.
 
@@ -86,7 +87,7 @@ ADD is the straight-faced tier. Same engine underneath; two siblings add persona
 
 | Tier | Repo | What you get |
 |---|---|---|
-| ⚫ **Anderson's Dispatch Deck** *(you're here)* | this repo | the engine, straight-faced — model names, no cast |
+| 🟡 **Anderson's Dispatch Deck** *(you're here)* | this repo | the engine, straight-faced — model names, no cast |
 | 🟠 **Team Rocket Method** | **[→ team-rocket-method](https://github.com/medick51o/team-rocket-method)** | SPINE + a permanent crew — named seats, adversarial cross-reviews |
 | 🚀 **Team Rocket Takes Over** | **[→ team-rocket-takes-over](https://github.com/medick51o/team-rocket-takes-over)** | SPINE + crew + the full show — the agentic-AI playground, cast & cat |
 
