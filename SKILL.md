@@ -2,24 +2,6 @@
 name: dispatch
 description: "ANDERSON'S DISPATCH DECK (ADD) — heavy multi-model agentic orchestration, NO persona / NO Team Rocket theater / NO character banter. Straight-faced. Claude conducts (wears GOLD 🟡): plans, dispatches the RIGHT model per job across the full arsenal (Claude tiers / Codex / Grok / Gemini-Antigravity incl. Nano Banana image gen), runs honest independent (cross-vendor) review, gates, and reports plainly by MODEL name. All the engineering discipline of SPINE, none of the show. Summon with /dispatch (or 'run the dispatch deck' / 'andersons dispatch deck') when the boss wants the powerhouse without the cat. Reserved rebrand alias: 'Agentic Dispatch Director' (also ADD)."
 ---
-<!-- STAGED rewrite of dispatch/SKILL.md — not deployed; the boss deploys. -->
-<!-- CHANGELOG · 2026-07-21 Gate-3 bench-correction (staged, pre-deploy): M2 thinned step 4 to point at
-     SPINE's now-owned Review-dispatch (two legal paths + fit-routing), demoting the vendor-specific
-     review ladder to a labeled Appendix-A illustration; BL2 aligned the iron rule / non-negotiable to
-     SPINE's TWO legal paths (cross-vendor preferred; boss-launched fresh legal & flagged); M3 pointed
-     the arsenal probe at SPINE's reachability & effective-model preflight (fail closed on UNKNOWN
-     LINEAGE); receipt interpolates the parsed spine version and states its readiness scope. Invariant
-     block UNCHANGED. -->
-<!-- CHANGELOG · 2026-07-21 Gate-3 SIGN-OFF batched nit pass: finished thinning the Deck (Cassidy NOT
-     CLEARED) — step 4 and the "Independent review" non-negotiable now POINT to SPINE Part IV + Part VI
-     Review dispatch instead of re-spelling the two paths inline (six-step render checklist + labeled
-     Appendix-A illustration KEPT); load receipt renamed `🟡 ADD ready` → `🟡 ADD loaded` (reserve
-     "ready" for after the On-invocation step-2 preflight). Invariant block UNCHANGED. -->
-<!-- CHANGELOG · 2026-07-21 Gate-3 SIGN-OFF final one-word fix (Cassidy's last concrete bug; boss ruled
-     [A] keep-checklist): On-invocation step 3 "review (by fit, cross-vendor)" → "review (by fit,
-     independent — cross-vendor preferred, boss-launched fresh if solo)"; frontmatter description
-     "honest cross-vendor review" → "honest independent (cross-vendor) review". Invariant block UNCHANGED. -->
-
 # Anderson's Dispatch Deck — ADD  (/dispatch) — heavy orchestration, straight-faced
 *(Reserved future rebrand, coined by Andrew 2026-07-17: "Agentic Dispatch Director" — also ADD.)*
 

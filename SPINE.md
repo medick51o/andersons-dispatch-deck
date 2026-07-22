@@ -1,24 +1,3 @@
-<!-- TRM-FAMILY · SPINE v1.0 · 2026-07-21 · owner: THE ENGINE · loaded by ALL tiers -->
-<!-- CHANGELOG · 2026-07-21 Gate-3 bench-correction (staged, pre-deploy): BL1 restored the plan-aware
-     operating policy into Part VI at full density (posture spend table · thin-support ENTRY/MINIMAL/
-     NONE · ENTRY-primary · headroom · currency · ledger no-causation); M1 abstracted the Part VI
-     character leak; M2 moved brand-neutral review-by-fit into Part VI Review dispatch; M3 added the
-     Reachability & effective-model preflight section; minors: Part VII circle-back bullet, Part VIII
-     block-id continuity note, Appendix B exact strings/examples restored. Invariant block UNCHANGED. -->
-<!-- CHANGELOG · 2026-07-21 Gate-3 ADDENDUM (bounded second pass): D3 portabilized the Lineage Ledger —
-     Doctrine 6 now names the shop's DECLARED ledger (default project-relative), this box's absolute
-     SecondBrain path moved to Appendix A wiring; E1 unified the severity ladder on Part V's canonical
-     BLOCKER/MATERIAL/MINOR/NOT PROVEN (Doctrine 1 gate 3 + Part VII now name all four; MATERIAL ≡ old
-     "Major"); minor: restored the three-flips caught-bug examples in Part VI. Invariant block UNCHANGED. -->
-<!-- CHANGELOG · 2026-07-21 Gate-3 SIGN-OFF batched nit pass: Doctrine 1 gate 3 renamed CROSS-VENDOR
-     BENCH → INDEPENDENT BENCH and rewritten to Part IV's two paths (Cassidy BLOCKER / Grok NEW-1);
-     harmonized "another vendor's account" → "different effective-model vendor + lineage" in Part IV,
-     Part VI Review dispatch, the Part III abstract role, and the Part VI thin-support paths (a
-     different account merely hosting the builder's own brain does NOT count — Cassidy PARTIAL). The
-     LOCKED canonical invariant block keeps its own "account" wording by design. Invariant block UNCHANGED. -->
-> **STAGED — not deployed; the boss deploys.** This is a refactor artifact living in
-> `docs/trm-family-staged/`, not the live method under `~/.claude/skills`. Only the boss merges.
-
 # SPINE — the method engine (single owner, all tiers inherit)
 
 **Version line (machine-readable):** `spine v1.0 (2026-07-21)`
