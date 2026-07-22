@@ -95,9 +95,9 @@ a model wearing another's brain shows both (🟠🟢 = Claude-brain on the Gemin
 
 ## THE INVARIANTS (copied verbatim from SPINE Part VIII, per Principle 9)
 ```
-TRM INVARIANTS (v2026-07-14 r1 · doctrine: SPINE.md)
-- Whoever built it never approves it; review comes from another vendor's
-  account or a boss-launched fresh seat.
+TRM INVARIANTS (v2026-07-22 r2 · doctrine: SPINE.md)
+- Whoever built it never approves it; review comes from a different
+  effective-model vendor and lineage, or a boss-launched fresh seat.
 - Claims are capped at evidence: "gates pass," never "it works."
 - Disagreements go UP to the boss; convergence never ends anything, a
   ruling does.

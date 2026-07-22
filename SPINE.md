@@ -56,7 +56,9 @@ each seat earn its place?" **The default is lean.**
   with a ticket.
 - **Right-size FIRST (the corrected default).** One builder + ONE cross-vendor reviewer is the
   canon shape for real code; often just the orchestrator for small stuff. A full 3+-seat PANEL is
-  a SPECIAL move — run it only when the boss asks or the task is genuinely gnarly/high-stakes.
+  a SPECIAL move — run it only when the boss asks. When the task looks genuinely gnarly/high-stakes the
+  orchestrator may PROPOSE a panel (one line: why + the rough cost of N vendors), but the fan-out
+  dispatches only on his explicit go — never self-authorized on the orchestrator's own "gnarly" call.
   Scaling seat count is the boss's call to make loud, never a habit. *(This REPLACES the old
   "whip-crack parallel delegation as default" — that instinct contradicts Gate-0. Fence and
   right-size first; parallelism is earned per task, not assumed.)*
@@ -76,7 +78,8 @@ Before building, classify. The two kinds of hard problem take opposite opening m
   *(A packet tap on the fleet wire ended hours of "maybe it's the session / the slot / the gate"
   by* proving *the input was arriving — collapsing the search space in one read. A splash of
   hypotheses loses to one honest measurement, every time.)*
-- **A NOVEL / GNARLY FEATURE → COUNCIL, then SYNTHESIS.** For a design-space-wide problem, write a
+- **A NOVEL / GNARLY FEATURE → COUNCIL, then SYNTHESIS.** *(A council is proposed to the boss and
+  fanned out only on his go — never auto-fired; see The Council.)* For a design-space-wide problem, write a
   one-page BRIEF (vision *verbatim* + hard-won context + numbered design questions), dispatch the
   crew to DESIGN it in parallel (each writes its own `docs/*-<vendor>.md`), then the orchestrator
   writes ONE `*-SYNTHESIS.md`: best-of-breed per piece, **every idea attributed, disagreements
@@ -110,7 +113,8 @@ that is the contract paying for itself.)*
 The day this was tuned, the shop took a "why won't my controller work" mess all the way to a
 council-reviewed, self-verifying feature. Five gates, in order — the house default for anything gnarly:
 1. **DESIGN COUNCIL → SYNTHESIS (before a line is built).** Per the Diagnose/Design fork above —
-   for a novel/gnarly problem only. Right-size still rules.
+   for a novel/gnarly problem only, and proposed to the boss — the multi-vendor fan-out dispatches only
+   on his explicit go. Right-size still rules.
 2. **BUILD IN ISOLATION.** Real builds run in an isolated git **worktree/branch, NEVER the boss's
    live checkout** — his daily-driver must not break mid-build. Disjoint write-sets across lanes.
 3. **INDEPENDENT BENCH before merge (Part IV's two paths).** Reviewed from OUTSIDE the builder's
@@ -563,6 +567,12 @@ move (Doctrine 5's right-size still rules — never the default for small work);
 stakes justify the multiples: a design-space-wide fork, a decision that must be right, a bug or claim
 that has to survive real scrutiny.
 
+**Consent gates the convening — offered, never auto-fired.** Even when work looks council-worthy, the
+orchestrator *proposes* the panel (one line: why + the rough cost of N vendors running at once) and
+dispatches only on the boss's explicit go. A "gnarly" call is licence to *ask*, never to self-authorize
+the most expensive move in the method — that is what makes "opt-in" literally true, in the engine and
+not just the brochure.
+
 **When NOT to convene — the guardrail, not the fine print.** A trivial ask — *"rewrite this email,"
 "did I send the PO out," a quick fix, a plain question* — is handled by the orchestrator alone (or a
 single seat), **NEVER a council.** The orchestrator does not *oops* into a token-eating dream team for
@@ -586,8 +596,9 @@ for small work is one seat doing it, quietly.
    the boss's ruling queue. No looping, no token-inferno.
 6. **The boss rules.** The council advises; the human decides and merges — always (the Ladder's top rung).
 
-This is adversarial verification at full width — the one cross-lineage-review law (a reviewer never
-wears the builder's own vendor), scaled to N independent perspectives. Each tier dresses it
+This is adversarial verification at full width — the one cross-lineage-review law (a review comes
+from a different effective-model vendor than the build — a same-vendor read is a labeled degraded
+self-check, never disguised as cross-vendor), scaled to N independent perspectives. Each tier dresses it
 differently — a plain **panel** (report by model name), a signed **crew council**, or a puppeteered
 **set-piece** — but the engine underneath is this single procedure. *(A four-model council once MISSED
 a bug that one real use surfaced instantly — Part I §1. The council widens coverage; it does not
@@ -666,9 +677,9 @@ The color→identity binding is a tier concern: the Deck tags by MODEL (🟡 orc
 every tier's launcher skill copy it VERBATIM; everything else in them is a pointer:
 
 ```
-TRM INVARIANTS (v2026-07-14 r1 · doctrine: SPINE.md)
-- Whoever built it never approves it; review comes from another vendor's
-  account or a boss-launched fresh seat.
+TRM INVARIANTS (v2026-07-22 r2 · doctrine: SPINE.md)
+- Whoever built it never approves it; review comes from a different
+  effective-model vendor and lineage, or a boss-launched fresh seat.
 - Claims are capped at evidence: "gates pass," never "it works."
 - Disagreements go UP to the boss; convergence never ends anything, a
   ruling does.
@@ -676,9 +687,11 @@ TRM INVARIANTS (v2026-07-14 r1 · doctrine: SPINE.md)
   and merges.
 ```
 
-*Note on the block id: the `v2026-07-14 r1` inside the block is the invariant block's own identity
+*Note on the block id: the `v2026-07-22 r2` inside the block is the invariant block's own identity
 and is intended CONTINUITY — it tracks the invariant text itself, independent of SPINE's minor
-version (SPINE may be v1.0, v1.1, … while the block stays r1 until its wording changes). The block is
+version (SPINE may be v1.0, v1.1, … while the block stays at its revision until its wording changes —
+bumped r1 → r2 on 2026-07-22, when "another vendor's account" was tightened to "a different
+effective-model vendor and lineage"). The block is
 verified byte-identical across SPINE and all three launchers; do not change it to match a spine
 version.*
 
