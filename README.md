@@ -18,9 +18,10 @@ gated, and reported plainly. The powerhouse, straight-faced.
 ## What it is
 
 Most people talk to one AI. **ADD treats models as a toolbox with a foreman.** A single
-orchestrator (Claude, running the conductor role — it wears **gold** 🟡, above the players)
-reads each job, sends it to the model that's actually best for it, has a *different* vendor
-review the result, runs the gates, and reports back — all from one Claude CLI. No four
+orchestrator — **Claude by default, because most of us drive the Claude CLI** — runs the conductor role
+(it wears **gold** 🟡, above the players; the seat is *model-agnostic* — a Codex-first shop puts Codex in
+gold and Claude in support). It reads each job, sends it to the model that's actually best for it, has a
+*different* vendor review the result, runs the gates, and reports back. No four
 terminals, no guessing, no drift.
 
 It's the straight-faced sibling of *Team Rocket Takes Over*: same engineering spine,
@@ -30,7 +31,7 @@ none of the show.
 
 ```mermaid
 flowchart TD
-    H([👑 Human — the mission]) --> O{{🟡 Orchestrator · Claude<br/>plan → fence → route}}
+    H([👑 Human — the mission]) --> O{{🟡 Orchestrator (Claude by default)<br/>plan → fence → route}}
     O -->|deep logic / architecture| C[🟠 Claude]
     O -->|bounded build| X[🔵 Codex]
     O -->|UI / skins / art| G[⚫ Grok]
