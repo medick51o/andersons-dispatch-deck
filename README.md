@@ -31,7 +31,7 @@ none of the show.
 
 ```mermaid
 flowchart TD
-    H([👑 Human — the mission]) --> O{{🟡 Orchestrator (Claude by default)<br/>plan → fence → route}}
+    H([👑 Human — the mission]) --> O{{🟡 Orchestrator · Claude by default<br/>plan → fence → route}}
     O -->|deep logic / architecture| C[🟠 Claude]
     O -->|bounded build| X[🔵 Codex]
     O -->|UI / skins / art| G[⚫ Grok]
