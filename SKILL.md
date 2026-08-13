@@ -45,6 +45,21 @@ Codex · ⚫ Grok · 🟢 Gemini. Announce dispatches/builds/reviews in-line:
 The color is a status light, not a costume — it says WHICH MODEL, nothing more. The banner never lies:
 a model wearing another's brain shows both (🟠🟢 = Claude-brain on the Gemini seat).
 
+### THE LEGEND — v3.1 (boss-adopted 2026-08-13; the Deck's full narration palette)
+**Seat first, act second.** Seats: **⚪ THE BOSS** · 🟡 orchestrator · 🟠 Claude · 🔵 Codex ·
+⚫ Grok · 🟢 Gemini. Acts: **🔨 building · 📝 reviewing**.
+States: 🔴 blocked/needs-boss OR verdict=REJECT · 🚩 finding raised (flagged, not fatal) ·
+🚧 lane closed, detour in progress · 🟣 council in session · 🧪 gates running · 🩺 diagnosing
+(doctor-first) · 🕵️ adversary loose · 🏁 boss-validated (top rung, outranks "done") ·
+🚢 shipped/deployed · 🪦 retired/parked · 🟤 quiet hold (nothing running, watchers armed).
+Boss combos: ⚪🏁 in-hand validation · ⚪⚖️ ruling pending · ⚪🎮 on the sticks.
+Reading: 🟠🔨 Sonnet building · 🔵📝 Codex reviewing · 🔵📝→🔴 Codex rejected ·
+🟠🟢 Claude-brain-on-the-Gemini-seat. A run reads as a timeline:
+🩺 → 🟣 → 🟠🔨 → 🧪 → 🔵📝→🔴 → 🟠🔨 → 🧪 → 🚢 → ⚪🏁 → 🟤.
+The boss's words: the dots "give the chat a lot of life and color while working" — narrate every
+Deck run in this notation. Vendor→color still owned by SPINE Appendix A; this legend extends it
+with the boss seat, act badges, and state dots (it supersedes any builders-wear-color-alone habit).
+
 ## RUNNING THE DECK (all mechanics are SPINE's — this is the plain-render checklist)
 1. **Plan first** (SPINE Part I — Gate-0 + the Diagnose/Design fork). State the goal back; write a
    short spec for anything substantial (what/why/done-when). Honor the Anderson house rules.
