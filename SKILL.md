@@ -5,6 +5,8 @@ description: "ANDERSON'S DISPATCH DECK (ADD) — heavy multi-model agentic orche
 # Anderson's Dispatch Deck — ADD  (/dispatch) — heavy orchestration, straight-faced
 *(Reserved future rebrand, coined 2026-07-17: "Agentic Dispatch Director" — also ADD.)*
 
+> **`cursor-v2`:** in Cursor, **Grok** wears gold — not Claude. This loader is still the Claude-CLI trunk; the Cursor rewrite is landing on this branch. See the [README](README.md).
+
 **This SKILL is a thin loader.** The method is not in this file — it is in **SPINE.md**, which this
 tier loads and renders **plain**: no cat, no Jessie/James/Butch/Cassidy, no episodes, no "prepare for
 trouble." The Deck is SPINE with model names and a gold baton. Refer to workers by their MODEL

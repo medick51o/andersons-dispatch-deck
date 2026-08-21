@@ -2,110 +2,142 @@
 
 # 🟡 Anderson's Dispatch Deck
 
-### Heavy multi-model agentic orchestration — conducted from a single chat window.
+### **cursor-v2** — the Cursor edition
 
-**One conductor. Four AI vendors. Zero terminal-juggling.**
+Heavy multi-model agentic orchestration — conducted from **one Cursor chat**.
 
-Claude · Codex · Grok · Gemini — dispatched to their strengths, reviewed across vendors,
-gated, and reported plainly. The powerhouse, straight-faced.
+**Grok wears gold. Composer builds. Everybody else is a specialist.**
 
-`•` no persona `•` no theater `•` right-model-right-job `•` honest cross-vendor review `•` cost-aware
+`•` no persona `•` no theater `•` right-model-right-job `•` honest review `•` meter-aware
+
+[![branch](https://img.shields.io/badge/branch-cursor--v2-FFD100?style=for-the-badge)](https://github.com/medick51o/andersons-dispatch-deck/tree/cursor-v2)
+[![status](https://img.shields.io/badge/status-in_progress-ff6b00?style=for-the-badge)](https://github.com/medick51o/andersons-dispatch-deck/tree/cursor-v2)
+[![main](https://img.shields.io/badge/CLI_trunk-main-111111?style=for-the-badge)](https://github.com/medick51o/andersons-dispatch-deck)
 
 </div>
+
+> **You are on the Cursor branch.** Gold is **Grok inside Cursor**, not Claude in a terminal.
+> The original Claude-CLI deck still lives on [`main`](https://github.com/medick51o/andersons-dispatch-deck).
+> Same engine ([`SPINE.md`](SPINE.md)). New seats. More landing in the coming days.
 
 ---
 
 ## What it is
 
-Most people talk to one AI. **ADD treats models as a toolbox with a foreman.** A single
-orchestrator — **Claude by default, because most of us drive the Claude CLI** — runs the conductor role
-(it wears **gold** 🟡, above the players; the seat is *model-agnostic* — a Codex-first shop puts Codex in
-gold and Claude in support). It reads each job, sends it to the model that's actually best for it, has a
-*different* vendor review the result, runs the gates, and reports back. No four
-terminals, no guessing, no drift.
+Most people talk to one AI. **ADD treats models as a toolbox with a foreman.**
 
-It's the straight-faced sibling of *Team Rocket Takes Over*: same engineering spine,
-none of the show.
+In Cursor, that foreman is **Grok** (🟡). It reads the job, fences the files, sends the work to the model that's actually best for it, gets a *different* line to look at the result, runs the gates, and reports back in plain language.
 
-## How a job flows
+No four terminals. No "it works." No theater.
+
+It's the straight-faced sibling of *Team Rocket Takes Over*: same engineering spine, none of the show.
+
+---
+
+## How a job flows *(this branch)*
 
 ```mermaid
 flowchart TD
-    H([👑 Human — the mission]) --> O{{🟡 Orchestrator · Claude by default<br/>plan → fence → route}}
-    O -->|deep logic / architecture| C[🟠 Claude]
-    O -->|bounded build| X[🔵 Codex]
-    O -->|UI / skins / art| G[⚫ Grok]
-    O -->|images / cheap / overflow| M[🟢 Gemini]
-    C --> R{{Cross-vendor review<br/>never the builder's own vendor}}
+    H([👑 Human — the mission]) --> O{{🟡 Orchestrator · Cursor Grok<br/>plan → fence → route}}
+    O -->|bounded build| P[🎼 Composer]
+    O -->|architecture / hard judgment| C[🟠 Claude]
+    O -->|sharp code review| X[🔵 GPT / Codex]
+    O -->|first-class cheap / overflow| M[🟢 Gemini 3.7 Flash]
+    P --> R{{Review — never the builder's own vendor}}
+    C --> R
     X --> R
-    G --> R
     M --> R
     R -->|findings + fixes| O
     R -->|clean| GT[✅ Gates — evidence, not vibes]
     GT --> D([👑 Human rules & merges])
 ```
 
-## The arsenal
+---
 
-| | Model | Best at | Dispatch it for |
+## The arsenal *(Cursor edition)*
+
+| | Seat | Best at | Dispatch it for |
 |:--:|---|---|---|
-| 🟠 | **Claude** (Anthropic) | deepest reasoning, architecture, honest judgment | design & specs · root-cause · engine-grade logic · reviewing others |
-| 🔵 | **Codex** (OpenAI) | precise builds; the sharpest code review (*proves* bugs) | bounded implementation · reviewing Claude/Grok/Gemini code |
-| ⚫ | **Grok** (xAI) | fearless one-shot visual design | UI · skins · concept pages · "make it feel like X" |
-| 🟢 | **Gemini** (Google / Antigravity) | budget builder · **image gen (Nano Banana)** · overflow capacity | real builds · renders · cheap sweeps · an independent 4th vote |
+| 🟡 | **Grok** *(this Cursor chat)* | conducting the deck | plan · fence · Gate-0 small work · UI judgment |
+| 🎼 | **Composer 2.5** | fast, bounded builds | tickets Grok fenced — **never gold**, **never independent review of Grok** |
+| 🟠 | **Claude** | deepest reasoning | architecture · specs · hard judgment — **not** daily gold in Cursor |
+| 🔵 | **GPT-5.6 Sol / Codex** | precise builds; the review that *proves* bugs | code review of work it did **not** build |
+| 🟢 | **Gemini 3.7 Flash** | first-class speed + an independent vote | real work + cheap honest reads — **not a spare tire** |
+| ⚫ | **Grok worker** | extra Grok hands | parallel Grok lane — **cannot** review this conductor |
+
+Two harnesses, one method:
+
+| Harness | When | Who pays |
+|---|---|---|
+| **Cursor-native** | daily drive inside this IDE | Cursor Models (Grok + Composer) · Other Models only when you *name* them |
+| **CLI overflow** | you explicitly want Claude Max / Codex / `agy` / Grok CLI | those subscriptions — not the Cursor meter |
+
+---
 
 ## The rules that make it trustworthy
 
-1. **A reviewer never wears the builder's own vendor.** Cross-vendor, or it's just a mirror — different training, different blind spots, real catches.
-2. **Right model for the job — and cost-aware.** Dispatch weighs the meter, not just capability (heavy Claude work can fail over to a cheaper lane and keep going).
-3. **The banner never lies.** When a model wears a borrowed brain, both are shown (`🟠🟢`).
-4. **Findings ship fixes.** Every review finding carries a suggested fix; reviews land at checkpoints and never stop the build.
-5. **Gates before "done."** Claims capped at evidence — *"gates pass,"* never *"it works."* The human is the final gate and the only one who merges.
-6. **No unasked fleets.** Multi-agent dispatch is deliberate and bounded, never a swarm.
+1. **A reviewer never wears the builder's own vendor.** Grok cannot review Grok. Composer verifying Grok is a **check**, not cross-vendor independence.
+2. **Right model for the job — and cost-aware.** The deck reads the plan before it spawns anyone. No surprise Claude on a $20 tank.
+3. **The banner never lies.** If the shop is Grok + Composer only, it says **solo-vendor degraded** — it does not print "full cross-vendor."
+4. **Findings ship fixes.** Reviews land at checkpoints and never freeze the build.
+5. **Gates before "done."** *"Gates pass."* Never *"it works."* The human is the final merge.
+6. **No unasked fleets.** A two-line ask is one seat. A council is a special move, and it **asks first**.
 
-## The Council — every vendor, one question
+---
 
-For a call that has to be *right* — a design fork, a decision, a claim that must survive scrutiny — the Deck convenes **the council**: it dispatches the same question to **every reachable vendor at once**, each handed a distinct lens (correctness · cost · *refute-it*), gathers the independent reads, synthesizes best-of-breed with **every disagreement named**, caps the debate at two rounds, and hands you the verdict. Four vendors mean four sets of blind spots — the special move for when one model's read isn't enough. No cast, no theater: just the panel, reported by model name. It's **stakes-gated** — a two-line ask (*"rewrite this email," "did I send the PO"*) is handled by one seat, **never** a council. *(Same engine move as TRM's crew council and TRTO's set-piece — here it's straight-faced.)*
+## Status
+
+This branch is the Cursor reseat. The method is proven; the Cursor wardrobe is being written now.
+
+- [x] Branch cut from the public deck
+- [x] Seats named: Grok gold · Composer builds · Gemini 3.7 first-class
+- [ ] Skill rewrite (`SKILL.md` + Cursor-native guide)
+- [ ] Dual-harness switch (`cursor` · `cli` · `off`) without the wrong-meter oops
+- [ ] Console + dispatch guide updated for this wardrobe
+
+Star the repo, switch the branch dropdown to **`cursor-v2`**, and watch it grow.
+
+---
+
+## Quick start *(today)*
+
+**Claude CLI trunk** (stable, on `main`):
+
+1. Install the vendor CLIs you want — see [`SETUP.md`](SETUP.md). All optional; Claude alone is a valid, degraded deck.
+2. Drop [`SKILL.md`](SKILL.md) **and** [`SPINE.md`](SPINE.md) into `~/.claude/skills/dispatch/`.
+3. Run **`/dispatch`**.
+
+**Cursor edition** (this branch — landing now):
+
+1. Stay in Cursor. Grok is already gold in the chat.
+2. The Cursor skill lives with your user skills (`dispatch on` / `/dispatch`).
+3. Don't switch the model picker to "be" Claude. Dispatch Claude as a worker, or don't.
+
+---
 
 ## In this repo
 
 | File | What |
 |---|---|
-| [`SKILL.md`](SKILL.md) | the `/dispatch` loader — drop it **+ [`SPINE.md`](SPINE.md)** into a Claude CLI and Claude becomes the conductor |
-| [`SPINE.md`](SPINE.md) | **the shared engine** — the whole method, brand-neutral; the *same* SPINE that TRM and TRTO run |
-| [`SETUP.md`](SETUP.md) | install · auth · gotchas · the reachability probe |
-| [`FIELD-NOTES.md`](FIELD-NOTES.md) | proven capabilities a fresh install inherits (so it doesn't re-learn what's already known) |
-| [`MODEL-DISPATCH-GUIDE.md`](MODEL-DISPATCH-GUIDE.md) | the deep who-to-send-where playbook |
-| [`dispatch-console.html`](dispatch-console.html) | a color-coded visual quick-reference |
-
-## Quick start
-
-1. Install the vendor CLIs you want in the arsenal (see [`SETUP.md`](SETUP.md)) — **all are
-   optional; Claude alone is a valid, degraded deck.**
-2. Drop [`SKILL.md`](SKILL.md) **and [`SPINE.md`](SPINE.md)** into `~/.claude/skills/dispatch/`.
-3. In a Claude CLI, run **`/dispatch`** (or just say *"run the dispatch deck"*). It probes
-   what's online, declares the live arsenal, and asks for the job.
-
-## Part of a family — try the other tiers
-
-ADD is the straight-faced tier. Same engine underneath; two siblings add personality — **worth a look:**
-
-| Tier | Repo | What you get |
-|---|---|---|
-| 🟡 **Anderson's Dispatch Deck** *(you're here)* | this repo | the engine, straight-faced — model names, no cast |
-| 🟠 **Team Rocket Method** | **[→ team-rocket-method](https://github.com/medick51o/team-rocket-method)** | SPINE + a permanent crew — named seats, adversarial cross-reviews |
-| 🚀 **Team Rocket Takes Over** | **[→ team-rocket-takes-over](https://github.com/medick51o/team-rocket-takes-over)** | SPINE + crew + the full show — the agentic-AI playground, cast & cat |
-
-Promote up the tiers when you want more personality; the discipline underneath is identical.
+| [`SKILL.md`](SKILL.md) | loader — Claude-CLI trunk today; Cursor rewrite coming on this branch |
+| [`SPINE.md`](SPINE.md) | **the shared engine** — same one TRM and TRTO run |
+| [`SETUP.md`](SETUP.md) | install · auth · gotchas |
+| [`FIELD-NOTES.md`](FIELD-NOTES.md) | proven capabilities a fresh install inherits |
+| [`MODEL-DISPATCH-GUIDE.md`](MODEL-DISPATCH-GUIDE.md) | who-to-send-where (CLI wardrobe; Cursor guide coming) |
+| [`dispatch-console.html`](dispatch-console.html) | color-coded visual quick-reference |
 
 ---
 
-## Lineage
+## Part of a family
 
-ADD grew from the **Team Rocket Method (TRM)** — the original two-model-shop discipline —
-and is the *straight-faced* cut of its playful successor, *Team Rocket Takes Over*. It keeps
-the engineering (fenced tickets, cross-vendor review, gates, decision batching) and drops
-the persona. Credit to TRM as the trunk this branch grew from. 🫡
+Same engine underneath; the other tiers add personality:
+
+| Tier | Repo | What you get |
+|---|---|---|
+| 🟡 **Anderson's Dispatch Deck** *(you're here)* | this repo · branch **`cursor-v2`** | Cursor Grok conducts · Composer builds · straight-faced |
+| 🟡 **ADD · CLI trunk** | [`main`](https://github.com/medick51o/andersons-dispatch-deck) | Claude conducts from the terminal |
+| 🟠 **Team Rocket Method** | **[→ team-rocket-method](https://github.com/medick51o/team-rocket-method)** | SPINE + a permanent crew |
+| 🚀 **Team Rocket Takes Over** | **[→ team-rocket-takes-over](https://github.com/medick51o/team-rocket-takes-over)** | SPINE + crew + the full show |
 
 ---
 
@@ -113,8 +145,9 @@ the persona. Credit to TRM as the trunk this branch grew from. 🫡
 
 *Reserved future rebrand: **Agentic Dispatch Director** (also ADD).*
 
-Built with heavy AI collaboration, and honest about it — that's the house rule.
-The value is the **method**: vendor-proof, because the roles are permanent and the models
-are just the costumes they wear.
+Built with heavy AI collaboration, and honest about it.
+The value is the **method**: the roles stay; the models are the costumes.
+
+**Share this branch:** [github.com/medick51o/andersons-dispatch-deck/tree/cursor-v2](https://github.com/medick51o/andersons-dispatch-deck/tree/cursor-v2)
 
 </div>
