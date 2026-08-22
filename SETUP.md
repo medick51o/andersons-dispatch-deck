@@ -61,6 +61,36 @@ it. Nothing to install for ADD itself beyond dropping the `/dispatch` skill in
 
 ---
 
+## 4. Persistent seats (MCP) — wire the crew so it REMEMBERS
+
+One-shot dispatches gave every seat amnesia: each call started from zero. The method now rigs
+each vendor CLI into Claude Code as a **persistent MCP seat** — the orchestrator starts a
+conversation with a seat, gets a session id back, and continues that exact conversation later
+with full context. Same subscriptions, no API keys. **This is the default transport; do not
+skip this step.**
+
+Full instructions, the wrapper scripts, the acceptance test, and the transport doctrine live in
+**[`mcp-seats/README.md`](mcp-seats/README.md)**. The short version:
+
+```bash
+# Codex — MCP server mode is built in (Windows: codex.cmd if plain codex isn't found)
+claude mcp add --scope user codex -- codex mcp-server
+# Grok — bundled stdlib wrapper
+claude mcp add --scope user grok -- python <repo>\mcp-seats\wmw_grok_mcp.py
+# Gemini / Antigravity — bundled stdlib wrapper
+claude mcp add --scope user gemini -- python <repo>\mcp-seats\wmw_gemini_mcp.py
+```
+
+Restart Claude Code (new MCP tools only appear in fresh sessions), confirm `claude mcp list`
+shows each seat `✔ Connected`, then run the codeword acceptance test from the README per seat.
+The wrappers also fix the two classic headless croaks: a 60-minute timeout (Antigravity's
+default was 5) and an `always_approve` switch for build tickets (headless runs can't click
+permission prompts). Two laws ride the transport: **reviewers are ALWAYS fresh calls** (a fresh
+call is blind — exactly what independent review requires), and **a reply-chained session stays
+in its owning-seat lineage forever** (it can never review work its thread touched).
+
+---
+
 ## The reachability probe — what's online right now?
 The orchestrator runs this (or its equivalent) at the start of a session and declares the
 LIVE arsenal. Only dispatch to what actually answers.

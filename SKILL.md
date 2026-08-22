@@ -22,7 +22,7 @@ tier loads **SPINE only** — it deliberately does NOT load CREW or SHOW.
 
 ## LOAD RECEIPT (print on activation, first line)
 ```
-🟡 ADD loaded · spine <parsed> · render: plain · crew: none · show: none
+🟡➤ ADD loaded · spine <parsed> · render: plain · crew: none · show: none
 ```
 Interpolate `<parsed>` from SPINE's actual version line (never a hardcoded literal that could disagree
 with the file). It says **loaded**, not "ready": this receipt confirms **SPINE inheritance only** and
@@ -37,7 +37,7 @@ narration.** Every rule below is SPINE's; this section only says how the Deck *p
 
 ### NARRATE IN COLOR (the one visual convention)
 The orchestrator (🟡 GOLD) narrates the run and TAGS every model action with its vendor color (SPINE
-Appendix A owns the vendor→color map): 🟡 orchestrator (Claude/Fable conducting) · 🟠 Claude · 🔵
+Appendix A owns the vendor→color map): 🟡➤ conductor (Claude/Fable conducting — the ➤ is the baton) · 🟠 Claude · 🔵
 Codex · ⚫ Grok · 🟢 Gemini. Announce dispatches/builds/reviews in-line:
 > *"🟡 fencing the work into two lanes. 🟠 Claude building the parser · 🔵 Codex building the
 > validator (parallel). → 🔵 Codex reviewing 🟠 Claude's parser: 2 findings, fixes attached. → 🟢
@@ -45,20 +45,55 @@ Codex · ⚫ Grok · 🟢 Gemini. Announce dispatches/builds/reviews in-line:
 The color is a status light, not a costume — it says WHICH MODEL, nothing more. The banner never lies:
 a model wearing another's brain shows both (🟠🟢 = Claude-brain on the Gemini seat).
 
-### THE LEGEND — v3.1 (boss-adopted 2026-08-13; the Deck's full narration palette)
-**Seat first, act second.** Seats: **⚪ THE BOSS** · 🟡 orchestrator · 🟠 Claude · 🔵 Codex ·
-⚫ Grok · 🟢 Gemini. Acts: **🔨 building · 📝 reviewing**.
-States: 🔴 blocked/needs-boss OR verdict=REJECT · 🚩 finding raised (flagged, not fatal) ·
-🚧 lane closed, detour in progress · 🟣 council in session · 🧪 gates running · 🩺 diagnosing
-(doctor-first) · 🕵️ adversary loose · 🏁 boss-validated (top rung, outranks "done") ·
-🚢 shipped/deployed · 🪦 retired/parked · 🟤 quiet hold (nothing running, watchers armed).
-Boss combos: ⚪🏁 in-hand validation · ⚪⚖️ ruling pending · ⚪🎮 on the sticks.
-Reading: 🟠🔨 Sonnet building · 🔵📝 Codex reviewing · 🔵📝→🔴 Codex rejected ·
-🟠🟢 Claude-brain-on-the-Gemini-seat. A run reads as a timeline:
-🩺 → 🟣 → 🟠🔨 → 🧪 → 🔵📝→🔴 → 🟠🔨 → 🧪 → 🚢 → ⚪🏁 → 🟤.
-The boss's words: the dots "give the chat a lot of life and color while working" — narrate every
-Deck run in this notation. Vendor→color still owned by SPINE Appendix A; this legend extends it
-with the boss seat, act badges, and state dots (it supersedes any builders-wear-color-alone habit).
+### THE LEGEND — v4.0 (boss-adopted 2026-08-22; the cursor-v2 refinements rolled home, minus the Cursor seats)
+**Seat first, act second, meter wrap around the words.** A line reads:
+`🔵🔴 Codex reviewing 🟠 Claude's parser`
+Seats: **⚪ THE BOSS** · **🟡➤ conductor** — the orchestrator wears the **➤ baton** after its dot
+(gold when Claude conducts the Deck; whoever hosts the baton, the arrow follows — boss law, across
+the board) · 🟠 Claude · 🔵 Codex · ⚫ Grok · 🟢 Gemini · 🟠🟢 borrowed brain (banner never lies:
+brain color + host color).
+Acts: **🔨 building** · **🔴 reviewing — a suffix on the seat** (🔵🔴 = Codex is reviewing; NOT a
+reject) · **⛔ rejected / blocked / needs-boss** (never 🔴 for this — reviewing and rejection must
+never look alike).
+Council: **🌈👥👥 — every color, a crowd** (retires v3.1's 🟣; purple now means nothing here).
+Meter: **not narrated in this shop** — every seat (the CLIs and the persistent MCP seats) rides an
+already-paid subscription, so there is nothing to meter and no wrap noise. (The wrap marks
+♾️/💸/🚨💳 live on the `cursor-v2` branch for shops that burn credits; roll them in only if a
+metered seat ever joins.)
+States (kept from v3.1): 🚩 finding raised (flagged, not fatal) · 🚧 lane closed, detour in
+progress · 🧪 gates running · 🩺 diagnosing (doctor-first) · 🕵️ adversary loose · 🏁 boss-validated
+(top rung, outranks "done") · 🚢 shipped/deployed · 🪦 retired/parked · 🟤 quiet hold (nothing
+running, watchers armed). Boss combos: ⚪🏁 in-hand validation · ⚪⚖️ ruling pending · ⚪🎮 on the
+sticks.
+A run reads as a timeline: 🩺 → 🌈👥👥 → 🟠🔨 → 🧪 → 🔵🔴→⛔ → 🟠🔨 → 🧪 → 🚢 → ⚪🏁 → 🟤.
+Situations (worked lines):
+> 🔵🔴 Codex reviewing ⚫ Grok's parser — proving the empty-input path
+> 🔵🔴→⛔ Codex rejected the parser: empty input panics. Fix attached
+> 🔵🔴 Codex reviewing → 🚩 empty-input panic · fix attached *(a finding, not a reject — build continues)*
+> 🩺 diagnosing the failed gate before anyone else builds
+> 🚢 shipped · ⚪🏁 boss already checked it · 🟤 quiet hold
+
+Vendor→color still owned by SPINE Appendix A; this legend extends it and **supersedes v3.1**
+(📝-as-reviewing and 🟣-as-council are retired marks).
+
+## PERSISTENT SEATS — the standing MCP transports (the amnesia era is over, 2026-08-22)
+Every vendor in the arsenal is wired into Claude Code as a **persistent MCP seat** (install: SETUP.md
+section 4 + `mcp-seats/README.md`) — subscription-billed, no API keys. The conductor starts a
+conversation with a seat and can continue that exact conversation later by its session id; a seat can
+be briefed, build, and answer follow-ups as the SAME seat all mission. Codex's MCP server is built in;
+Grok and Gemini/Antigravity use the bundled stdlib wrappers, which also bake in the two headless
+croak-fixes (60-minute timeout — Antigravity's default was 5; `always_approve` so build tickets don't
+stall on unanswerable permission prompts; pass `cwd` = the repo on build work).
+
+**Transport doctrine (SPINE's laws applied to these tools):**
+- **Fresh call = blind seat.** A new start-tool call remembers nothing from any other session —
+  exactly what council and review seats require. Reviewers are ALWAYS fresh calls; never brief a
+  reviewer through a session that saw the build (anchoring law).
+- **Reply-chain = the same seat continuing.** The `*-reply` tool keeps one seat's thread alive for
+  follow-ups inside its own lane. A reply-chained session is inside its owning-seat lineage forever —
+  it can never become the independent reviewer of work its thread touched.
+- Raw one-shots (`grok -p`, `codex exec`, `agy -p`) stay legal as fallback transport; the persistent
+  seats are the default.
 
 ## RUNNING THE DECK (all mechanics are SPINE's — this is the plain-render checklist)
 1. **Plan first** (SPINE Part I — Gate-0 + the Diagnose/Design fork). State the goal back; write a
