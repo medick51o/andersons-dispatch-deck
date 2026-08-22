@@ -43,10 +43,16 @@ def _utf8_stdio():
 
 def find_agy():
     # Known install path FIRST (substitute-binary defence); PATH is the fallback.
-    local = os.environ.get("LOCALAPPDATA", os.path.expanduser(r"~\AppData\Local"))
-    cand = os.path.join(local, "agy", "bin", "agy.exe")
-    if os.path.isfile(cand):
-        return cand
+    home = os.path.expanduser("~")
+    local = os.environ.get("LOCALAPPDATA", os.path.join(home, "AppData", "Local"))
+    for cand in (
+        os.path.join(local, "agy", "bin", "agy.exe"),        # Windows
+        os.path.join(home, ".antigravity", "bin", "agy"),    # macOS / Linux
+        os.path.join(home, ".local", "bin", "agy"),
+        os.path.join(home, "agy", "bin", "agy"),
+    ):
+        if os.path.isfile(cand):
+            return cand
     return shutil.which("agy")
 
 _UUID_RE = __import__("re").compile(r"\A[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\Z")

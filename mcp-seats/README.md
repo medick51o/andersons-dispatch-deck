@@ -19,8 +19,10 @@ Server names are yours to choose at registration — this shop prefixes them wit
 
 ## Install
 
-**Prereqs:** **Python 3.10+ on PATH** (`python --version` — the wrappers are stdlib-only, but
-the registration commands invoke `python`; register the interpreter's full path if yours differs),
+**Prereqs:** **Python 3.10+ on PATH** — check with `python --version`, or `python3 --version` on
+macOS/Linux where a bare `python` often does not exist. The wrappers are stdlib-only, but the
+registration commands invoke the interpreter by name: use `python3` on macOS/Linux, or register
+the interpreter's full path. Also needed:
 plus each vendor's CLI installed and logged in to your subscription. Verify before wiring:
 `codex --version` · `grok --version` · `agy --version` (Antigravity). Wire only the seats you have —
 the method degrades loud, not silent, when a vendor is missing.
@@ -36,14 +38,17 @@ claude mcp add --scope user codex -- codex mcp-server
 **2 · Grok** — uses the bundled wrapper `wmw_grok_mcp.py` (stdlib-only Python, no dependencies):
 
 ```
-claude mcp add --scope user grok -- python <path-to-this-folder>\wmw_grok_mcp.py
+claude mcp add --scope user grok -- python <path-to-this-folder>/wmw_grok_mcp.py
 ```
 
 **3 · Gemini / Antigravity** — bundled wrapper `wmw_gemini_mcp.py`:
 
 ```
-claude mcp add --scope user gemini -- python <path-to-this-folder>\wmw_gemini_mcp.py
+claude mcp add --scope user gemini -- python <path-to-this-folder>/wmw_gemini_mcp.py
 ```
+
+*(Forward slashes work in PowerShell, cmd, bash and zsh alike — one command serves every
+platform. On macOS/Linux substitute `python3`.)*
 
 **4 · Restart Claude Code.** New MCP tools only appear in fresh sessions. Then check
 `claude mcp list` shows every seat `✔ Connected`.

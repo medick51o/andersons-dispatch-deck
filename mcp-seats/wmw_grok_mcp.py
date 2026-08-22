@@ -36,10 +36,11 @@ def _utf8_stdio():
 def find_grok():
     # Known install path FIRST: a stray "grok" earlier on PATH would run with this user's
     # credentials. PATH is only the fallback.
+    home = os.path.expanduser("~")
     for cand in (
-        os.path.expanduser(r"~\.grok\bin\grok.exe"),
-        os.path.expanduser(r"~\.grok\bin\grok"),
-        os.path.expanduser("~/.grok/bin/grok"),
+        os.path.join(home, ".grok", "bin", "grok.exe"),   # Windows
+        os.path.join(home, ".grok", "bin", "grok"),       # macOS / Linux
+        os.path.join(home, ".local", "bin", "grok"),
     ):
         if os.path.isfile(cand):
             return cand

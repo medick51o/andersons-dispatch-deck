@@ -80,18 +80,23 @@ Full instructions, the wrapper scripts, the acceptance test, and the transport d
 # Codex — MCP server mode is built in (Windows: codex.cmd if plain codex isn't found)
 claude mcp add --scope user codex -- codex mcp-server
 # Grok — bundled stdlib wrapper
-claude mcp add --scope user grok -- python <repo>\mcp-seats\wmw_grok_mcp.py
+claude mcp add --scope user grok -- python <repo>/mcp-seats/wmw_grok_mcp.py
 # Gemini / Antigravity — bundled stdlib wrapper
-claude mcp add --scope user gemini -- python <repo>\mcp-seats\wmw_gemini_mcp.py
+claude mcp add --scope user gemini -- python <repo>/mcp-seats/wmw_gemini_mcp.py
 ```
+
+*(macOS/Linux: use `python3`. Forward slashes work in every shell, Windows included.)*
 
 Restart Claude Code (new MCP tools only appear in fresh sessions), confirm `claude mcp list`
 shows each seat `✔ Connected`, then run the codeword acceptance test from the README per seat.
 The wrappers also fix the two classic headless croaks: a 60-minute timeout (Antigravity's
 default was 5) and an `always_approve` switch for build tickets (headless runs can't click
-permission prompts). Two laws ride the transport: **reviewers are ALWAYS fresh calls** (a fresh
-call is blind — exactly what independent review requires), and **a reply-chained session stays
-in its owning-seat lineage forever** (it can never review work its thread touched).
+permission prompts). The Grok wrapper's 60-minute cap is its own subprocess timeout; the
+Antigravity one is the CLI's `--print-timeout`. Two laws ride the transport: **reviewers are
+ALWAYS fresh calls** (blind is *necessary but not sufficient* — an independent review also needs
+a different effective-model vendor than the build, or a human-launched fresh seat), and **a
+reply-chained session stays in its owning-seat lineage forever** (it can never review work its
+thread touched).
 
 ---
 
@@ -106,10 +111,10 @@ only the fallback lane. The arsenal declaration names which transport each seat 
 ```bash
 # Codex
 codex --version 2>/dev/null && echo "CODEX: online" || echo "CODEX: missing (see §1)"
-# Grok (use the real path)
-"$HOME/.grok/bin/grok.exe" --version 2>/dev/null && echo "GROK: online" || echo "GROK: missing (see §2)"
-# Gemini / Antigravity
-"$LOCALAPPDATA/agy/bin/agy.exe" --version 2>/dev/null && echo "GEMINI: online" || echo "GEMINI: missing (see §3)"
+# Grok — Windows install path, then POSIX, then PATH
+{ "$HOME/.grok/bin/grok.exe" --version || "$HOME/.grok/bin/grok" --version || grok --version; } 2>/dev/null   && echo "GROK: online" || echo "GROK: missing (see §2)"
+# Gemini / Antigravity — same order
+{ "$LOCALAPPDATA/agy/bin/agy.exe" --version || "$HOME/.antigravity/bin/agy" --version || agy --version; } 2>/dev/null   && echo "GEMINI: online" || echo "GEMINI: missing (see §3)"
 # Claude is the host — always online (it's running this).
 ```
 
