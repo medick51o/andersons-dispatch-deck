@@ -5,7 +5,7 @@ description: "ANDERSON'S DISPATCH DECK (ADD) — heavy multi-model agentic orche
 # Anderson's Dispatch Deck — ADD  (/dispatch) — heavy orchestration, straight-faced
 *(Reserved future rebrand, coined 2026-07-17: "Agentic Dispatch Director" — also ADD.)*
 
-> **`cursor-v2`:** in Cursor the conductor is **⚫➤** (this Grok chat), not Claude. Composer is **🟣**. This loader is still the Claude-CLI trunk; the Cursor rewrite is landing on this branch. See the [README](README.md).
+> **`cursor-v2`:** in Cursor the conductor is **⚫➤** (this Grok chat), not Claude. Composer is **🟣**. Reviewing is a red dot on the seat (**🔵🔴**). Reject is **⛔**, not red — those two must never look the same. This loader is still the Claude-CLI trunk; the Cursor rewrite is landing on this branch. See the [README](README.md).
 
 **This SKILL is a thin loader.** The method is not in this file — it is in **SPINE.md**, which this
 tier loads and renders **plain**: no cat, no Jessie/James/Butch/Cassidy, no episodes, no "prepare for
@@ -47,20 +47,29 @@ Codex · ⚫ Grok · 🟢 Gemini. Announce dispatches/builds/reviews in-line:
 The color is a status light, not a costume — it says WHICH MODEL, nothing more. The banner never lies:
 a model wearing another's brain shows both (🟠🟢 = Claude-brain on the Gemini seat).
 
-### THE LEGEND — v3.1 (boss-adopted 2026-08-13; the Deck's full narration palette)
+### THE LEGEND — v3.2 (cursor-v2 · 2026-08-21)
+**Seat first, act second, meter last (meter mark still TBD — see README).**
+Seats: **⚪ THE BOSS** · **⚫➤** orchestrator (this Cursor Grok chat) · **🟣** Composer · **🟠** Claude · **🔵** Codex / GPT · **🟢** Gemini.
+Acts: **🔨 building** · **🔴 reviewing** (suffix on the seat: **🔵🔴** = Codex is reviewing).
+States: **⛔** blocked / needs-boss / verdict=REJECT · 🚩 finding raised (flagged, not fatal) ·
+🚧 lane closed, detour in progress · **👥** council in session · 🧪 gates running · 🩺 diagnosing
+(doctor-first) · 🕵️ adversary loose · 🏁 boss-validated (top rung, outranks "done") ·
+🚢 shipped/deployed · 🪦 retired/parked · 🟤 quiet hold (nothing running, watchers armed).
+Boss combos: ⚪🏁 in-hand validation · ⚪⚖️ ruling pending · ⚪🎮 on the sticks.
+Reading: 🟣🔨 Composer building · **🔵🔴** Codex reviewing · **🔵🔴→⛔** Codex rejected ·
+🟠🟢 Claude-brain-on-the-Gemini-seat. A run reads as a timeline:
+🩺 → 👥 → 🟣🔨 → 🧪 → 🔵🔴→⛔ → 🟣🔨 → 🧪 → 🚢 → ⚪🏁 → 🟤.
+**Do not** use 🔴 for reject. **Do not** use 🟣 for council (🟣 is Composer).
+The boss's words: the dots "give the chat a lot of life and color while working" — narrate every
+Deck run in this notation.
+
+### THE LEGEND — v3.1 (CLI trunk on `main`; kept for the Claude-CLI loader)
 **Seat first, act second.** Seats: **⚪ THE BOSS** · 🟡 orchestrator · 🟠 Claude · 🔵 Codex ·
 ⚫ Grok · 🟢 Gemini. Acts: **🔨 building · 📝 reviewing**.
 States: 🔴 blocked/needs-boss OR verdict=REJECT · 🚩 finding raised (flagged, not fatal) ·
 🚧 lane closed, detour in progress · 🟣 council in session · 🧪 gates running · 🩺 diagnosing
 (doctor-first) · 🕵️ adversary loose · 🏁 boss-validated (top rung, outranks "done") ·
 🚢 shipped/deployed · 🪦 retired/parked · 🟤 quiet hold (nothing running, watchers armed).
-Boss combos: ⚪🏁 in-hand validation · ⚪⚖️ ruling pending · ⚪🎮 on the sticks.
-Reading: 🟠🔨 Sonnet building · 🔵📝 Codex reviewing · 🔵📝→🔴 Codex rejected ·
-🟠🟢 Claude-brain-on-the-Gemini-seat. A run reads as a timeline:
-🩺 → 🟣 → 🟠🔨 → 🧪 → 🔵📝→🔴 → 🟠🔨 → 🧪 → 🚢 → ⚪🏁 → 🟤.
-The boss's words: the dots "give the chat a lot of life and color while working" — narrate every
-Deck run in this notation. Vendor→color still owned by SPINE Appendix A; this legend extends it
-with the boss seat, act badges, and state dots (it supersedes any builders-wear-color-alone habit).
 
 ## RUNNING THE DECK (all mechanics are SPINE's — this is the plain-render checklist)
 1. **Plan first** (SPINE Part I — Gate-0 + the Diagnose/Design fork). State the goal back; write a

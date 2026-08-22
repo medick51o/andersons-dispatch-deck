@@ -71,6 +71,21 @@ Two harnesses, one method:
 | **Cursor-native** | daily drive inside this IDE | Cursor Models (Grok + Composer) · Other Models only when you *name* them |
 | **CLI overflow** | you explicitly want Claude Max / Codex / `agy` / Grok CLI | those subscriptions — not the Cursor meter |
 
+### Reading a run
+
+Seat first, act second. Building is the hammer. Reviewing is a **red dot on the seat**. Reject is a stop — never another red dot.
+
+| You see | It means |
+|---|---|
+| 🟣🔨 | Composer is building |
+| **🔵🔴** | Codex is **reviewing** |
+| **🔵🔴→⛔** | Codex reviewed, then **rejected** |
+| 🟠🔴 | Claude is reviewing |
+| 🟢🔴 | Gemini is reviewing |
+| 🟣🔴 | Composer verification (check, not cross-vendor) |
+| 👥 | Council in session |
+| 🧪 | Gates running |
+
 ---
 
 ## The rules that make it trustworthy
@@ -90,6 +105,7 @@ This branch is the Cursor reseat. The method is proven; the Cursor wardrobe is b
 
 - [x] Branch cut from the public deck
 - [x] Seats named: ⚫➤ conducts · 🟣 Composer · Gemini 3.7 first-class
+- [x] Review = red dot on the seat (**🔵🔴**). Reject = **⛔**. Council = **👥** (🟣 is Composer)
 - [ ] Skill rewrite (`SKILL.md` + Cursor-native guide)
 - [ ] Dual-harness switch (`cursor` · `cli` · `off`) without the wrong-meter oops
 - [ ] Console + dispatch guide updated for this wardrobe
