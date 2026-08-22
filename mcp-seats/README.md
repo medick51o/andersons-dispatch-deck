@@ -19,7 +19,9 @@ Server names are yours to choose at registration — this shop prefixes them wit
 
 ## Install
 
-**Prereqs:** each vendor's CLI installed and logged in to your subscription. Verify before wiring:
+**Prereqs:** **Python 3.10+ on PATH** (`python --version` — the wrappers are stdlib-only, but
+the registration commands invoke `python`; register the interpreter's full path if yours differs),
+plus each vendor's CLI installed and logged in to your subscription. Verify before wiring:
 `codex --version` · `grok --version` · `agy --version` (Antigravity). Wire only the seats you have —
 the method degrades loud, not silent, when a vendor is missing.
 
@@ -83,9 +85,18 @@ the bottom never changes.
 
 - **Fresh call = blind seat.** A new start-tool call remembers nothing from any other session —
   exactly what council and review seats require. Reviewers are ALWAYS fresh calls; never brief a
-  reviewer through a session that saw the build.
+  reviewer through a session that saw the build. Fresh is necessary, not sufficient — an
+  independent review also needs a different effective-model vendor than the build (or a
+  human-launched fresh seat); fresh-Codex reviewing Codex-built work is a self-check, not a review.
 - **Reply-chain = the same seat continuing.** Use the continue tool for follow-ups inside one
   seat's owned lane. A reply-chained session stays in its owning-seat lineage forever — it can
   never become the independent reviewer of work its thread touched.
 - Raw one-shots (`grok -p`, `codex exec`, `agy -p`) remain legal fallback transport; the
   persistent seats are the default.
+
+## Known limitation (queued for v2)
+
+Each wrapper handles one request at a time: a long-running seat call blocks that server's loop
+(other seats are separate processes and unaffected), and in-flight calls cannot be cancelled
+mid-run — the CLI keeps running until it finishes or times out. Fine for dispatch-and-wait
+orchestration; not yet a concurrent job queue.

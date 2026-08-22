@@ -1,18 +1,28 @@
 #!/usr/bin/env python3
-"""wmw-gemini — MCP stdio server wrapping the Antigravity CLI (Google seat).
+"""wmw-gemini — MCP stdio server wrapping the Antigravity CLI (Google seat). v1.1
 
 Persistent Gemini/Antigravity seat for Claude Code, sibling of wmw-grok:
   gemini(prompt, ...)              start a new conversation -> reply + conversationId
   gemini-reply(conversationId, ..) continue that conversation with full context
 
-Bakes in the two headless crash fixes discovered 2026-08-22:
-  - --print-timeout raised from the 5m default (long tasks died mid-thought)
-  - --dangerously-skip-permissions on always_approve (headless permission
-    prompts can never be answered and stall until the timeout kills the run)
+v1.1 (2026-08-22, council findings): honest error detection, strict UTF-8 stdio,
+argument validation, per-request exception boundary, prompt-length guard (the
+CLI takes the prompt as an argv argument; Windows caps a command line at 32K
+chars — oversized prompts get a clean error, not a crash), and the reply footer
+reports the effective model/brain (`brain: UNREPORTED` when the CLI's JSON
+does not say — so an independence preflight can fail closed instead of assuming
+green = Gemini). v1.2: UUID-validated conversation ids + no-leading-dash argv guard (a crafted id
+could otherwise smuggle CLI flags), --conversation= equals form, absolute-path-first
+exe lookup, stdin closed. Install/registration: see README.md in this folder.
+Requires Python 3.10+ on PATH.
+
+Bakes in the two headless croak-fixes: --print-timeout 60m (the CLI default of
+5 minutes killed long tasks) and --dangerously-skip-permissions behind
+`always_approve` (headless runs can never click a permission prompt).
 
 Transport: newline-delimited JSON-RPC 2.0 over stdio. Stdlib only.
-Registered via:
-  claude mcp add --scope user wmw-gemini -- python C:\\Sync\\Projects\\andersons-dispatch-deck\\wmw-grok\\wmw_gemini_mcp.py
+Known limitation (documented, queued): requests are handled one at a time; a
+long-running call blocks the loop and cancellation is not supported.
 """
 import json
 import os
@@ -20,26 +30,67 @@ import shutil
 import subprocess
 import sys
 
-PRINT_TIMEOUT = "60m"   # passed to agy --print-timeout
-PROC_TIMEOUT_S = 3900   # subprocess guard, slightly above PRINT_TIMEOUT
+PRINT_TIMEOUT = "60m"
+PROC_TIMEOUT_S = 3900
+MAX_ARGV_PROMPT = 25000  # chars; Windows command-line hard cap is 32767 for the whole line
+
+def _utf8_stdio():
+    for stream in (sys.stdin, sys.stdout):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except Exception:
+            pass
 
 def find_agy():
-    exe = shutil.which("agy")
-    if exe:
-        return exe
+    # Known install path FIRST (substitute-binary defence); PATH is the fallback.
     local = os.environ.get("LOCALAPPDATA", os.path.expanduser(r"~\AppData\Local"))
     cand = os.path.join(local, "agy", "bin", "agy.exe")
-    if os.path.exists(cand):
+    if os.path.isfile(cand):
         return cand
+    return shutil.which("agy")
+
+_UUID_RE = __import__("re").compile(r"\A[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\Z")
+
+def _safe_id(value, label):
+    """Session ids are argv values: a leading '-' would be reparsed as a CLI flag."""
+    if not isinstance(value, str) or not _UUID_RE.match(value):
+        raise ValueError(f"'{label}' must be a UUID as returned in a prior reply footer")
+    return value
+
+def _safe_argv(value, label):
+    if value is None:
+        return None
+    if not isinstance(value, str) or not value.strip() or value.lstrip().startswith("-"):
+        raise ValueError(f"'{label}' must be a non-empty string that does not start with '-'")
+    return value
+
+def _extract_json(raw):
+    dec = json.JSONDecoder()
+    idx = raw.find("{")
+    while idx != -1:
+        try:
+            obj, _ = dec.raw_decode(raw[idx:])
+            if isinstance(obj, dict):
+                return obj
+        except json.JSONDecodeError:
+            pass
+        idx = raw.find("{", idx + 1)
     return None
 
 def run_gemini(prompt, conversation_id=None, cwd=None, model=None, always_approve=False):
     exe = find_agy()
     if not exe:
         return True, "Antigravity CLI not found (PATH or %LOCALAPPDATA%\\agy\\bin\\agy.exe)."
+    if cwd and not os.path.isdir(cwd):
+        return True, f"cwd is not a directory: {cwd}"
+    if len(prompt) > MAX_ARGV_PROMPT:
+        return True, (f"prompt is {len(prompt)} chars; this seat's CLI takes the prompt on the "
+                      f"command line and Windows caps that at ~32K. Keep prompts under "
+                      f"{MAX_ARGV_PROMPT} chars — write long material to a file and (with "
+                      f"always_approve: true) ask Gemini to read the file instead.")
     cmd = [exe]
     if conversation_id:
-        cmd += ["--conversation", conversation_id]
+        cmd += [f"--conversation={conversation_id}"]
     if model:
         cmd += ["--model", model]
     if always_approve:
@@ -49,46 +100,75 @@ def run_gemini(prompt, conversation_id=None, cwd=None, model=None, always_approv
         proc = subprocess.run(
             cmd, capture_output=True, text=True, encoding="utf-8",
             errors="replace", timeout=PROC_TIMEOUT_S, cwd=cwd or None,
+            stdin=subprocess.DEVNULL,
         )
     except subprocess.TimeoutExpired:
         return True, f"Antigravity timed out after {PROC_TIMEOUT_S}s"
-    except NotADirectoryError:
-        return True, f"cwd is not a directory: {cwd}"
+    except OSError as e:
+        return True, f"could not launch agy: {e}"
     raw = (proc.stdout or "").strip()
-    idx = raw.find("{")
-    if idx == -1:
-        err = (proc.stderr or "").strip()
-        return True, f"agy exited {proc.returncode} with no JSON output.\nstdout: {raw[:2000]}\nstderr: {err[:2000]}"
-    try:
-        data = json.loads(raw[idx:])
-    except json.JSONDecodeError as e:
-        return True, f"could not parse agy JSON output ({e}).\nraw: {raw[:2000]}"
-    text = data.get("response", "")
-    cid = data.get("conversation_id", "unknown")
+    err = (proc.stderr or "").strip()
+    data = _extract_json(raw)
+    if data is None:
+        return True, (f"agy exited {proc.returncode} with no parseable JSON.\n"
+                      f"stdout: {raw[:2000]}\nstderr: {err[:2000]}")
+    text = data.get("response")
+    cid = data.get("conversation_id")
     status = data.get("status", "unknown")
+    if proc.returncode != 0 or status != "SUCCESS" or not isinstance(cid, str) or not cid:
+        return True, (f"agy run failed (exit {proc.returncode}, status {status}, "
+                      f"conversationId={cid!r}).\ntext: {str(text)[:1000]}\nstderr: {err[:1000]}")
+    if not isinstance(text, str):
+        text = "" if text is None else str(text)
+    # Effective model/brain: agy can rent non-Gemini brains (the Overflow Valve), and an
+    # independence preflight must be able to fail closed when the brain is unknown.
+    brain = data.get("model") or data.get("model_name") or (model if model else "UNREPORTED")
     footer = (f"\n\n---\n[wmw-gemini] conversationId: {cid} · status: {status}"
-              f" · turns: {data.get('num_turns', '?')}")
-    if proc.returncode != 0:
-        footer += f" · exit: {proc.returncode}"
-    return (status != "SUCCESS" or proc.returncode != 0), text + footer
+              f" · brain: {brain} · turns: {data.get('num_turns', '?')}")
+    return False, text + footer
+
+def _req_str(args, key):
+    v = args.get(key)
+    if not isinstance(v, str) or not v.strip():
+        raise ValueError(f"'{key}' must be a non-empty string")
+    return v
+
+def _opt_str(args, key):
+    v = args.get(key)
+    if v is None:
+        return None
+    if not isinstance(v, str) or not v.strip():
+        raise ValueError(f"'{key}' must be a non-empty string when given")
+    return v
+
+def _opt_bool(args, key):
+    v = args.get(key)
+    if v is None:
+        return False
+    if isinstance(v, bool):
+        return v
+    if isinstance(v, str) and v.lower() in ("true", "false"):
+        return v.lower() == "true"
+    raise ValueError(f"'{key}' must be a boolean")
 
 TOOLS = [
     {
         "name": "gemini",
         "description": (
             "Start a NEW conversation with Gemini via the Antigravity CLI (Google "
-            "subscription seat). Returns the reply plus a conversationId footer; continue "
-            "the same conversation with gemini-reply. Each fresh call is an independent, "
-            "blind session — correct for council/review seats. Set always_approve true when "
-            "Gemini must edit files or run commands (headless permission prompts otherwise "
-            "stall the run)."
+            "subscription seat). Returns the reply plus a conversationId footer (including the "
+            "effective brain — check it before counting this seat as an independent Gemini vote); "
+            "continue the same conversation with gemini-reply. Each fresh call is an independent, "
+            "blind session. Set always_approve true when Gemini must edit files or run commands "
+            "(headless permission prompts otherwise stall the run). Keep prompts under ~25K chars; "
+            "put long material in a file for Gemini to read."
         ),
         "inputSchema": {
             "type": "object",
             "properties": {
                 "prompt": {"type": "string", "description": "The task or message for Gemini."},
                 "cwd": {"type": "string", "description": "Working directory (repo path for build work)."},
-                "model": {"type": "string", "description": "Optional model override (agy models lists them)."},
+                "model": {"type": "string", "description": "Optional model override (agy models lists them; exact-match strings)."},
                 "always_approve": {"type": "boolean", "description": "Skip tool-permission prompts. Required for build work; default false."},
             },
             "required": ["prompt"],
@@ -112,16 +192,37 @@ TOOLS = [
     },
 ]
 
+def _tool_call(name, args):
+    if not isinstance(args, dict):
+        return True, "arguments must be an object"
+    try:
+        if name == "gemini":
+            return run_gemini(
+                _req_str(args, "prompt"), cwd=_safe_argv(_opt_str(args, "cwd"), "cwd"),
+                model=_safe_argv(_opt_str(args, "model"), "model"),
+                always_approve=_opt_bool(args, "always_approve"),
+            )
+        if name == "gemini-reply":
+            return run_gemini(
+                _req_str(args, "prompt"),
+                conversation_id=_safe_id(args.get("conversationId"), "conversationId"),
+                always_approve=_opt_bool(args, "always_approve"),
+            )
+    except ValueError as e:
+        return True, f"invalid arguments: {e}"
+    return None
+
 def handle(msg):
     method = msg.get("method")
     mid = msg.get("id")
+    is_notification = "id" not in msg
     if method == "initialize":
         return {
             "jsonrpc": "2.0", "id": mid,
             "result": {
                 "protocolVersion": msg.get("params", {}).get("protocolVersion", "2024-11-05"),
                 "capabilities": {"tools": {}},
-                "serverInfo": {"name": "wmw-gemini", "version": "1.0.0"},
+                "serverInfo": {"name": "wmw-gemini", "version": "1.2.0"},
             },
         }
     if method == "ping":
@@ -129,30 +230,22 @@ def handle(msg):
     if method == "tools/list":
         return {"jsonrpc": "2.0", "id": mid, "result": {"tools": TOOLS}}
     if method == "tools/call":
-        params = msg.get("params", {})
+        params = msg.get("params") or {}
         name = params.get("name")
-        args = params.get("arguments", {}) or {}
-        if name == "gemini":
-            is_err, text = run_gemini(
-                args.get("prompt", ""), cwd=args.get("cwd"), model=args.get("model"),
-                always_approve=bool(args.get("always_approve")),
-            )
-        elif name == "gemini-reply":
-            is_err, text = run_gemini(
-                args.get("prompt", ""), conversation_id=args.get("conversationId"),
-                always_approve=bool(args.get("always_approve")),
-            )
-        else:
+        result = _tool_call(name, params.get("arguments") or {})
+        if result is None:
             return {"jsonrpc": "2.0", "id": mid,
                     "error": {"code": -32602, "message": f"unknown tool: {name}"}}
+        is_err, text = result
         return {"jsonrpc": "2.0", "id": mid,
                 "result": {"content": [{"type": "text", "text": text}], "isError": is_err}}
-    if mid is not None:
+    if not is_notification:
         return {"jsonrpc": "2.0", "id": mid,
                 "error": {"code": -32601, "message": f"method not found: {method}"}}
     return None
 
 def main():
+    _utf8_stdio()
     for line in sys.stdin:
         line = line.strip()
         if not line:
@@ -160,8 +253,18 @@ def main():
         try:
             msg = json.loads(line)
         except json.JSONDecodeError:
+            sys.stdout.write(json.dumps({"jsonrpc": "2.0", "id": None,
+                                         "error": {"code": -32700, "message": "parse error"}}) + "\n")
+            sys.stdout.flush()
             continue
-        resp = handle(msg)
+        if not isinstance(msg, dict):
+            continue
+        try:
+            resp = handle(msg)
+        except Exception as e:
+            print(f"[wmw-gemini] internal error: {e}", file=sys.stderr)
+            resp = {"jsonrpc": "2.0", "id": msg.get("id"),
+                    "error": {"code": -32603, "message": f"internal error: {e}"}} if "id" in msg else None
         if resp is not None:
             sys.stdout.write(json.dumps(resp) + "\n")
             sys.stdout.flush()

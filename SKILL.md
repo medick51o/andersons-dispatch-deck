@@ -45,7 +45,7 @@ Codex · ⚫ Grok · 🟢 Gemini. Announce dispatches/builds/reviews in-line:
 The color is a status light, not a costume — it says WHICH MODEL, nothing more. The banner never lies:
 a model wearing another's brain shows both (🟠🟢 = Claude-brain on the Gemini seat).
 
-### THE LEGEND — v4.0 (boss-adopted 2026-08-22; the cursor-v2 refinements rolled home, minus the Cursor seats)
+### THE LEGEND — v4.0 (boss-adopted 2026-08-22; the Deck RENDERING of SPINE's THE NOTATION v4.0 — SPINE owns the marks)
 **Seat first, act second, meter wrap around the words.** A line reads:
 `🔵🔴 Codex reviewing 🟠 Claude's parser`
 Seats: **⚪ THE BOSS** · **🟡➤ conductor** — the orchestrator wears the **➤ baton** after its dot
@@ -56,10 +56,9 @@ Acts: **🔨 building** · **🔴 reviewing — a suffix on the seat** (🔵🔴
 reject) · **⛔ rejected / blocked / needs-boss** (never 🔴 for this — reviewing and rejection must
 never look alike).
 Council: **🌈👥👥 — every color, a crowd** (retires v3.1's 🟣; purple now means nothing here).
-Meter: **not narrated in this shop** — every seat (the CLIs and the persistent MCP seats) rides an
-already-paid subscription, so there is nothing to meter and no wrap noise. (The wrap marks
-♾️/💸/🚨💳 live on the `cursor-v2` branch for shops that burn credits; roll them in only if a
-metered seat ever joins.)
+Meter: **wrap marks not narrated on this trunk** — subscription seats have windows, not per-token
+bills, so the ♾️/💸/🚨💳 wraps (kept on `cursor-v2` for credit-burning shops) would be noise here.
+Meter-AWARENESS itself (SPINE Part VI: headroom, the five levers) still binds.
 States (kept from v3.1): 🚩 finding raised (flagged, not fatal) · 🚧 lane closed, detour in
 progress · 🧪 gates running · 🩺 diagnosing (doctor-first) · 🕵️ adversary loose · 🏁 boss-validated
 (top rung, outranks "done") · 🚢 shipped/deployed · 🪦 retired/parked · 🟤 quiet hold (nothing
@@ -76,24 +75,34 @@ Situations (worked lines):
 Vendor→color still owned by SPINE Appendix A; this legend extends it and **supersedes v3.1**
 (📝-as-reviewing and 🟣-as-council are retired marks).
 
-## PERSISTENT SEATS — the standing MCP transports (the amnesia era is over, 2026-08-22)
-Every vendor in the arsenal is wired into Claude Code as a **persistent MCP seat** (install: SETUP.md
-section 4 + `mcp-seats/README.md`) — subscription-billed, no API keys. The conductor starts a
-conversation with a seat and can continue that exact conversation later by its session id; a seat can
-be briefed, build, and answer follow-ups as the SAME seat all mission. Codex's MCP server is built in;
-Grok and Gemini/Antigravity use the bundled stdlib wrappers, which also bake in the two headless
-croak-fixes (60-minute timeout — Antigravity's default was 5; `always_approve` so build tickets don't
-stall on unanswerable permission prompts; pass `cwd` = the repo on build work).
+## PERSISTENT SEATS — the standing MCP transports (installed & verified 2026-08-22)
+Every rival vendor is wired into Claude Code as a **persistent MCP seat** — subscription-billed, no
+API keys, no per-token bills. The orchestrator dispatches through these tools by default:
 
-**Transport doctrine (SPINE's laws applied to these tools):**
-- **Fresh call = blind seat.** A new start-tool call remembers nothing from any other session —
-  exactly what council and review seats require. Reviewers are ALWAYS fresh calls; never brief a
-  reviewer through a session that saw the build (anchoring law).
-- **Reply-chain = the same seat continuing.** The `*-reply` tool keeps one seat's thread alive for
-  follow-ups inside its own lane. A reply-chained session is inside its owning-seat lineage forever —
-  it can never become the independent reviewer of work its thread touched.
-- Raw one-shots (`grok -p`, `codex exec`, `agy -p`) stay legal as fallback transport; the persistent
-  seats are the default.
+| Banner | Server | Start tool | Continue tool | Under the hood |
+|---|---|---|---|---|
+| 🔵 Codex | `wmw-codex` | `codex` | `codex-reply` + conversationId | `codex mcp-server` (built in) |
+| ⚫ Grok | `wmw-grok` | `grok` | `grok-reply` + sessionId | Grok Build CLI `-p` / `--resume` |
+| 🟢 Gemini | `wmw-gemini` | `gemini` | `gemini-reply` + conversationId | Antigravity `agy -p` / `--conversation` |
+
+Wrapper source: `C:\Sync\Projects\andersons-dispatch-deck\mcp-seats\`. The Grok/Gemini wrappers bake in
+the two headless croak-killers found 2026-08-22: a 60-minute timeout (agy's default was 5 minutes —
+long tasks died mid-thought) and an `always_approve` switch (headless runs can never click a
+permission prompt; without it a build task stalls until the timeout kills it).
+
+**Transport doctrine (owner: SPINE v2.0, THE TRANSPORT LAW — this is the Deck rendering):**
+- **Fresh call = blind seat — necessary, not sufficient.** A new `codex`/`grok`/`gemini` call
+  remembers nothing from any other session. Reviewers are ALWAYS fresh calls; never brief a
+  reviewer through a session that saw the build (anchoring law). Fresh alone is not independence —
+  the reviewer must also sit on a different effective-model vendor than the build, or be
+  boss-launched (SPINE Part IV's two legal paths).
+- **Reply-chain = the same seat continuing.** `*-reply` keeps one seat's thread alive for follow-ups
+  inside its own lane (ticket clarification, build iteration). A reply-chained session is inside its
+  owning-seat lineage forever — it can never become the independent reviewer of work its thread touched.
+- **Build tickets:** pass `always_approve: true` and `cwd` = the repo. Research/review tickets: omit
+  both (read-only default).
+- Raw one-shots (`grok -p`, `codex exec`, `agy -p`) stay legal as fallback transport; the MCP seats
+  are the default.
 
 ## RUNNING THE DECK (all mechanics are SPINE's — this is the plain-render checklist)
 1. **Plan first** (SPINE Part I — Gate-0 + the Diagnose/Design fork). State the goal back; write a

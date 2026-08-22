@@ -1,6 +1,10 @@
 # SPINE — the method engine (single owner, all tiers inherit)
 
-**Version line (machine-readable):** `spine v1.1 (2026-07-22)`
+**Version line (machine-readable):** `spine v2.0 (2026-08-22)`
+**v2.0 — THE GREAT RE-SYNC:** the SPINE fork is healed — every tier's copy is byte-identical to
+this one from today forward (the trm copy had carried silent edits under v1.1's tag; that practice
+is banned: any content change bumps this line). New in v2.0: THE NOTATION v4.0 (supersedes the
+2026-08-09 act marks) and THE TRANSPORT LAW (persistent seats).
 **One owner per fact.** Everything the method *does* — how work is judged, dispatched, fenced,
 reviewed, and shipped — lives HERE, character-free. The Deck renders this plain; TRM (CREW) adds
 a crew on top; TRTO (SHOW) adds a story on top. **Neither CREW nor SHOW restates SPINE.** Edit the
@@ -512,8 +516,35 @@ restatement) · **EXPECTED OUTCOME** (gradeable before dispatch; can't write the
 not ready to delegate) · **CONTEXT** (file paths, not pasted bulk) · **CONSTRAINTS** · **MUST DO**
 (incl. the exact verify command) · **MUST NOT** (incl. "no undeclared spawns") · **OUTPUT FORMAT**
 · **WRITE SET** (every file/glob the worker may create or modify — mandatory on every implementation
-ticket). Every builder ticket carries the load-bearing line: *"'I could not tell what you meant' is
-a good outcome. Propose, don't guess."* Ambiguity is a finding, not an input.
+ticket) · **LAWS** (one tucked-away line: the numbers/names of the house laws and standards that
+govern this ticket — injection by reference, never re-taught in prose; boss ruling 2026-07-24:
+this line lives in the ticket's small print and is never narrated in the story voice). Every
+builder ticket carries the load-bearing line: *"'I could not tell what you meant' is a good
+outcome. Propose, don't guess."* Ambiguity is a finding, not an input.
+
+### The episode folder (documentation lane — never the stage)
+Every mission/episode with REAL dispatches gets a dated backend folder —
+`episodes/YYYY-MM-DD-<slug>/` at the project root — collecting that run's artifacts: the shape
+receipt (see the Anderson deck's shape.md rule), tickets as issued, worker reports/receipts, and
+any reality evidence the boss provides. This is the harvest source for end-of-project bottling
+and the inspectable evidence behind lineage-ledger rows. **Style law (boss ruling 2026-07-24):
+the DATE is for the backend only.** Front-facing narration (TRM/SHOW voices) refers to episodes
+by NAME — the jargon and datestamps stay in the folder, visible if the boss peeks, never
+paraded in the story. **One sanctioned exception (boss amendment, same day): the ENDING
+CREDITS — show tiers only.** When an episode closes under a SHOW-voiced tier (TRM's crew
+voice, TEAM ROCKET TAKES OVER), the show may roll credits — and there the start and end
+dates belong, movie-style (*"filmed on location · 2026-07-23 → 2026-07-24"*). Dates at the
+close are part of the fun; dates mid-story are jargon. **The dispatch deck does NOT roll
+credits** — the plain tier closes plainly; its dates live in the backend folder only.
+
+**Visuals (boss ruling 2026-07-24): the boss's screenshots are reality evidence — file them,
+cheaply.** When the boss drops a screenshot during an episode (a bug's face, an in-hand proof,
+a before/after), the crew quietly copies it into `episodes/<slug>/visuals/` — RE-COMPRESSED to
+economical JPEG (cap ~1280px on the long edge, quality ~70; a full-HD PNG becomes a small JPG).
+These are evidence for audits and bottling, not gallery prints. Zero ceremony: no narration, no
+asking the boss to screenshot anything, one quiet filing at most mentioned in the episode's
+backend notes. (Mechanics: uploads arrive under `.claude\uploads\` — convert on copy with
+whatever image tool the box has; ffmpeg and Pillow both do it in one line.)
 
 ### The WRITE SET fence (parallel dispatch)
 Parallel tickets require **provably disjoint write sets**, including shared manifests, lockfiles,
@@ -697,11 +728,63 @@ version.*
 
 ---
 
+## THE TRANSPORT LAW — persistent seats (owner: SPINE; added v2.0, 2026-08-22)
+
+Vendor seats are reached, by default, as **persistent MCP conversations** inside the conductor's
+harness — a start tool returns the reply plus a session id; a `*-reply` tool continues that exact
+conversation with full context — not as amnesia one-shot CLI dispatches. Wiring, wrapper scripts,
+and install commands live with the Deck (`mcp-seats/` — Appendix-A-class detail, not law). The law:
+
+1. **Opt-in, per vendor.** Vendors are suggestions, never requirements. The orchestrator OFFERS
+   the wiring when it sees a CLI is present and registers nothing without the owner's yes;
+   registration is user-scope, touches nothing else in their setup, and one command removes it.
+2. **A fresh call is a blind seat — necessary, not sufficient.** A new session remembers nothing
+   from any other session: reviewers are ALWAYS fresh calls, never briefed through a session that
+   saw the build. Fresh alone does not make a review independent — Part IV's two legal paths
+   still bind (different effective-model vendor outside the build's lineage, or a boss-launched
+   fresh-context seat).
+3. **A reply-chain stays in its owning-seat lineage forever.** "Touched" means built, edited, or
+   was briefed on it (a repair still gets a fresh review — Part V). A reply-chained session can
+   never be dressed up as the independent reviewer of that work.
+4. **Preflight probes the transport, not the binary.** A seat is online when its MCP seat answers
+   in THIS session (registered and Connected); a CLI `--version` only proves the fallback lane
+   exists. The arsenal declaration names which transport each seat answered on.
+5. **One-shot CLI dispatches stay legal as the fallback lane.** Build tickets on persistent seats
+   pass explicit tool-approval and a working directory; research and review tickets stay
+   read-only by default.
+
 ## APPENDIX A — THE ARSENAL / WIRING (current wiring, NOT law — verify; pricing/promos are details)
 
 The model banner colors (vendor → color; the ONLY color fact SPINE owns): **claude = orange 🟠 ·
 codex = blue 🔵 · grok = black ⚫ · gemini = green 🟢** · the orchestrator conducting
-plain = **gold 🟡**. A worn wardrobe shows both (🟠🟢 = a Claude brain on the Gemini seat).
+plain = **gold 🟡**, and the CONDUCTOR's banner wears the **➤ baton** after its dot — 🟡➤ on the
+plain Deck, 😼🟠➤ when a crew tier's cat is hosted on Claude (boss law 2026-08-22, all tiers). A
+worn wardrobe shows both (🟠🟢 = a Claude brain on the Gemini seat).
+
+**THE NOTATION — v4.0 (boss-adopted 2026-08-22; supersedes the 2026-08-09 marks: 🟣-building is
+repealed and the ⚪/🟤 reservations are spent). Seat first, act second. This section is the OWNER —
+tier legends (Deck SKILL, CREW) are renderings of it.**
+
+- **BUILDING = 🔨** trailing the seat: 🔵🔨 Codex building · 🟠🔨 Claude building. (**🟣 is retired
+  everywhere** — it no longer means building, council, or anything else.)
+- **REVIEWING = 🔴** trailing the seat on the plain Deck: 🔵🔴 = Codex reviewing — NOT a reject.
+  **Grammar scope:** the Deck is seat-first; crew tiers are character-first, where a LEADING 🔴 is
+  Butch's character color — so crew tiers render the reviewing act as **📝** (*🩷⚫ Cassidy (in
+  grok) 📝*). Either way the vendor color stays visible: the value of a review is WHO ran it, and
+  🔵🔨 then 🔵🔴 on the same work is the self-review failure this notation exists to expose.
+- **REJECTED / BLOCKED / NEEDS-BOSS = ⛔**, never a red circle — rejection, reviewing, and Butch
+  must never look alike.
+- **COUNCIL = 🌈👥👥** — every color, a crowd; a council is a special move and asks first.
+- **THE BOSS = ⚪** on the plain Deck, **👑** in crew tiers. Combos: ⚪🏁/👑🏁 in-hand validation ·
+  ⚪⚖️/👑⚖️ ruling pending · ⚪🎮/👑🎮 on the sticks.
+- **STATES:** 🚩 finding raised (flagged, not fatal) · 🚧 lane closed, detour in progress · 🧪
+  gates running · 🩺 diagnosing (doctor-first) · 🕵️ adversary loose · 🏁 boss-validated (top rung,
+  outranks "done") · 🚢 shipped/deployed · 🪦 retired/parked · 🟤 quiet hold (watchers armed).
+- **Meter wrap marks (♾️/💸/🚨💳) are optional rendering** for shops that burn metered credits;
+  this shop narrates none. Meter-AWARENESS (Part VI) still binds — subscription seats have windows
+  and drainable quotas.
+
+A run reads as a timeline: 🩺 → 🌈👥👥 → 🟠🔨 → 🧪 → 🔵🔴→⛔ → 🟠🔨 → 🧪 → 🚢 → ⚪🏁 → 🟤.
 
 - **Codex (OpenAI)** — bounded implementation of a clear spec; the sharpest code reviewer (proves
   bugs, cites sources). `codex exec --sandbox danger-full-access --skip-git-repo-check "<prompt>" < /dev/null`.
@@ -744,6 +827,11 @@ plain = **gold 🟡**. A worn wardrobe shows both (🟠🟢 = a Claude brain on 
 - **agy HEADLESS auto-denies tool permissions** (`read_file` etc. — the run dies with a "jetski"
   permission error and empty output). Headless dispatches must EMBED the evidence in the prompt
   (reviews-by-embed); probe auth cheaply first with a one-word `-p` ping.
+- **Codex safety layer flags "exploit/attack/laundering" vocabulary (2026-07-26):** a
+  verify ticket phrased as "re-run your exploits / attack variations" died mid-run flagged
+  as cyber-risk (78K tokens lost). Same work re-dispatched as "re-create the defect's
+  failure scenario / negative-path QA regression" ran clean. Phrase adversarial-verify
+  tickets to Codex in defect/QA vocabulary, never attacker vocabulary.
 - **Secret-gated verification pattern (proven 2026-07-22):** when a reviewer's sandbox denies it a
   secret the proof needs (e.g. an HMAC key), the reviewer AUTHORS the exact verifier script; a
   key-holding seat EXECUTES it unmodified (trivial repairs applied openly and logged); the verdict

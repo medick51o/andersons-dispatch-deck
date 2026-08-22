@@ -97,7 +97,11 @@ in its owning-seat lineage forever** (it can never review work its thread touche
 
 ## The reachability probe — what's online right now?
 The orchestrator runs this (or its equivalent) at the start of a session and declares the
-LIVE arsenal. Only dispatch to what actually answers.
+LIVE arsenal. Only dispatch to what actually answers. **Probe the default transport first:**
+`claude mcp list` must show each wired seat Connected (and its tools present in THIS session —
+they only appear in sessions started after registration); the CLI `--version` checks below prove
+only the fallback lane. The arsenal declaration names which transport each seat answered on
+(SPINE v2.0, transport law #4).
 
 ```bash
 # Codex
