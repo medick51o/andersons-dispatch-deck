@@ -48,17 +48,21 @@ The color is a status light, not a costume — it says WHICH MODEL, nothing more
 a model wearing another's brain shows both (🟠🟢 = Claude-brain on the Gemini seat).
 
 ### THE LEGEND — v3.2 (cursor-v2 · 2026-08-21)
-**Seat first, act second, meter last (meter mark still TBD — see README).**
+**Seat first, act second, meter wrap around the words.**
 Seats: **⚪ THE BOSS** · **⚫➤** orchestrator (this Cursor Grok chat) · **🟣** Composer · **🟠** Claude · **🔵** Codex / GPT · **🟢** Gemini.
 Acts: **🔨 building** · **🔴 reviewing** (suffix on the seat: **🔵🔴** = Codex is reviewing).
+Meter wrap (required on every dispatch line):
+- **♾️ … ♾️** — already on a sub. Does **not** chip Cursor plan credits (this chat, Composer, paid CLIs).
+- **💸 … 💸** — burning **Cursor plan credits** (Other Models Tasks).
+- **🚨💳 … 🚨💳** — **known** actual API money: Anthropic invoice, ChatGPT recharge, BYOK. Siren + card. **Never guess.** If you are not sure it is a vendor bill, use 💸 or ♾️.
+Format: `🔵🔴 💸 words here 💸` — badges, then wrap, then the same wrap at the end.
 States: **⛔** blocked / needs-boss / verdict=REJECT · 🚩 finding raised (flagged, not fatal) ·
 🚧 lane closed, detour in progress · **👥** council in session · 🧪 gates running · 🩺 diagnosing
 (doctor-first) · 🕵️ adversary loose · 🏁 boss-validated (top rung, outranks "done") ·
 🚢 shipped/deployed · 🪦 retired/parked · 🟤 quiet hold (nothing running, watchers armed).
 Boss combos: ⚪🏁 in-hand validation · ⚪⚖️ ruling pending · ⚪🎮 on the sticks.
-Reading: 🟣🔨 Composer building · **🔵🔴** Codex reviewing · **🔵🔴→⛔** Codex rejected ·
-🟠🟢 Claude-brain-on-the-Gemini-seat. A run reads as a timeline:
-🩺 → 👥 → 🟣🔨 → 🧪 → 🔵🔴→⛔ → 🟣🔨 → 🧪 → 🚢 → ⚪🏁 → 🟤.
+Reading: 🟣🔨 ♾️ Composer building the parser ♾️ · **🔵🔴 💸 Codex reviewing Grok's parser 💸** · **🔵🔴→⛔ 💸 Codex rejected the parser 💸** ·
+🟠🔴 🚨💳 Claude on Anthropic API — tank empty 🚨💳.
 **Do not** use 🔴 for reject. **Do not** use 🟣 for council (🟣 is Composer).
 The boss's words: the dots "give the chat a lot of life and color while working" — narrate every
 Deck run in this notation.

@@ -73,16 +73,22 @@ Two harnesses, one method:
 
 ### Reading a run
 
-Seat first, act second. Building is the hammer. Reviewing is a **red dot on the seat**. Reject is a stop — never another red dot.
+Seat first, act second, **meter wrap last**. Building is the hammer. Reviewing is a **red dot on the seat**. Reject is a stop — never another red dot.
+
+The sentence is wrapped so you can see the bill from across the room:
+
+| Wrap | When |
+|---|---|
+| **♾️ … ♾️** | Already on a sub. **Not** chipping Cursor plan credits (this ⚫➤ chat, 🟣 Composer, a CLI you already pay for) |
+| **💸 … 💸** | Burning **Cursor plan credits** (Other Models in Cursor — Claude / GPT / Gemini Tasks) |
+| **🚨💳 … 🚨💳** | **Known** empty tank / actual API invoice — Anthropic bill, ChatGPT recharge, BYOK. Never guess this wrap |
 
 | You see | It means |
 |---|---|
-| 🟣🔨 | Composer is building |
-| **🔵🔴** | Codex is **reviewing** |
-| **🔵🔴→⛔** | Codex reviewed, then **rejected** |
-| 🟠🔴 | Claude is reviewing |
-| 🟢🔴 | Gemini is reviewing |
-| 🟣🔴 | Composer verification (check, not cross-vendor) |
+| 🟣🔨 ♾️ … ♾️ | Composer building, included |
+| **🔵🔴 💸 … 💸** | Codex reviewing, Cursor credits leaving |
+| **🔵🔴→⛔ 💸 … 💸** | Codex reviewed, then **rejected**, still a credit burn |
+| 🟠🔴 🚨💳 … 🚨💳 | Claude reviewing, and this is a real API bill |
 | 👥 | Council in session |
 | 🧪 | Gates running |
 
@@ -106,6 +112,7 @@ This branch is the Cursor reseat. The method is proven; the Cursor wardrobe is b
 - [x] Branch cut from the public deck
 - [x] Seats named: ⚫➤ conducts · 🟣 Composer · Gemini 3.7 first-class
 - [x] Review = red dot on the seat (**🔵🔴**). Reject = **⛔**. Council = **👥** (🟣 is Composer)
+- [x] Meter wrap: **♾️** included · **💸** Cursor credits · **🚨💳** real API bill (known only)
 - [ ] Skill rewrite (`SKILL.md` + Cursor-native guide)
 - [ ] Dual-harness switch (`cursor` · `cli` · `off`) without the wrong-meter oops
 - [ ] Console + dispatch guide updated for this wardrobe
