@@ -89,7 +89,7 @@ The sentence is wrapped so you can see the bill from across the room:
 | **🔵🔴 💸 … 💸** | Codex reviewing, Cursor credits leaving |
 | **🔵🔴→⛔ 💸 … 💸** | Codex reviewed, then **rejected**, still a credit burn |
 | 🟠🔴 🚨💳 … 🚨💳 | Claude reviewing, and this is a real API bill |
-| 👥 | Council in session |
+| **🌈👥👥** | Council in session — every color, a crowd |
 | 🧪 | Gates running |
 
 ---
@@ -111,7 +111,7 @@ This branch is the Cursor reseat. The method is proven; the Cursor wardrobe is b
 
 - [x] Branch cut from the public deck
 - [x] Seats named: ⚫➤ conducts · 🟣 Composer · Gemini 3.7 first-class
-- [x] Review = red dot on the seat (**🔵🔴**). Reject = **⛔**. Council = **👥** (🟣 is Composer)
+- [x] Review = red dot on the seat (**🔵🔴**). Reject = **⛔**. Council = **🌈👥👥** (🟣 is Composer)
 - [x] Meter wrap: **♾️** included · **💸** Cursor credits · **🚨💳** real API bill (known only)
 - [ ] Skill rewrite (`SKILL.md` + Cursor-native guide)
 - [ ] Dual-harness switch (`cursor` · `cli` · `off`) without the wrong-meter oops
