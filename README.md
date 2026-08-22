@@ -1,12 +1,12 @@
 <div align="center">
 
-# 🟡 Anderson's Dispatch Deck
+# ⚫➤ Anderson's Dispatch Deck
 
 ### **cursor-v2** — the Cursor edition
 
 Heavy multi-model agentic orchestration — conducted from **one Cursor chat**.
 
-**Grok wears gold. Composer builds. Everybody else is a specialist.**
+**⚫➤ conducts. 🟣 Composer builds. Everybody else is a specialist.**
 
 `•` no persona `•` no theater `•` right-model-right-job `•` honest review `•` meter-aware
 
@@ -16,7 +16,7 @@ Heavy multi-model agentic orchestration — conducted from **one Cursor chat**.
 
 </div>
 
-> **You are on the Cursor branch.** Gold is **Grok inside Cursor**, not Claude in a terminal.
+> **You are on the Cursor branch.** The main talker is **⚫➤** — Grok inside Cursor, not Claude in a terminal.
 > The original Claude-CLI deck still lives on [`main`](https://github.com/medick51o/andersons-dispatch-deck).
 > Same engine ([`SPINE.md`](SPINE.md)). New seats. More landing in the coming days.
 
@@ -26,7 +26,7 @@ Heavy multi-model agentic orchestration — conducted from **one Cursor chat**.
 
 Most people talk to one AI. **ADD treats models as a toolbox with a foreman.**
 
-In Cursor, that foreman is **Grok** (🟡). It reads the job, fences the files, sends the work to the model that's actually best for it, gets a *different* line to look at the result, runs the gates, and reports back in plain language.
+In Cursor, that foreman is **⚫➤** (this Grok chat). It reads the job, fences the files, sends the work to the model that's actually best for it, gets a *different* line to look at the result, runs the gates, and reports back in plain language.
 
 No four terminals. No "it works." No theater.
 
@@ -38,8 +38,8 @@ It's the straight-faced sibling of *Team Rocket Takes Over*: same engineering sp
 
 ```mermaid
 flowchart TD
-    H([👑 Human — the mission]) --> O{{🟡 Orchestrator · Cursor Grok<br/>plan → fence → route}}
-    O -->|bounded build| P[🎼 Composer]
+    H([👑 Human — the mission]) --> O{{⚫➤ Orchestrator · Cursor Grok<br/>plan → fence → route}}
+    O -->|bounded build| P[🟣 Composer]
     O -->|architecture / hard judgment| C[🟠 Claude]
     O -->|sharp code review| X[🔵 GPT / Codex]
     O -->|first-class cheap / overflow| M[🟢 Gemini 3.7 Flash]
@@ -58,12 +58,11 @@ flowchart TD
 
 | | Seat | Best at | Dispatch it for |
 |:--:|---|---|---|
-| 🟡 | **Grok** *(this Cursor chat)* | conducting the deck | plan · fence · Gate-0 small work · UI judgment |
-| 🎼 | **Composer 2.5** | fast, bounded builds | tickets Grok fenced — **never gold**, **never independent review of Grok** |
-| 🟠 | **Claude** | deepest reasoning | architecture · specs · hard judgment — **not** daily gold in Cursor |
+| ⚫➤ | **Grok** *(this Cursor chat)* | conducting the deck | plan · fence · Gate-0 · the one talking to you. Parallel Grok Tasks wear this same badge and **cannot** review it |
+| 🟣 | **Composer 2.5** | fast, bounded builds | tickets the conductor fenced — **never** the main talker, **never** independent review of Grok |
+| 🟠 | **Claude** | deepest reasoning | architecture · specs · hard judgment — **not** daily conductor in Cursor |
 | 🔵 | **GPT-5.6 Sol / Codex** | precise builds; the review that *proves* bugs | code review of work it did **not** build |
 | 🟢 | **Gemini 3.7 Flash** | first-class speed + an independent vote | real work + cheap honest reads — **not a spare tire** |
-| ⚫ | **Grok worker** | extra Grok hands | parallel Grok lane — **cannot** review this conductor |
 
 Two harnesses, one method:
 
@@ -90,7 +89,7 @@ Two harnesses, one method:
 This branch is the Cursor reseat. The method is proven; the Cursor wardrobe is being written now.
 
 - [x] Branch cut from the public deck
-- [x] Seats named: Grok gold · Composer builds · Gemini 3.7 first-class
+- [x] Seats named: ⚫➤ conducts · 🟣 Composer · Gemini 3.7 first-class
 - [ ] Skill rewrite (`SKILL.md` + Cursor-native guide)
 - [ ] Dual-harness switch (`cursor` · `cli` · `off`) without the wrong-meter oops
 - [ ] Console + dispatch guide updated for this wardrobe
@@ -109,7 +108,7 @@ Star the repo, switch the branch dropdown to **`cursor-v2`**, and watch it grow.
 
 **Cursor edition** (this branch — landing now):
 
-1. Stay in Cursor. Grok is already gold in the chat.
+1. Stay in Cursor. This chat is already **⚫➤**.
 2. The Cursor skill lives with your user skills (`dispatch on` / `/dispatch`).
 3. Don't switch the model picker to "be" Claude. Dispatch Claude as a worker, or don't.
 
@@ -134,7 +133,7 @@ Same engine underneath; the other tiers add personality:
 
 | Tier | Repo | What you get |
 |---|---|---|
-| 🟡 **Anderson's Dispatch Deck** *(you're here)* | this repo · branch **`cursor-v2`** | Cursor Grok conducts · Composer builds · straight-faced |
+| ⚫➤ **Anderson's Dispatch Deck** *(you're here)* | this repo · branch **`cursor-v2`** | Cursor Grok conducts · 🟣 Composer builds · straight-faced |
 | 🟡 **ADD · CLI trunk** | [`main`](https://github.com/medick51o/andersons-dispatch-deck) | Claude conducts from the terminal |
 | 🟠 **Team Rocket Method** | **[→ team-rocket-method](https://github.com/medick51o/team-rocket-method)** | SPINE + a permanent crew |
 | 🚀 **Team Rocket Takes Over** | **[→ team-rocket-takes-over](https://github.com/medick51o/team-rocket-takes-over)** | SPINE + crew + the full show |
