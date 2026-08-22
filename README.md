@@ -71,28 +71,97 @@ Two harnesses, one method:
 | **Cursor-native** | daily drive inside this IDE | Cursor Models (Grok + Composer) · Other Models only when you *name* them |
 | **CLI overflow** | you explicitly want Claude Max / Codex / `agy` / Grok CLI | those subscriptions — not the Cursor meter |
 
-### Reading a run
+## The legend *(cursor-v2)*
 
-Seat first, act second, **meter wrap last**. Building is the hammer. Reviewing is a **red dot on the seat**. Reject is a stop — never another red dot.
+**Seat first, act second, meter wrap around the words.**  
+A line looks like: `🔵🔴 💸 Codex reviewing Grok's parser 💸`
 
-The sentence is wrapped so you can see the bill from across the room:
+On [`main`](https://github.com/medick51o/andersons-dispatch-deck) the conductor is still **🟡** gold (Claude in a terminal) and Composer did not exist. This branch is the Cursor wardrobe.
+
+### Seats
+
+| | Who | Job |
+|:--:|---|---|
+| ⚪ | **The boss** (you) | Only person who merges. Reality outranks the bench |
+| ⚫➤ | **Grok** *(this Cursor chat)* | Conductor. Plans, fences, talks to you. Parallel Grok Tasks wear this same badge and cannot review it |
+| 🟣 | **Composer 2.5** | Bounded builder. Never the main talker. Never independent review of Grok |
+| 🟠 | **Claude** | Architecture, specs, hard judgment |
+| 🔵 | **GPT / Codex** | Precise builds; the review that *proves* a bug |
+| 🟢 | **Gemini 3.7** | First-class cheap work + an independent vote |
+| 🟠🟢 | **Borrowed brain** | Banner never lies: Claude-brain on a Gemini host (both colors) |
+
+### Acts
+
+| | Meaning |
+|:--:|---|
+| 🔨 | **Building** — writing the files |
+| 🔴 | **Reviewing** — suffix on the seat. **🔵🔴** = Codex is reviewing. Not a reject |
+| ⛔ | **Rejected / blocked / needs the boss.** Never use 🔴 for this |
+
+### Meter wrap *(same mark at both ends of the words)*
 
 | Wrap | When |
 |---|---|
-| **♾️ … ♾️** | Already on a sub. **Not** chipping Cursor plan credits (this ⚫➤ chat, 🟣 Composer, a CLI you already pay for) |
-| **💸 … 💸** | Burning **Cursor plan credits** (Other Models in Cursor — Claude / GPT / Gemini Tasks) |
-| **🚨💳 … 🚨💳** | **Known** empty tank / actual API invoice — Anthropic bill, ChatGPT recharge, BYOK. Never guess this wrap |
+| **♾️ … ♾️** | Already on a sub. **Not** Cursor plan credits — this chat, Composer, a CLI you already pay for |
+| **💸 … 💸** | Burning **Cursor plan credits** — Other Models Tasks (Claude / GPT / Gemini inside Cursor) |
+| **🚨💳 … 🚨💳** | **Known** real API bill — Anthropic invoice, ChatGPT recharge, BYOK. Never guess. Unsure → ♾️ or 💸 |
 
-| You see | It means |
-|---|---|
-| 🟣🔨 ♾️ … ♾️ | Composer building, included |
-| **🔵🔴 💸 … 💸** | Codex reviewing, Cursor credits leaving |
-| **🔵🔴→⛔ 💸 … 💸** | Codex reviewed, then **rejected**, still a credit burn |
-| 🟠🔴 🚨💳 … 🚨💳 | Claude reviewing, and this is a real API bill |
-| **🌈👥👥** | Council in session — every color, a crowd |
+### States *(the rest of the palette — kept from the Deck)*
+
+| | Meaning |
+|:--:|---|
+| 🚩 | Finding raised. Flagged, not fatal |
+| 🚧 | Lane closed, detour in progress |
+| 🌈👥👥 | **Council** — every color, a crowd. Ask first. (🟣 is Composer now; council is not purple) |
 | 🧪 | Gates running |
+| 🩺 | Diagnosing (doctor-first, before a pile of builders) |
+| 🕵️ | Adversary loose — refute / try-to-kill-it lens |
+| 🏁 | Boss-validated. Top rung. Outranks “done” |
+| 🚢 | Shipped / deployed |
+| 🪦 | Retired / parked |
+| 🟤 | Quiet hold. Nothing running, watchers armed |
+| ⚪🏁 | Boss in-hand check |
+| ⚪⚖️ | Ruling pending from the boss |
+| ⚪🎮 | Boss on the sticks |
+
+### Situations
+
+**Included build** — Composer is on the Cursor sub, not the Other Models tank:
+
+> 🟣🔨 ♾️ Composer building the parser in `src/parser.ts` ♾️
+
+**Cursor credits leaving** — you named Codex in Cursor to review Grok’s work. Other Models pool:
+
+> 🔵🔴 💸 Codex reviewing Grok's parser — proving the empty-input path 💸
+
+**Reviewer said no** — same credit burn, stop sign not a second red dot:
+
+> 🔵🔴→⛔ 💸 Codex rejected the parser: empty input panics. Fix attached 💸
+
+**Real API bill** — Cursor tank is empty (or BYOK) and Anthropic / OpenAI will invoice. Only when you *know*:
+
+> 🟠🔴 🚨💳 Claude reviewing on Anthropic API — Cursor Other Models is empty 🚨💳
+
+**Council** — special move, every vendor, one question, you said go:
+
+> 🌈👥👥 💸 council in session — four lenses on the auth fork 💸
+
+**Doctor first** — something’s broken; don’t spawn a fleet yet:
+
+> 🩺 ♾️ diagnosing the failed gate before anyone else builds ♾️
+
+**Finding, not a reject** — reviewer caught something, build continues:
+
+> 🔵🔴 💸 Codex reviewing 💸 → 🚩 empty-input panic · fix attached
+
+**Quiet night** — work landed, nothing in flight:
+
+> 🚢 shipped · ⚪🏁 boss already checked it · 🟤 quiet hold
+
+**CLI gold** — if you open [`main`](https://github.com/medick51o/andersons-dispatch-deck), the conductor is **🟡** and review used to be 📝. That wardrobe stays on the Claude-CLI trunk.
 
 ---
+
 
 ## The rules that make it trustworthy
 
