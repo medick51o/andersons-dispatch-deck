@@ -66,8 +66,12 @@ it. Nothing to install for ADD itself beyond dropping the `/dispatch` skill in
 One-shot dispatches gave every seat amnesia: each call started from zero. The method now rigs
 each vendor CLI into Claude Code as a **persistent MCP seat** — the orchestrator starts a
 conversation with a seat, gets a session id back, and continues that exact conversation later
-with full context. Same subscriptions, no API keys. **This is the default transport; do not
-skip this step.**
+with full context. Same subscriptions, no API keys. **Opt-in, per vendor:** wire only the seats
+you actually have and want — vendors are suggestions, and a missing one just isn't in the pool
+(the method degrades loud, never demands a purchase). The orchestrator should OFFER this wiring
+when it spots a CLI ("you have Gemini — want it persistent instead of amnesia one-shots?"), not
+install it unasked. Registration is user-scope only, touches nothing else in your setup, and one
+`claude mcp remove <name>` undoes it. Once a seat is wired, persistent is its default transport.
 
 Full instructions, the wrapper scripts, the acceptance test, and the transport doctrine live in
 **[`mcp-seats/README.md`](mcp-seats/README.md)**. The short version:

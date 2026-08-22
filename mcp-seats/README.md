@@ -46,6 +46,16 @@ claude mcp add --scope user gemini -- python <path-to-this-folder>\wmw_gemini_mc
 **4 · Restart Claude Code.** New MCP tools only appear in fresh sessions. Then check
 `claude mcp list` shows every seat `✔ Connected`.
 
+## Opt-in, and clean removal
+
+Vendors are suggestions — the method never requires you to own all four, and nothing here should
+be installed on someone's machine unasked. The right flow is consent-first: the orchestrator
+notices a CLI is present and OFFERS the upgrade ("you have Gemini — want a persistent seat
+instead of blind one-shots?"). What registration actually does: adds one entry to your Claude
+Code user config, nothing more — no PATH changes, no services, no edits to the vendor CLI's own
+setup. Undo any seat with `claude mcp remove --scope user <name>`. The wrapper scripts are plain
+stdlib Python you can read in two minutes.
+
 ## Acceptance test (run it before trusting a seat)
 
 The codeword test, per seat: call the start tool with *"My codeword is REDHAWK. Reply with exactly:
