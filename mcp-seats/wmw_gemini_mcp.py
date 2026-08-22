@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""wmw-gemini — MCP stdio server wrapping the Antigravity CLI (Google seat). v1.1
+"""wmw-gemini — MCP stdio server wrapping the Antigravity CLI (Google seat). v1.3
 
 Persistent Gemini/Antigravity seat for Claude Code, sibling of wmw-grok:
   gemini(prompt, ...)              start a new conversation -> reply + conversationId
@@ -32,7 +32,8 @@ import sys
 
 PRINT_TIMEOUT = "60m"
 PROC_TIMEOUT_S = 3900
-MAX_ARGV_PROMPT = 25000  # chars; Windows command-line hard cap is 32767 for the whole line
+MAX_ARGV_PROMPT = 25000
+MAX_REPLY_CHARS = 400_000  # chars; Windows command-line hard cap is 32767 for the whole line
 
 def _utf8_stdio():
     for stream in (sys.stdin, sys.stdout):
@@ -126,12 +127,37 @@ def run_gemini(prompt, conversation_id=None, cwd=None, model=None, always_approv
                       f"conversationId={cid!r}).\ntext: {str(text)[:1000]}\nstderr: {err[:1000]}")
     if not isinstance(text, str):
         text = "" if text is None else str(text)
+    if len(text) > MAX_REPLY_CHARS:
+        text = text[:MAX_REPLY_CHARS] + f"\n\n[wmw-gemini] ...truncated at {MAX_REPLY_CHARS} chars]"
     # Effective model/brain: agy can rent non-Gemini brains (the Overflow Valve), and an
     # independence preflight must be able to fail closed when the brain is unknown.
-    brain = data.get("model") or data.get("model_name") or (model if model else "UNREPORTED")
+    # NEVER promote the REQUESTED model into the brain slot: the CLI can rent a non-Gemini
+    # brain, and a preflight must be able to fail closed. Only the CLI's own JSON counts.
+    reported = data.get("model") or data.get("model_name")
+    brain = reported if isinstance(reported, str) and reported else (
+        f"UNREPORTED (requested: {model})" if model else "UNREPORTED")
     footer = (f"\n\n---\n[wmw-gemini] conversationId: {cid} · status: {status}"
               f" · brain: {brain} · turns: {data.get('num_turns', '?')}")
     return False, text + footer
+
+def _safe_cwd(cwd, always_approve):
+    """A write-capable seat may not be pointed at a home or system directory."""
+    if not always_approve or cwd is None:
+        return cwd
+    real = os.path.realpath(cwd)
+    home = os.path.realpath(os.path.expanduser("~"))
+    banned = {home, os.path.realpath(os.path.abspath(os.sep))}
+    for env in ("SystemRoot", "windir", "ProgramFiles", "USERPROFILE"):
+        v = os.environ.get(env)
+        if v:
+            banned.add(os.path.realpath(v))
+    if real in banned:
+        raise ValueError(f"refusing a write-capable session rooted at {real} — "
+                         f"point cwd at a project directory")
+    for secret in (".ssh", ".aws", ".grok", ".gemini", ".claude", ".config"):
+        if os.path.basename(real) == secret or os.sep + secret in real + os.sep:
+            raise ValueError(f"refusing a write-capable session inside {secret}")
+    return cwd
 
 def _req_str(args, key):
     v = args.get(key)
@@ -169,6 +195,7 @@ TOOLS = [
             "(headless permission prompts otherwise stall the run). Keep prompts under ~25K chars; "
             "put long material in a file for Gemini to read."
         ),
+        "annotations": {"destructiveHint": True, "openWorldHint": True},
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -203,10 +230,12 @@ def _tool_call(name, args):
         return True, "arguments must be an object"
     try:
         if name == "gemini":
+            approve = _opt_bool(args, "always_approve")
             return run_gemini(
-                _req_str(args, "prompt"), cwd=_safe_argv(_opt_str(args, "cwd"), "cwd"),
+                _req_str(args, "prompt"),
+                cwd=_safe_cwd(_safe_argv(_opt_str(args, "cwd"), "cwd"), approve),
                 model=_safe_argv(_opt_str(args, "model"), "model"),
-                always_approve=_opt_bool(args, "always_approve"),
+                always_approve=approve,
             )
         if name == "gemini-reply":
             return run_gemini(
@@ -228,7 +257,7 @@ def handle(msg):
             "result": {
                 "protocolVersion": msg.get("params", {}).get("protocolVersion", "2024-11-05"),
                 "capabilities": {"tools": {}},
-                "serverInfo": {"name": "wmw-gemini", "version": "1.2.0"},
+                "serverInfo": {"name": "wmw-gemini", "version": "1.3.0"},
             },
         }
     if method == "ping":

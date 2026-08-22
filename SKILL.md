@@ -13,11 +13,11 @@ trouble." The Deck is SPINE with model names and a gold baton. Refer to workers 
 ## DEPENDENCIES (versioned — enforceable inheritance)
 ```
 DEPENDS:
-  SPINE.md   >= 1.0     (the method engine — the WHOLE method for this tier)
+  SPINE.md   >= 2.0     (the method engine — the WHOLE method for this tier)
 ```
 On activation, **read each dep's version line** (`spine vX.Y (date)` at the top of the file) and
 verify it satisfies the requirement. If SPINE is missing or its version is below the floor, **HALT
-and tell the boss** ("SPINE v1.0+ required; found <X>") — do not run the method from memory. This
+and tell the boss** ("SPINE v2.0+ required; found <X>") — do not run the method from memory. This
 tier loads **SPINE only** — it deliberately does NOT load CREW or SHOW.
 
 ## LOAD RECEIPT (print on activation, first line)
@@ -141,8 +141,11 @@ permission prompt; without it a build task stalls until the timeout kills it).
 ## ON INVOCATION
 1. **Load SPINE**, verify its version against DEPENDS, print the load receipt.
 2. **PROBE the arsenal, don't assume it** (SPINE Part VI — *Reachability & effective-model preflight*;
-   the arsenal list lives in Appendix A). Run the reachability check (`--version` on each vendor CLI:
-   codex, grok full-path, agy) AND confirm the effective model/lineage behind each host — a host
+   the arsenal list lives in Appendix A). **Probe the TRANSPORT first** (SPINE v2.0 transport law
+   #4): a seat is online when its persistent MCP seat answers in THIS session — its tools are
+   present and `claude mcp list` shows it Connected. A CLI `--version` (codex, grok full-path, agy)
+   only proves the FALLBACK lane exists; name which transport each seat answered on. Then confirm
+   the effective model/lineage behind each host — a host
    renting another vendor's brain counts as THAT vendor's lineage, and an unestablished identity is
    `UNKNOWN LINEAGE`, which fails closed and is never counted as a cross-vendor reviewer. DECLARE the
    live arsenal and the independence status in one line: *"Online: 🟠 Claude · 🔵 Codex · ⚫ Grok · 🟢

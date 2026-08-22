@@ -99,6 +99,18 @@ the bottom never changes.
 - Raw one-shots (`grok -p`, `codex exec`, `agy -p`) remain legal fallback transport; the
   persistent seats are the default.
 
+**What "read-only" actually means here (verified, not assumed):** a default call passes explicit
+**deny rules** for write/edit/shell tools. The CLI's own `--sandbox` flag is *not* the control —
+its enforcement is Linux/macOS only and silently fails open on Windows, which a council proved by
+writing a file straight through it. Deny rules were then verified to block that same write on the
+same box. Default calls also run with web search **off**; pass `allow_web_search: true` for a
+research ticket that needs it. `always_approve: true` is the loaded gun: it lets the seat write
+files and run shell commands under `cwd`, the tools are registered at user scope so they exist in
+every later project, and a hostile repo's instructions only have to talk your orchestrator into
+setting it. The wrappers refuse a write-capable session rooted at your home or system directory,
+or inside `.ssh` / `.aws` / `.grok` / `.gemini` / `.claude` / `.config` — but the judgement of
+when to set the flag is still yours.
+
 ## Known limitation (queued for v2)
 
 Each wrapper handles one request at a time: a long-running seat call blocks that server's loop

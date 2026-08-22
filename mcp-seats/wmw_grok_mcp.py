@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""wmw-grok — MCP stdio server wrapping the Grok Build CLI. v1.1
+"""wmw-grok — MCP stdio server wrapping the Grok Build CLI. v1.3
 
 Gives Claude Code a persistent Grok seat:
   grok(prompt, ...)            start a new Grok conversation -> reply + sessionId
@@ -25,6 +25,11 @@ import sys
 import tempfile
 
 GROK_TIMEOUT_S = 3600
+MAX_REPLY_CHARS = 400_000   # cap what we hand back to the client
+
+# Tools a read-only seat may never use. Deny rules bind on every platform; the CLI's
+# --sandbox does not (Landlock/Seatbelt only, silently unenforced on Windows).
+DENY_RULES = ("Write", "Edit", "MultiEdit", "NotebookEdit", "Bash")
 
 def _utf8_stdio():
     for stream in (sys.stdin, sys.stdout):
@@ -75,7 +80,8 @@ def _extract_json(raw):
         idx = raw.find("{", idx + 1)
     return None
 
-def run_grok(prompt, session_id=None, cwd=None, model=None, always_approve=False):
+def run_grok(prompt, session_id=None, cwd=None, model=None, always_approve=False,
+             allow_web_search=False):
     exe = find_grok()
     if not exe:
         return True, "grok CLI not found on PATH or in ~/.grok/bin — is Grok Build installed?"
@@ -97,8 +103,14 @@ def run_grok(prompt, session_id=None, cwd=None, model=None, always_approve=False
         if always_approve:
             cmd += ["--always-approve"]
         if not always_approve:
-            # read-only means read-only in argv, not in a comment or a config default
-            cmd += ["--sandbox", "read-only", "--disable-web-search", "--no-subagents", "--no-memory"]
+            # Read-only enforced by DENY RULES, not --sandbox: the CLI's sandbox is
+            # Landlock/Seatbelt only and fails OPEN on Windows (council 2026-08-22 proved a
+            # write succeeded under --sandbox read-only). Deny rules were verified to block it.
+            for rule in DENY_RULES:
+                cmd += ["--deny", rule]
+            cmd += ["--no-subagents", "--no-memory"]
+            if not allow_web_search:
+                cmd += ["--disable-web-search"]
         cmd += ["--prompt-file", tmp, "--output-format", "json"]
         try:
             proc = subprocess.run(
@@ -131,10 +143,31 @@ def run_grok(prompt, session_id=None, cwd=None, model=None, always_approve=False
                       f"text: {str(text)[:1000]}\nstderr: {err[:1000]}")
     if not isinstance(text, str):
         text = "" if text is None else str(text)
+    if len(text) > MAX_REPLY_CHARS:
+        text = text[:MAX_REPLY_CHARS] + f"\n\n[wmw-grok] ...truncated at {MAX_REPLY_CHARS} chars]"
     usage = data.get("modelUsage") or {}
     model_used = next(iter(usage), "unknown-model")
     footer = f"\n\n---\n[wmw-grok] sessionId: {sid} · model: {model_used} · turns: {data.get('num_turns', '?')}"
     return False, text + footer
+
+def _safe_cwd(cwd, always_approve):
+    """A write-capable seat may not be pointed at a home or system directory."""
+    if not always_approve or cwd is None:
+        return cwd
+    real = os.path.realpath(cwd)
+    home = os.path.realpath(os.path.expanduser("~"))
+    banned = {home, os.path.realpath(os.path.abspath(os.sep))}
+    for env in ("SystemRoot", "windir", "ProgramFiles", "USERPROFILE"):
+        v = os.environ.get(env)
+        if v:
+            banned.add(os.path.realpath(v))
+    if real in banned:
+        raise ValueError(f"refusing a write-capable session rooted at {real} — "
+                         f"point cwd at a project directory")
+    for secret in (".ssh", ".aws", ".grok", ".gemini", ".claude", ".config"):
+        if os.path.basename(real) == secret or os.sep + secret in real + os.sep:
+            raise ValueError(f"refusing a write-capable session inside {secret}")
+    return cwd
 
 def _req_str(args, key):
     v = args.get(key)
@@ -166,17 +199,20 @@ TOOLS = [
         "description": (
             "Start a NEW persistent conversation with Grok (Grok Build CLI, xAI subscription seat). "
             "Returns Grok's reply plus a sessionId footer. To continue the same conversation with "
-            "full context, call grok-reply with that sessionId. Grok has web search and can read/"
-            "edit files in cwd when always_approve is true. Use for build dispatches, research, "
-            "and council seats."
+            "full context, call grok-reply with that sessionId. DEFAULT IS READ-ONLY: file writes, "
+            "edits and shell are denied, and web search is off unless allow_web_search is true. "
+            "Set always_approve true ONLY for build tickets — it lets Grok write files and run "
+            "commands under cwd. Use for build dispatches, research, and council seats."
         ),
+        "annotations": {"destructiveHint": True, "openWorldHint": True},
         "inputSchema": {
             "type": "object",
             "properties": {
                 "prompt": {"type": "string", "description": "The task or message for Grok."},
-                "cwd": {"type": "string", "description": "Working directory for the session (repo path for build work)."},
+                "cwd": {"type": "string", "description": "Working directory for the session (repo path for build work). Required when always_approve is true; must not be a home/system directory."},
                 "model": {"type": "string", "description": "Optional Grok model ID override."},
-                "always_approve": {"type": "boolean", "description": "Auto-approve Grok's tool use (file edits, commands). Required for build work; default false (read/research only)."},
+                "always_approve": {"type": "boolean", "description": "DANGEROUS: auto-approve all of Grok's tool use, including file writes and shell commands under cwd. Required for build work; default false = deny-listed read-only."},
+                "allow_web_search": {"type": "boolean", "description": "Allow web search/fetch on a read-only call (default false; ignored when always_approve is true)."},
             },
             "required": ["prompt"],
         },
@@ -204,16 +240,20 @@ def _tool_call(name, args):
         return True, "arguments must be an object"
     try:
         if name == "grok":
+            approve = _opt_bool(args, "always_approve")
+            cwd = _safe_cwd(_safe_argv(_opt_str(args, "cwd"), "cwd"), approve)
             return run_grok(
-                _req_str(args, "prompt"), cwd=_safe_argv(_opt_str(args, "cwd"), "cwd"),
+                _req_str(args, "prompt"), cwd=cwd,
                 model=_safe_argv(_opt_str(args, "model"), "model"),
-                always_approve=_opt_bool(args, "always_approve"),
+                always_approve=approve,
+                allow_web_search=_opt_bool(args, "allow_web_search"),
             )
         if name == "grok-reply":
             return run_grok(
                 _req_str(args, "prompt"),
                 session_id=_safe_id(args.get("sessionId"), "sessionId"),
                 always_approve=_opt_bool(args, "always_approve"),
+                allow_web_search=_opt_bool(args, "allow_web_search"),
             )
     except ValueError as e:
         return True, f"invalid arguments: {e}"
@@ -229,7 +269,7 @@ def handle(msg):
             "result": {
                 "protocolVersion": msg.get("params", {}).get("protocolVersion", "2024-11-05"),
                 "capabilities": {"tools": {}},
-                "serverInfo": {"name": "wmw-grok", "version": "1.2.0"},
+                "serverInfo": {"name": "wmw-grok", "version": "1.3.0"},
             },
         }
     if method == "ping":
