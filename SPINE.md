@@ -63,8 +63,8 @@ each seat earn its place?" **The default is lean.**
   canon shape for real code; often just the orchestrator for small stuff. A full 3+-seat PANEL is
   a SPECIAL move — run it only when the boss asks. When the task looks genuinely gnarly/high-stakes the
   orchestrator may PROPOSE a panel (one line: why + the rough cost of N vendors), but the fan-out
-  dispatches only on his explicit go — never self-authorized on the orchestrator's own "gnarly" call.
-  Scaling seat count is the boss's call to make loud, never a habit.
+  dispatches only on his explicit go — never self-authorized. **This clause OWNS the consent gate;
+  everywhere else points here.** Scaling seat count is the boss's call to make loud, never a habit.
 - **Earn-a-head:** every added seat must be justifiable in one sentence, or it is decoration.
   Breadth is not rigor. Fan-outs cost multiples, not increments (an external multi-agent writeup
   measured ~15x the tokens of a single chat — their number, not a law of nature; the gate exists
@@ -119,7 +119,7 @@ Five gates, in order — the house default for anything gnarly:
    UNAVAILABLE`. Adversarial, ranked with Part V's canonical ladder — **BLOCKER / MATERIAL / MINOR /
    NOT PROVEN** — each finding with a fix. Green gates alone never merge — the bench earns its
    keep finding the paths that "looked clean."
-4. **BOSS IN-HAND — the TOP gate** (Ladder of Truth, Part I §1). The bench catches CODE bugs; the boss catches
+4. **BOSS IN-HAND — the TOP gate.** Part I §1 owns the ship rule. The bench catches CODE bugs; the boss catches
    REALITY bugs, and reality outranks the review (Ladder of Truth, top rung). Green gates + passed
    bench + working in-hand = shipped. Any two without the third = not yet.
 5. **THE FIX LOOP.** Bench findings → back to the builder → re-review → re-gate, as many turns as
@@ -577,7 +577,7 @@ seat** (legal, weaker, flagged) — never the builder's own producing lineage. *
 those paths:** send each review to the strongest-fit independent seat for the work TYPE — the
 sharpest bug-proving seat for code, the frontier seat for architecture/judgment, a cheap independent
 seat for a scan or a tie-breaking extra vote — always outside the builder's lineage. Which concrete
-model that is, is the shop's wiring (Appendix A), not the engine's law.
+model that is, is the shop's wiring (`SPINE-WIRING.md`), not the engine's law.
 
 **The reviewer ticket carries exactly four things:**
 1. The **ORIGINAL task, verbatim** (never the builder's restatement).
@@ -643,7 +643,7 @@ The builder seat has flipped for three causes — **capability**, **price**, **i
 and in each flip the cold reviewer surfaced defects the builder missed. **The seat map is mission
 state, never method state. The only fixed point is that the lineage which produced the work does not
 approve it.**
-Practical scars: when the reviewer can't read the repo, HAND IT THE CODE via stdin · let the builder
+Practical scars: when the reviewer can't read the repo, hand it the code directly (Review dispatch) · let the builder
 write files and the reviewer/orchestrator run git after the gate passes (the builder does not commit
 its own work) · a seat given an underspecified task wrote a proposal instead of guessing — that
 instruction is load-bearing, keep it in every builder ticket.
@@ -701,7 +701,7 @@ telling).** When the shop runs unattended these are ABSOLUTE:
 **Signature mechanic (Principle 1 made literal).** Every message from a seat ends with its color.
 The color→identity binding is a tier concern: the Deck tags by MODEL (🟡 orchestrator · 🟠 Claude ·
 🔵 Codex · ⚫ Grok · 🟢 Gemini); CREW binds those colors to CHARACTERS. SPINE owns only the rule
-*that every seat signs* and the vendor→color map (Appendix A).
+*that every seat signs* and the vendor→color map (THE NOTATION, below — kept in the trunk).
 
 **The canonical invariant block is defined HERE and nowhere else** (Principle 9). Entry files and
 every tier's launcher skill copy it VERBATIM; everything else in them is a pointer:
@@ -757,7 +757,7 @@ vendors now sell capacity without stating how much you bought.
    subsidy can be halved silently while the meter calmly reports the new reality as normal. Watch
    the RATIO of value to price over time, not the balance — decay creeps, it does not cliff.
 
-*Wiring, not law:* endpoints, scripts and vendor quirks live with the shop's tooling (Appendix A) —
+*Wiring, not law:* endpoints, scripts and vendor quirks live in `SPINE-WIRING.md` —
 they change without notice. The obligation to read them does not.
 
 ## THE COUNCIL SEAT LAW (owner: SPINE; v2.3, rewritten v2.5 on the boss's ruling 2026-08-24)
@@ -786,7 +786,7 @@ spends, held on the operator's own machine — never in the method's repo, so no
 shop's permission. A council that tries to exceed it trips the wire instead of the budget.
 
 *(Wiring — the allowance file's location and format, and the per-vendor guards — lives with the
-shop's tooling, Appendix A. It changes without notice. The duty to check it does not.)*
+shop's tooling, `SPINE-WIRING.md`. It changes without notice. The duty to check it does not.)*
 
 ## THE TRANSPORT LAW — persistent seats (owner: SPINE; added v2.0, 2026-08-22)
 
@@ -813,15 +813,10 @@ and install commands live with the Deck (`mcp-seats/` — Appendix-A-class detai
    pass explicit tool-approval and a working directory; research and review tickets stay
    read-only by default.
 
-## APPENDIX A — THE ARSENAL / WIRING (current wiring, NOT law — verify; pricing/promos are details)
+## THE NOTATION (owner: SPINE — the marks an orchestrator must PRODUCE, not look up)
+*(Kept in the trunk on the 2026-08-24 council's ruling: a grammar applied to every line cannot be fetched per line. The vendor list, paths and field notes it used to sit beside are in `SPINE-WIRING.md`.)*
 
-The model banner colors (vendor → color; the ONLY color fact SPINE owns): **claude = orange 🟠 ·
-codex = blue 🔵 · grok = black ⚫ · gemini = green 🟢** · the orchestrator conducting
-plain = **gold 🟡**, and the CONDUCTOR's banner wears the **➤ baton** after its dot — 🟡➤ on the
-plain Deck, 😼🟠➤ when a crew tier's cat is hosted on Claude (boss law 2026-08-22, all tiers). A
-worn wardrobe shows both (🟠🟢 = a Claude brain on the Gemini seat).
-
-**THE NOTATION — v4.2 (boss-adopted 2026-08-23). Seat first, act second. This section is the OWNER —
+**v4.2 (boss-adopted 2026-08-23). Seat first, act second. SPINE owns these marks —
 tier legends (Deck SKILL, CREW) are renderings of it. (v4.0 repealed the 2026-08-09 marks, including
 🟣-as-building.)**
 
@@ -863,58 +858,20 @@ tier legends (Deck SKILL, CREW) are renderings of it. (v4.0 repealed the 2026-08
   flat-rate windows drain too.
 
 
-- **Codex (OpenAI)** — bounded implementation of a clear spec; the sharpest code reviewer (proves
-  bugs, cites sources). `codex exec --sandbox danger-full-access --skip-git-repo-check "<prompt>" < /dev/null`.
-- **Grok (xAI)** — fearless UI/skins/concept pages; surface only, never engine.
-  `C:\Users\<you>\.grok\bin\grok.exe --prompt-file <f> --always-approve < /dev/null`. Mandatory trail entry.
-- **Gemini / Antigravity (Google)** — proven builder (Flash), IMAGE GEN via Nano Banana (on the sub,
-  no card), cheap reviews/sweeps, independent 4th vote, and **the Overflow Valve** (rents Claude/GPT
-  brains on Google's tab when the Claude meter runs hot — count agy as the GOOGLE bloodline only when
-  wearing a Gemini model; agy-running-Claude is not an independent reviewer of Claude work).
-  `"C:\Users\<you>\AppData\Local\agy\bin\agy.exe" -p "<prompt>" --model "Gemini 3.6 Flash (High)"`.
-  agy `--model` strings are exact-match; Claude tiers need the `(Thinking)` suffix.
-- Dispatch ritual for any wardrobe: ticket file → headless dispatch → the orchestrator gates
-  independently (render/probe/screenshot) → re-ticket → loop. Trails mandatory where the fence is
-  wider than one file.
-- **The arsenal is OPTIONAL.** The method works with whatever vendors are reachable (Claude alone is
-  a valid, degraded arsenal). No specific vendor, plan, or price is part of the method.
-- **This shop's Lineage Ledger location (wiring, NOT law):**
-  `<your-brain>\_claude-brain\memory\model-lineage-ledger.md`. The engine (Doctrine 6) names
-  no absolute path — downloaders default to a project-relative `model-lineage-ledger.md`; this is
-  merely where THIS box keeps its shared fleet-wide store.
-
-## APPENDIX B — FIELD NOTES (append-only; proven capabilities & gotchas, inherited by all tiers)
-*(When a run PROVES something new, it goes here so future installs inherit it.)*
-- **agy `--model` strings are exact-match**: Claude tiers require the `(Thinking)` suffix —
-  `"Claude Sonnet 4.6 (Thinking)"`, `"Claude Opus 4.6 (Thinking)"`. A bad string exits 1 and prints
-  the full valid-model list (useful as a probe).
-- **Gemini 3.1 Pro (High) handled a heavy adversarial review fine** (~600-word verdict table, physics
-  attacks) — confirms the Flash review-ceiling workaround: route heavy reviews to Pro, not Flash.
-- **Two `codex exec` instances run in parallel** without issue (separate processes, same box).
-- **Codex cites sources when reviewing factual claims** (web-searches vendor manuals unprompted) —
-  doubles as a doc-checker for claim-verification tickets.
-- **Cross-vendor consensus worked as designed**: Codex and Gemini independently killed the same two
-  pieces of draft advice (mill-first/burn-second; interpolate-from-3-probes) for the same physical
-  reasons. Agreement is corroboration, never a ruling — the human still rules (Part V).
-- Claude-tier doc-verification subagent (Sonnet + web) is slow (~10 min) but resolves which claims
-  rest on conflicting sources — its "don't publish this number" flags are the payoff.
-- **Gemini 3.6 Flash (High) is live and handled a real analysis ticket clean** (2026-07-22,
-  token-ticker EP10): agy's valid-model roster now carries the 3.6 Flash family (High/Medium/Low).
-  The bad-string probe still works — an invalid `--model` exits 1 and prints the current roster.
-- **agy HEADLESS auto-denies tool permissions** (`read_file` etc. — the run dies with a "jetski"
-  permission error and empty output). Headless dispatches must EMBED the evidence in the prompt
-  (reviews-by-embed); probe auth cheaply first with a one-word `-p` ping.
-- **Codex safety layer flags "exploit/attack/laundering" vocabulary (2026-07-26):** a
-  verify ticket phrased as "re-run your exploits / attack variations" died mid-run flagged
-  as cyber-risk (78K tokens lost). Same work re-dispatched as "re-create the defect's
-  failure scenario / negative-path QA regression" ran clean. Phrase adversarial-verify
-  tickets to Codex in defect/QA vocabulary, never attacker vocabulary.
-- **Secret-gated verification pattern (proven 2026-07-22):** when a reviewer's sandbox denies it a
-  secret the proof needs (e.g. an HMAC key), the reviewer AUTHORS the exact verifier script; a
-  key-holding seat EXECUTES it unmodified (trivial repairs applied openly and logged); the verdict
-  binds to the output. Keeps builder-never-approves intact when secrets gate the evidence — the
-  reviewer's NOT-PROVEN-until-run discipline is the correct half of the handshake.
 
 ---
-*SPINE owns the engine; the Team Rocket Method's provenance lives in CREW, because it is that
-brand's identity, not the brand-neutral engine's.*
+
+## WIRING & FIELD NOTES — NOT loaded on a summon
+
+**They live in `SPINE-WIRING.md`.** Which vendors this shop has, their CLI paths and exact
+model strings, the lineage-ledger location, and every proven gotcha a fresh install would
+otherwise re-discover. None of it is law and all of it changes without notice.
+
+**Load it before you act, not after — three triggers:**
+- **before a seat preflight or the first dispatch of a session** — you cannot probe an
+  arsenal you have not read;
+- **before selecting a vendor capability** (image generation, a long-context tier, a
+  specific model string) — the exact strings are there and a wrong one fails the call;
+- **when a vendor-specific failure appears** — the gotcha is probably already written down.
+
+*The obligation to read it is law and lives here. Its contents are not.*

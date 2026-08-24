@@ -1,0 +1,1 @@
+Read docs/council-lighten/pkt-grok.md in this directory, in FULL, and follow it exactly. Output only your findings in the brief's format.
