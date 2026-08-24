@@ -11,9 +11,24 @@ gated, and reported plainly. The powerhouse, straight-faced.
 
 `•` no persona `•` no theater `•` right-model-right-job `•` honest cross-vendor review `•` cost-aware
 
+**`spine v2.6`** `•` persistent seats `•` a 200-model bench `•` spend gated by consent `•` meters read, never guessed
+
 </div>
 
 ---
+
+## What's in it now — the short list
+
+| | Feature | What it means for you |
+|:--:|---|---|
+| 🔌 | **Persistent seats, not amnesia** | Brief a vendor once, get a session id, continue that exact conversation later. Reviewers stay fresh calls on purpose. |
+| 🟣 | **The Cursor bench — 200+ models** | One CLI is a doorway to the whole roster. Two of them draw on the plan rather than credits, so routine work is effectively free. |
+| 💳 | **Spend gated by consent** | A seat that *can* spend needs a recorded allowance first — a bound, with an expiry. No allowance, no spend. Free seats never ask. |
+| 📊 | **Meters read, never guessed** | Live usage pulled from each vendor's own billing endpoint. Cost claims cite a reading, not a recollection. |
+| 🛡️ | **Read-only actually read-only** | Three real escape routes found and closed: argument injection through a Windows shim, a "read-only" flag that only meant *authorize*, and a seat escalating by driving another seat. |
+| 🧪 | **A 15-check arm test** | `armcheck.py` proves every guard still holds before you trust the rig. |
+| ⚖️ | **Contradiction-swept law** | A four-vendor blind council re-read the engine and found nine places two rules disagreed. All nine repaired. |
+| 📜 | **Nothing deleted, only un-billed** | War stories moved to `SPINE-PROVENANCE.md`, which no summon loads. The law stays; the story keeps its home. |
 
 ## What it is
 
@@ -53,19 +68,35 @@ flowchart TD
 | 🔵 | **Codex** (OpenAI) | precise builds; the sharpest code review (*proves* bugs) | bounded implementation · reviewing Claude/Grok/Gemini code |
 | ⚫ | **Grok** (xAI) | fearless one-shot visual design | UI · skins · concept pages · "make it feel like X" |
 | 🟢 | **Gemini** (Google / Antigravity) | budget builder · **image gen (Nano Banana)** · overflow capacity | real builds · renders · cheap sweeps · an independent 4th vote |
+| 🟣 | **The Cursor bench** | one CLI, **200+ models** — its own house models plus most of the majors | routine work on the plan's free half · a wide 5th opinion · reaching a model you don't hold a sub for |
+
+### 🟣 About the bench
+
+The Cursor seat is different in kind: it isn't one model, it's a *roster*. That makes the
+important question **which half of the pool a call lands in**, so the seat enforces it:
+
+- **The plan's own models** (its house builder, and its hosted Grok) draw on the subscription. These are the default, and they're where routine work goes.
+- **Everything else** — Claude, GPT, Gemini, and the open-weight models — bills credits at API rates, and the seat **refuses to touch them without a recorded allowance.**
+
+A lesson worth stealing: our first head-to-head said the bench's hosted Grok was clearly
+worse than the standalone CLI. It wasn't. **We'd given it fewer tool permissions** — we were
+measuring our own harness. Level the permissions and they matched. If you benchmark a budget
+tier, check that first.
 
 ## The rules that make it trustworthy
 
 1. **A reviewer never wears the builder's own vendor.** Cross-vendor, or it's just a mirror — different training, different blind spots, real catches.
 2. **Right model for the job — and cost-aware.** Dispatch weighs the meter, not just capability (heavy Claude work can fail over to a cheaper lane and keep going).
 3. **The banner never lies.** When a model wears a borrowed brain, both are shown (`🟠🟢`).
-4. **Findings ship fixes.** Every review finding carries a suggested fix; reviews land at checkpoints and never stop the build.
+4. **Findings ship fixes.** Every finding carries a suggested fix. Reporting and stopping are different acts: a finding may be filed the moment it's found, but only a genuine blocker halts a lane — and only that lane.
 5. **Gates before "done."** Claims capped at evidence — *"gates pass,"* never *"it works."* The human is the final gate and the only one who merges.
-6. **No unasked fleets.** Multi-agent dispatch is deliberate and bounded, never a swarm.
+6. **No unasked fleets.** Parallel builders on disjoint files are declared and bounded; an N-way panel on one question needs your explicit go. Neither hides behind the other.
+7. **The dispatch gate decides who *builds*, never whether the result is *reviewed*.** An orchestrator that builds is a builder like anyone else.
+8. **Nothing spends without consent.** A seat that can bill needs a recorded allowance — bounded, and expiring by default. Unknown cost fails closed.
 
 ## The Council — every vendor, one question
 
-For a call that has to be *right* — a design fork, a decision, a claim that must survive scrutiny — the Deck convenes **the council**: it dispatches the same question to **every reachable vendor at once**, each handed a distinct lens (correctness · cost · *refute-it*), gathers the independent reads, synthesizes best-of-breed with **every disagreement named**, caps the debate at two rounds, and hands you the verdict. Four vendors mean four sets of blind spots — the special move for when one model's read isn't enough. No cast, no theater: just the panel, reported by model name. It's **stakes-gated** — a two-line ask (*"rewrite this email," "did I send the PO"*) is handled by one seat, **never** a council. *(Same engine move as TRM's crew council and TRTO's set-piece — here it's straight-faced.)*
+For a call that has to be *right* — a design fork, a decision, a claim that must survive scrutiny — the Deck convenes **the council**: it dispatches the same question to **a bounded set of eligible vendors at once** (the cap is set in advance; *"as many as it takes"* is not a number), each handed a distinct lens (correctness · cost · *refute-it*), gathers the independent reads, synthesizes best-of-breed with **every disagreement named**, caps the debate at two rounds, and hands you the verdict. Four vendors mean four sets of blind spots — the special move for when one model's read isn't enough. No cast, no theater: just the panel, reported by model name. It's **stakes-gated** — a two-line ask (*"rewrite this email," "did I send the PO"*) is handled by one seat, **never** a council. *(Same engine move as TRM's crew council and TRTO's set-piece — here it's straight-faced.)*
 
 ## In this repo
 
@@ -77,6 +108,13 @@ For a call that has to be *right* — a design fork, a decision, a claim that mu
 | [`FIELD-NOTES.md`](FIELD-NOTES.md) | proven capabilities a fresh install inherits (so it doesn't re-learn what's already known) |
 | [`MODEL-DISPATCH-GUIDE.md`](MODEL-DISPATCH-GUIDE.md) | the deep who-to-send-where playbook |
 | [`dispatch-console.html`](dispatch-console.html) | a color-coded visual quick-reference |
+| [`mcp-seats/`](mcp-seats/) | **the wiring** — one small MCP server per vendor, plus the guards |
+| [`mcp-seats/allowance.py`](mcp-seats/allowance.py) | the spend record a metered seat checks before it bills |
+| [`mcp-seats/armcheck.py`](mcp-seats/armcheck.py) | **15 checks** — proves every guard still holds |
+| [`mcp-seats/read-meters.py`](mcp-seats/read-meters.py) | live usage, straight from each vendor's billing endpoint |
+| [`MEASURING-POOLS.md`](MEASURING-POOLS.md) | **how to measure a usage pool a vendor won't publish** — generalizes to any vendor |
+| [`BENCH-LEDGER.md`](BENCH-LEDGER.md) | the bench roster: which models are free, which bill, and their track records |
+| [`SPINE-PROVENANCE.md`](SPINE-PROVENANCE.md) | the war stories behind the laws — kept, but never loaded on a summon |
 
 ## Quick start
 
