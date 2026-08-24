@@ -13,11 +13,11 @@ trouble." The Deck is SPINE with model names and a gold baton. Refer to workers 
 ## DEPENDENCIES (versioned — enforceable inheritance)
 ```
 DEPENDS:
-  SPINE.md   >= 2.6     (the method engine — the WHOLE method for this tier)
+  SPINE.md   >= 2.8     (the method engine — the WHOLE method for this tier)
 ```
 On activation, **read each dep's version line** (`spine vX.Y (date)` at the top of the file) and
 verify it satisfies the requirement. If SPINE is missing or its version is below the floor, **HALT
-and tell the boss** ("SPINE v2.6+ required; found <X>") — do not run the method from memory. This
+and tell the boss** ("SPINE v2.8+ required; found <X>") — do not run the method from memory. This
 tier loads **SPINE only** — it deliberately does NOT load CREW or SHOW.
 
 ## LOAD RECEIPT (print on activation, first line)
@@ -36,8 +36,8 @@ The Deck adds nothing to the *method*. Its entire delta is **plain rendering + t
 narration.** Every rule below is SPINE's; this section only says how the Deck *presents* it.
 
 ### NARRATE IN COLOR (the one visual convention)
-The orchestrator (🟡 GOLD) narrates the run and TAGS every model action with its vendor color (SPINE
-Appendix A owns the vendor→color map): 🟡➤ conductor (Claude/Fable conducting — the ➤ is the baton) · 🟠 Claude · 🔵
+The orchestrator (🟡 GOLD) narrates the run and TAGS every model action with its vendor color (SPINE's THE NOTATION
+owns the vendor→color map): 🟡➤ conductor (Claude/Fable conducting — the ➤ is the baton) · 🟠 Claude · 🔵
 Codex · ⚫ Grok · 🟢 Gemini. Announce dispatches/builds/reviews in-line:
 > *"🟡 fencing the work into two lanes. 🟠 Claude building the parser · 🔵 Codex building the
 > validator (parallel). → 🔵 Codex reviewing 🟠 Claude's parser: 2 findings, fixes attached. → 🟢
@@ -45,35 +45,16 @@ Codex · ⚫ Grok · 🟢 Gemini. Announce dispatches/builds/reviews in-line:
 The color is a status light, not a costume — it says WHICH MODEL, nothing more. The banner never lies:
 a model wearing another's brain shows both (🟠🟢 = Claude-brain on the Gemini seat).
 
-### THE LEGEND — v4.0 (boss-adopted 2026-08-22; the Deck RENDERING of SPINE's THE NOTATION v4.0 — SPINE owns the marks)
-**Seat first, act second, meter wrap around the words.** A line reads:
-`🔵🔴 Codex reviewing 🟠 Claude's parser`
-Seats: **⚪ THE BOSS** · **🟡➤ conductor** — the orchestrator wears the **➤ baton** after its dot
-(gold when Claude conducts the Deck; whoever hosts the baton, the arrow follows — boss law, across
-the board) · 🟠 Claude · 🔵 Codex · ⚫ Grok · 🟢 Gemini · 🟠🟢 borrowed brain (banner never lies:
-brain color + host color).
-Acts: **🔨 building** · **🔴 reviewing — a suffix on the seat** (🔵🔴 = Codex is reviewing; NOT a
-reject) · **⛔ rejected / blocked / needs-boss** (never 🔴 for this — reviewing and rejection must
-never look alike).
-Council: **🌈👥👥 — every color, a crowd** (retires v3.1's 🟣; purple now means nothing here).
-Meter: **wrap marks not narrated on this trunk** — subscription seats have windows, not per-token
-bills, so the ♾️/💸/🚨💳 wraps (kept on `cursor-v2` for credit-burning shops) would be noise here.
-Meter-AWARENESS itself (SPINE Part VI: headroom, the five levers) still binds.
-States (kept from v3.1): 🚩 finding raised (flagged, not fatal) · 🚧 lane closed, detour in
-progress · 🧪 gates running · 🩺 diagnosing (doctor-first) · 🕵️ adversary loose · 🏁 boss-validated
-(top rung, outranks "done") · 🚢 shipped/deployed · 🪦 retired/parked · 🟤 quiet hold (nothing
-running, watchers armed). Boss combos: ⚪🏁 in-hand validation · ⚪⚖️ ruling pending · ⚪🎮 on the
-sticks.
-A run reads as a timeline: 🩺 → 🌈👥👥 → 🟠🔨 → 🧪 → 🔵🔴→⛔ → 🟠🔨 → 🧪 → 🚢 → ⚪🏁 → 🟤.
-Situations (worked lines):
-> 🔵🔴 Codex reviewing ⚫ Grok's parser — proving the empty-input path
-> 🔵🔴→⛔ Codex rejected the parser: empty input panics. Fix attached
-> 🔵🔴 Codex reviewing → 🚩 empty-input panic · fix attached *(a finding, not a reject — build continues)*
-> 🩺 diagnosing the failed gate before anyone else builds
-> 🚢 shipped · ⚪🏁 boss already checked it · 🟤 quiet hold
+### THE LEGEND — rendered, never restated (SPINE's THE NOTATION is the OWNER)
+The Deck does not keep its own copy of the marks. **Read THE NOTATION in SPINE and render it
+plain** — model names, no characters. A forked legend is how the tiers drift: this file carried
+a stale v4.0 against SPINE's v4.2 for two days, telling the conductor that purple meant nothing
+and that meter wraps were not narrated, while SPINE had already assigned 🟣➤ to the reserve
+transport and made a meter mark **mandatory on any line that can spend**. Both of those were
+repealed marks being rendered on live lines.
 
-Vendor→color still owned by SPINE Appendix A; this legend extends it and **supersedes v3.1**
-(📝-as-reviewing and 🟣-as-council are retired marks).
+The one thing this tier adds is the **gold baton**: the orchestrator conducting the Deck signs
+**🟡➤**, and every worker is named by MODEL, never by a character.
 
 ### FUEL MODE — opt-in ADHD verbiage register (boss-adopted 2026-08-24; OFF by default)
 The Deck stays straight-faced. But the boss's brain runs on an interest-based nervous system —
@@ -157,7 +138,7 @@ and what it has proven · `MEASURING-POOLS.md` for how to size an unpublished po
 4. **Build with any model; route the review by FIT.** The two legal review paths, their statuses
    (`FULL CROSS-VENDOR` / `SOLO-VENDOR DEGRADED` / `REVIEW UNAVAILABLE`), and the fit-routing rule are
    **SPINE's — Part VI *Review dispatch* (+ Part IV's anti-laundering guard); this tier NAMES the move,
-   it does not restate the rule.** *This shop's wiring (Appendix A), as an ILLUSTRATION of SPINE's
+   it does not restate the rule.** *This shop's wiring (`SPINE-WIRING.md`), as an ILLUSTRATION of SPINE's
    fit-routing, not new law:* Codex is usually the sharpest CODE reviewer
    when it didn't build it (Claude/Grok/Gemini code → Codex); Codex built it → Claude reviews;
    architecture/judgment → Claude; Gemini = a cheap independent pass or tie-breaking 4th vote. State it
@@ -181,7 +162,7 @@ and what it has proven · `MEASURING-POOLS.md` for how to size an unpublished po
 ## ON INVOCATION
 1. **Load SPINE**, verify its version against DEPENDS, print the load receipt.
 2. **PROBE the arsenal, don't assume it** (SPINE Part VI — *Reachability & effective-model preflight*;
-   the arsenal list lives in Appendix A). **Probe the TRANSPORT first** (SPINE v2.0 transport law
+   the arsenal list lives in `SPINE-WIRING.md`, which this step REQUIRES you to load first). **Probe the TRANSPORT first** (SPINE v2.0 transport law
    #4): a seat is online when its persistent MCP seat answers in THIS session — its tools are
    present and `claude mcp list` shows it Connected. A CLI `--version` (codex, grok full-path, agy)
    only proves the FALLBACK lane exists; name which transport each seat answered on. Then confirm

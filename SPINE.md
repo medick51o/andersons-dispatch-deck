@@ -1,6 +1,6 @@
 # SPINE — the method engine (single owner, all tiers inherit)
 
-**Version line (machine-readable):** `spine v2.7 (2026-08-24)`
+**Version line (machine-readable):** `spine v2.8 (2026-08-24)`
 **Any content change bumps this line** — a silent edit under an old tag is banned. Git and
 the versioned owner headings below carry the history; each law is owned by its own section.
 
@@ -63,8 +63,9 @@ each seat earn its place?" **The default is lean.**
   canon shape for real code; often just the orchestrator for small stuff. A full 3+-seat PANEL is
   a SPECIAL move — run it only when the boss asks. When the task looks genuinely gnarly/high-stakes the
   orchestrator may PROPOSE a panel (one line: why + the rough cost of N vendors), but the fan-out
-  dispatches only on his explicit go — never self-authorized. **This clause OWNS the consent gate;
-  everywhere else points here.** Scaling seat count is the boss's call to make loud, never a habit.
+  dispatches only on his explicit go — never self-authorized. **This clause OWNS the consent gate.
+  It is deliberately restated at Doctrine 1, Doctrine 5, the dispatch gate and THE COUNCIL: a
+  reflex wants redundancy, and the Amendment Law prefers the rule that leaves a trace.** Scaling seat count is the boss's call to make loud, never a habit.
 - **Earn-a-head:** every added seat must be justifiable in one sentence, or it is decoration.
   Breadth is not rigor. Fan-outs cost multiples, not increments (an external multi-agent writeup
   measured ~15x the tokens of a single chat — their number, not a law of nature; the gate exists
@@ -147,8 +148,8 @@ Ledger recalibrates WHO gets a job, never "spawn more heads."**
 The routing memory that turns experience into better casting. After an episode/run with REAL
 dispatches, the orchestrator appends objective rows to the **shop's declared Model Lineage Ledger**
 (default: project-relative `model-lineage-ledger.md` at the project root, next to `PLAN-CARD.md`; a
-shop may point it elsewhere on the plan card, and this shop's actual location is recorded in Appendix
-A — wiring, not law). The engine names no absolute machine path.
+shop may point it elsewhere on the plan card, and this shop's actual location is recorded in
+`SPINE-WIRING.md` — wiring, not law). The engine names no absolute machine path.
 - **THE ONE RULE — FACTS ≠ FLAVOR (logging form).** Log only OBJECTIVE dispatch signals: vendor,
   seat/wardrobe worn, task type, outcome (APPROVE/REJECT/found-N-real-bugs/shipped/failed),
   wall-time, and the specific real catch or contribution. Banter is the ACT — **never logged as
@@ -785,15 +786,16 @@ they change without notice. The obligation to read them does not.
 spends, held on the operator's own machine — never in the method's repo, so no one inherits another
 shop's permission. A council that tries to exceed it trips the wire instead of the budget.
 
-*(Wiring — the allowance file's location and format, and the per-vendor guards — lives with the
-shop's tooling, `SPINE-WIRING.md`. It changes without notice. The duty to check it does not.)*
+*(Wiring — the allowance record's location and format, and the per-vendor guards — is CODE, not
+prose: `mcp-seats/allowance.py` holds the record and the seat wrappers refuse before spending.
+It changes without notice. The duty to check it does not.)*
 
 ## THE TRANSPORT LAW — persistent seats (owner: SPINE; added v2.0, 2026-08-22)
 
 Vendor seats are reached, by default, as **persistent MCP conversations** inside the conductor's
 harness — a start tool returns the reply plus a session id; a `*-reply` tool continues that exact
 conversation with full context — not as amnesia one-shot CLI dispatches. Wiring, wrapper scripts,
-and install commands live with the Deck (`mcp-seats/` — Appendix-A-class detail, not law). The law:
+and install commands live with the Deck (`mcp-seats/` — wiring detail, not law). The law:
 
 1. **Opt-in, per vendor.** Vendors are suggestions, never requirements. The orchestrator OFFERS
    the wiring when it sees a CLI is present and registers nothing without the owner's yes;
@@ -872,6 +874,9 @@ otherwise re-discover. None of it is law and all of it changes without notice.
   arsenal you have not read;
 - **before selecting a vendor capability** (image generation, a long-context tier, a
   specific model string) — the exact strings are there and a wrong one fails the call;
-- **when a vendor-specific failure appears** — the gotcha is probably already written down.
+- **when a vendor-specific failure appears** — the gotcha is probably already written down;
+- **before a LINEAGE REVIEW or a SPEND READING** — both are boss-invoked by name, neither is a
+  dispatch, and both need a location that lives only in the wiring. Without this trigger an
+  orchestrator follows a default path and silently forks the ledger.
 
 *The obligation to read it is law and lives here. Its contents are not.*

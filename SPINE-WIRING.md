@@ -1,5 +1,11 @@
 # SPINE — WIRING & FIELD NOTES
 
+**Version line (machine-readable):** `spine-wiring v1.0 (2026-08-24)`
+**Owner:** this file owns the shop's arsenal, paths, model strings and proven gotchas.
+SPINE owns the *duty* to read it. Neither restates the other.
+**Any content change bumps the version line** — a stale rendering grows exactly where
+nobody is looking, which is how the Deck's legend forked to v4.0 unnoticed.
+
 *Not loaded on a summon.* SPINE names three triggers that require reading this first:
 before a seat preflight or the session's first dispatch, before selecting a vendor
 capability, and when a vendor-specific failure appears.
