@@ -2,7 +2,7 @@
 
 **Convened 2026-08-24 by boss order. Cap set in advance: 5 seats, 5 distinct lineages.**
 Reported: ⚫ Grok (xAI) · 🎼 Composer (Cursor) · 🌙 Kimi K3 (Moonshot) · 🟢 Gemini (Google).
-🔵 Codex (OpenAI) still running at time of writing — this synthesis will be amended, not rewritten.
+🔵 Codex (OpenAI) reported last; its amendment is section 7, and it REFUTED the headline fix.
 
 Each seat read the same brief with a different lens, blind to the others.
 
@@ -10,7 +10,7 @@ Each seat read the same brief with a different lens, blind to the others.
 
 ## 1. UNANIMOUS — the leak is NOT fixed
 
-All four seats, independently and without hedging. **Knowledge is not a control plane.** Nothing
+All five seats, independently and without hedging. **Knowledge is not a control plane.** Nothing
 enforceable has changed since the incident; the next cloud-agent launch repeats it.
 
 They also converged on *why no file can ever fix it*, stated most cleanly by Kimi:
@@ -18,7 +18,30 @@ They also converged on *why no file can ever fix it*, stated most cleanly by Kim
 > *"Anything that executes on the vendor's infrastructure is governed by the vendor's settings,
 > not yours. A guard that the guarded system cannot see is decoration."*
 
-### The fix, and it is not code
+### CORRECTION — the first proposed fix does not work
+
+Grok's spend-fuse recommendation was published below and then **refuted by Codex**, whose
+objection the operator's own dashboard confirms:
+
+> **"A vendor-side hard overage limit protects cash but does not protect the prepaid monthly
+> allowance; an agent can still destroy the included pool without charging another dollar.
+> The required control is a usage/concurrency cap or feature disablement, not merely $0
+> overage."** — Codex
+
+**The incident proves him right.** The billing page for the burn window reads
+`On-Demand Usage (Aug 21 - Aug 24): $0.00`. Thirteen cloud agents consumed 51.9M tokens and
+two-thirds of the month **entirely inside the included pool, with on-demand at zero the whole
+time.** Setting on-demand to $0 would not have prevented a single one of them. Grok's premise
+that "Cloud Agents require on-demand to launch" is contradicted by this shop's own data.
+
+**Ruling: the $0 fuse is a CASH backstop, not an allowance guard.** Set it anyway, it is free
+and caps the tail risk of an uncapped overage bill, but do not mistake it for the fix.
+
+**The actual control is to disable the cloud-agent lane, or gate it behind a remote policy that
+caps concurrency and forbids the expensive modes.** Codex: *"a checklist, local hook, or
+dashboard alert is not a guard."*
+
+### The fix that was proposed first, and why it looked right
 
 ⚫ Grok found the one control that sits on the lane the money actually travels:
 
@@ -182,3 +205,68 @@ way can die on the same afternoon, with no SLA and no appeal queue a one-person 
   rational, but the arbitrage is over and Pro at $20 plus metered overflow may beat it.
 - 30 days of audited logs showing >80% uncached frontier tokens, which would push the API
   column toward $11/M and make the stack even more cap-bound.
+
+---
+
+## 7. AMENDMENT — the fifth seat, Codex (OpenAI)
+
+Codex arrived last and changed two things materially.
+
+**It refuted the headline fix** (see the correction in section 1). That refutation is the single
+most valuable output of this council: without it the operator would have set a $0 overage limit,
+believed the leak sealed, and been wrong.
+
+**It expanded the bypass inventory from ~10 lanes to ~15**, adding the ones a one-person shop
+would never think of:
+
+- **WSL, containers, remote workstations, SSH hosts, VMs** — each a separate enforcement domain
+  that can hold copied credentials and none of the local guards.
+- **Plugins, MCP tools, nested agents, tool-spawned subprocesses** — a permitted agent can
+  recursively open another metered lane. This shop already proved that class of escalation on
+  2026-08-23, when a read-only Grok seat wrote a file *through* the Codex seat.
+- **OAuth tokens, copied browser sessions, old devices** — revoking a local config revokes
+  nothing that already exists elsewhere.
+- **Automatic model fallback / Max escalation / vendor-side retries** — a cheap launch can
+  silently become expensive if routing changes or the chosen model is unavailable.
+- **Crash recovery, duplicate delivery, auto-resume** — a job can run twice on one click.
+
+**Its "biggest risk nobody named" is a real race, and it explains the incident's shape better
+than anything else offered:**
+
+> **Concurrent allowance oversubscription — a time-of-check/time-of-use race.** Thirteen
+> launches can each read the same apparently-available balance before delayed vendor telemetry
+> records any of them. Every launch passes its check; their combined commitment exceeds the
+> month. *"A meter that merely rereads bonusSpend cannot prevent this race."*
+
+Thirteen agents were launched. Thirteen is the number in the incident. The fix is an **atomic
+reservation before dispatch** — worst-case cost reserved per job, one active lease, no child
+launch without a sub-reservation, reconciliation afterward.
+
+**It also demoted this shop's allowance tool honestly:** `allowance.py` cannot be called
+enforcement unless every credential and all outbound traffic pass through it. It is
+**telemetry**. Keep it for reconciliation and alerts; drop any claim that it prevents overspend.
+
+Codex's own pricing was blocked by its sandbox — it said so plainly and labeled everything
+ESTIMATE. Its Sonnet-class blended figure of **$5.70/M including OpenRouter's 5.5% fee**, with
+crossover at **26-44M tokens/month**, lands close to Grok's live-fetched **$7.04/M and 29M**:
+two seats, different sources, same conclusion. On owned hardware it was blunter than anyone —
+**$42,260 of capex is a 211-month break-even against a $200/month stack, and you still would
+not have Claude.**
+
+### Final tally across five seats
+
+| | Leak fixed? | Subs vs API | GPU? |
+|---|---|---|---|
+| Grok | NO | keep subs | no |
+| Composer | NO | keep subs | no |
+| Kimi | NO | keep subs, as a bridge | no |
+| Gemini | NO | move background agents *(stale prices)* | no |
+| Codex | NO | keep subs, restrict to attended work | no |
+
+**5/5 the leak is not fixed. 5/5 no GPU. 4/5 keep the subscriptions**, and the lone dissent
+rests on superseded pricing that live data contradicts.
+
+Codex's framing is the one to keep:
+
+> *"The ~14x subsidy is the vendor buying adoption. Refusing it would be economically
+> irrational, while designing the business to require it would be operationally reckless."*
