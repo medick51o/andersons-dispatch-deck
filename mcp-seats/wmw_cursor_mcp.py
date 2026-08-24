@@ -181,6 +181,36 @@ def _log_spend(model, lineage, klass, usage, sid, ok, write_capable):
     except Exception as e:
         print(f"[wmw-cursor] spend-ledger write failed: {e}", file=sys.stderr)
 
+def _allowance(seat):
+    """Ask the operator's allowance record whether this seat may spend.
+
+    The record lives on the operator's own machine, never in the repo. Absent or
+    expired means NO -- a metered seat asks before it spends, every time, until a
+    bounded grant exists. See mcp-seats/allowance.py.
+    """
+    try:
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "_allowance_mod", os.path.join(os.path.dirname(os.path.abspath(__file__)), "allowance.py"))
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return mod.status(seat)
+    except Exception as e:
+        return False, f"the allowance record could not be read ({e}); failing closed"
+
+def _allowance_calls(seat, fallback):
+    """The granted call bound, so the rolling cap enforces the operator's number."""
+    try:
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "_allowance_mod", os.path.join(os.path.dirname(os.path.abspath(__file__)), "allowance.py"))
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        g = mod._load().get(seat) or {}
+        return int(g.get("calls", fallback))
+    except Exception:
+        return fallback
+
 def _recent_billable(window_s):
     """How many billable calls landed in the last window_s seconds, per the ledger."""
     if not os.path.exists(SPEND_LEDGER):
@@ -348,13 +378,24 @@ def run_cursor(prompt, session_id=None, cwd=None, model=None, always_approve=Fal
             f"Boss ruling 2026-08-23. Re-run this as a read-only call (drop always_approve), "
             f"or hand the build to composer-2.5 / cursor-grok-4.6-high.")
 
+    # THE COUNCIL SEAT LAW (SPINE v2.5): spending is gated by a recorded ALLOWANCE,
+    # not by vendor class. No grant, or an expired one, means this seat may not spend.
+    if klass.startswith("CREDITS"):
+        ok, why = _allowance("cursor")
+        if not ok:
+            return True, (
+                f"{CURSOR_BANNER} 🛑 NO ALLOWANCE — REFUSED BEFORE SPENDING\n\n"
+                f"'{chosen}' bills the third-party credit pool, and {why}\n\n"
+                f"Grants are bounded and expire on purpose. Free INCLUDED models "
+                f"(composer-2.5, cursor-grok-4.6-*) are unaffected and need no allowance.")
+
     if klass.startswith("CREDITS") and COUNCIL_LOCK_ON:
         recent = _recent_billable(COUNCIL_LOCK_WINDOW_S)
-        if recent >= COUNCIL_LOCK_MAX:
+        if recent >= _allowance_calls("cursor", COUNCIL_LOCK_MAX):
             return True, (
                 f"{CURSOR_BANNER} 🛑 COUNCIL LOCK — REFUSED\n\n"
                 f"{recent} billable Cursor calls already landed in the last "
-                f"{COUNCIL_LOCK_WINDOW_S // 60} minutes, at the cap of {COUNCIL_LOCK_MAX}. "
+                f"{COUNCIL_LOCK_WINDOW_S // 60} minutes, at the operator's granted bound. "
                 f"This looks like a COUNCIL fanning out onto metered seats.\n\n"
                 f"Standing boss ruling (2026-08-23): a council runs on SUBSCRIPTION seats "
                 f"only — house Claude, Codex, Grok, Gemini. Cursor-hosted models are not "
@@ -581,7 +622,7 @@ def handle(msg):
             "result": {
                 "protocolVersion": msg.get("params", {}).get("protocolVersion", "2024-11-05"),
                 "capabilities": {"tools": {}},
-                "serverInfo": {"name": "wmw-cursor", "version": "2.1.0"},
+                "serverInfo": {"name": "wmw-cursor", "version": "2.2.0"},
             },
         }
     if method == "ping":

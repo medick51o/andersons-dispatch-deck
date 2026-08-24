@@ -1,13 +1,9 @@
 # SPINE — the method engine (single owner, all tiers inherit)
 
-**Version line (machine-readable):** `spine v2.4 (2026-08-23)`
-**v2.4 — THE METER LAW:** a seat that costs money must be readable; measure a pool, never infer it; two agreeing burns beat one precise-looking reading; a subsidy is never a foundation.
-**v2.3 — COMPOSER SEATED:** THE COUNCIL SEAT LAW (councils run on subscription seats; the free-seat exception admits a reserve model that is BOTH free AND a bloodline the house lacks — 🟣 Composer qualifies, cursor-grok does not). NOTATION v4.2: the arrow marks whoever DIRECTS, so a summoned seat answering a council signs bare.
-**v2.1 — THE BENCH:** adds NOTATION v4.1 (🟣➤ the Cursor arrow, bloodline marks, mandatory reserve meter marks). Reserve-seat law lands with the bench ledger.
-**v2.0 — THE GREAT RE-SYNC:** the SPINE fork is healed — every tier's copy is byte-identical to
-this one from today forward (the trm copy had carried silent edits under v1.1's tag; that practice
-is banned: any content change bumps this line). New in v2.0: THE NOTATION v4.0 (supersedes the
-2026-08-09 act marks) and THE TRANSPORT LAW (persistent seats).
+**Version line (machine-readable):** `spine v2.5 (2026-08-24)`
+**Any content change bumps this line** — a silent edit under an old tag is banned. Git and
+the versioned owner headings below carry the history; each law is owned by its own section.
+
 **One owner per fact.** Everything the method *does* — how work is judged, dispatched, fenced,
 reviewed, and shipped — lives HERE, character-free. The Deck renders this plain; TRM (CREW) adds
 a crew on top; TRTO (SHOW) adds a story on top. **Neither CREW nor SHOW restates SPINE.** Edit the
@@ -85,14 +81,11 @@ Before building, classify. The two kinds of hard problem take opposite opening m
   *(A packet tap on the fleet wire ended hours of "maybe it's the session / the slot / the gate"
   by* proving *the input was arriving — collapsing the search space in one read. A splash of
   hypotheses loses to one honest measurement, every time.)*
-- **A NOVEL / GNARLY FEATURE → COUNCIL, then SYNTHESIS.** *(A council is proposed to the boss and
-  fanned out only on his go — never auto-fired; see The Council.)* For a design-space-wide problem, write a
-  one-page BRIEF (vision *verbatim* + hard-won context + numbered design questions), dispatch the
-  crew to DESIGN it in parallel (each writes its own `docs/*-<vendor>.md`), then the orchestrator
-  writes ONE `*-SYNTHESIS.md`: best-of-breed per piece, **every idea attributed, disagreements
-  NAMED and resolved — never smoothed.** One vendor correcting another's load-bearing error is a
-  council WIN. *(Right-size still rules: the council is the SPECIAL move for design-space-wide
-  problems, not the default for small work.)*
+- **A NOVEL / GNARLY FEATURE → PROPOSE A COUNCIL, then SYNTHESIZE.** Convening is consent-gated —
+  never auto-fired. The procedure (brief → lenses → parallel design → synthesis → cap → ruling) is
+  owned by THE COUNCIL, Part VI, including the rule that every idea is attributed and disagreements
+  are NAMED and resolved, never smoothed. Right-size still rules: the council is the SPECIAL move for
+  design-space-wide problems, never the default for small work.
 - The fork is not either/or forever: a feature can surface a bug (fork to instrument), a bug can
   reveal a design gap (fork to council). Re-classify when the problem changes shape.
 
@@ -153,12 +146,10 @@ sentence ("we don't have to make them deaf — just listen on the right slot"). 
 surface the MINIMAL honest version and hand him the scalpel; **a scope cut is a WIN celebrated,
 never a loss mourned.** (The rarest, highest-value product skill in the room, and it's his.)
 
-### Doctrine 5 · RIGHT-SIZE THE DISPATCH (boss ruling 2026-07-18)
-The DEFAULT is lean: one builder + ONE cross-vendor reviewer for canon code; often just the
-orchestrator for small stuff. A full 3+-model PANEL (like the MAC whack-a-mole) is a SPECIAL move —
-run it only when the boss asks or the task is genuinely gnarly/high-stakes. **The Lineage Ledger
-recalibrates WHO gets a job, never "spawn more heads."** Scaling agent count is the boss's call to
-make loud, not a habit — guard the meter (echoes the anti-token-inferno clause).
+### Doctrine 5 · RIGHT-SIZE THE DISPATCH (boss ruling 2026-07-18; amended 2026-08-24)
+Gate-0's lean default and the consent-gated panel — owned by Part I §2. Gnarly work may justify
+PROPOSING a panel; it convenes only on the boss's explicit go, never self-authorized. **The Lineage
+Ledger recalibrates WHO gets a job, never "spawn more heads."**
 
 ### Doctrine 6 · THE LINEAGE ENGINE (boss idea 2026-07-18 — track who's actually good)
 The routing memory that turns experience into better casting. After an episode/run with REAL
@@ -211,8 +202,12 @@ A — wiring, not law). The engine names no absolute machine path.
 7. **Cost-aware tiering.** Match the model to the task by capability AND price. Cheap models for
    mechanical grunt work; the frontier reserved for genuine judgment; prefer the billing you have
    headroom on. Economics picks among the seats that clear the bar — it never lowers the bar.
-8. **Cap the loop.** Cross-review is capped (two rounds is the house cap), then the judge decides.
-   Prevents perfectionist spirals that burn resources chasing diminishing returns.
+8. **Cap the loop.** *(Unit, defined once: a **ROUND** is one builder → reviewer → builder cycle. An
+   **EXCHANGE** is one reviewer statement plus one builder reply.)* Three caps, each binding a
+   different situation: **review disputes → TWO ROUNDS** (the house cap, this clause); **review
+   tone and nits → ONE EXCHANGE** (Part VII); **unattended debates → TWO ROUNDS EACH, then the bell**
+   (Autonomous hours). Then the judge decides. Prevents perfectionist spirals that burn resources
+   chasing diminishing returns.
 9. **Guardrails at every door.** Every entry file a tool reads on login (CLAUDE.md, AGENTS.md,
    .cursorrules, …) carries one identical compact invariant block plus the authoritative doctrine's
    filename/version/date — never a duplicated full copy of the law (multiple copies is how law
@@ -595,8 +590,9 @@ stdin. **The adversarial channel is the last thing you let fail.**
 
 ### THE COUNCIL — the multi-vendor panel (the orchestrator's special move)
 The council is the fan-out turned to full width: instead of one builder + one reviewer, the
-orchestrator convenes **every reachable vendor at once** — one per seat, each a genuinely different
-effective-model lineage — for independent reads on a single high-stakes question. It is the SPECIAL
+orchestrator convenes **every ELIGIBLE seat at once** (eligibility and the spend gate are owned by
+THE COUNCIL SEAT LAW) — one per seat, each a genuinely different effective-model lineage — for
+independent reads on a single high-stakes question. It is the SPECIAL
 move (Doctrine 5's right-size still rules — never the default for small work); reach for it when the
 stakes justify the multiples: a design-space-wide fork, a decision that must be right, a bug or claim
 that has to survive real scrutiny.
@@ -626,8 +622,8 @@ for small work is one seat doing it, quietly.
 4. **Synthesize.** The orchestrator writes ONE synthesis: best-of-breed per piece, **every idea
    attributed, every disagreement NAMED and resolved, never smoothed.** One vendor catching another's
    load-bearing error is a council WIN.
-5. **Two-round cap** (Principle 8): one exchange per dispute, then the bell; unresolved splits go to
-   the boss's ruling queue. No looping, no token-inferno.
+5. **Cap the loop** (Principle 8): the house cap of TWO ROUNDS per dispute, then the bell;
+   unresolved splits go to the boss's ruling queue. No looping, no token-inferno.
 6. **The boss rules.** The council advises; the human decides and merges — always (the Ladder's top rung).
 
 This is adversarial verification at full width — the one cross-lineage-review law (a review comes
@@ -674,8 +670,9 @@ color was red or pink, and no work ever shipped.)*
   mechanism or repro) never blocks and never ships. Never a meeting.
 - **Every finding ships with a suggested fix.** "This is wrong, stop everything" is banned dialect.
   "This breaks X under Y — here's the patch shape" is how this house speaks.
-- **No debate clubs.** Builder and reviewer get ONE exchange. Still split → it goes silently into
-  the boss's ruling queue and WORK CONTINUES (extends the two-round cap to tone).
+- **No debate clubs.** On review TONE and nits — as distinct from the substance of a dispute —
+  builder and reviewer get ONE EXCHANGE (Principle 8's units). Still split → it goes silently into
+  the boss's ruling queue and WORK CONTINUES.
 - **Nits don't multiply.** A handful of taste notes per review, max. A pile of style opinions is a
   style-guide proposal, and those go to the boss.
 - **Grade the work, not the worker.** A catch is a team win; a gotcha hunt is a crime.
@@ -695,8 +692,11 @@ agents argued for hours, tokens torched, each restart burning more):
   warm; restarts are expensive.
 - **DECISION BATCHING.** Taste/design questions are collected and resolved as a SET (when the color
   comes up, the stripes and dots come up in the same pass). Never re-stop the line serially.
-- If in doubt: build the safest honest version, note the assumption, keep moving. The boss must
-  never come home to a burnt token pile and a transcript of four characters litigating paint.
+- If in doubt **while he is unreachable**: build the safest honest version, note the assumption
+  LOUDLY, and queue it for his ruling. *(This is the unattended exception to "ambiguity is a finding,
+  never an input" — Part I §1. While the boss IS reachable, ambiguity still goes up; a sleeping boss
+  is not a licence to author requirements, only to keep moving without him.)* He must never come home
+  to a burnt token pile and a transcript of four characters litigating paint.
 
 ---
 
@@ -751,42 +751,36 @@ vendors now sell capacity without stating how much you bought.
 *Wiring, not law:* endpoints, scripts and vendor quirks live with the shop's tooling (Appendix A) —
 they change without notice. The obligation to read them does not.
 
-## THE COUNCIL SEAT LAW (owner: SPINE; added v2.3, boss ruling 2026-08-23)
+## THE COUNCIL SEAT LAW (owner: SPINE; v2.3, rewritten v2.5 on the boss's ruling 2026-08-24)
 
-A **COUNCIL** — several seats answering the same brief independently — runs on **SUBSCRIPTION
-seats**: the house arsenal, flat-rate, $0 marginal. **Metered reserve models are not council
-seats**, however cheap a single call looks. Reasons, in order of weight:
+**Any seat may hold a council seat. What is gated is SPENDING, not vendor class.**
 
-1. **A council is a fan-out, and fan-out is where a metered pool drains.** One review is pennies;
-   five seats on one brief, then a second round on the fixes, is how a month's pool disappears
-   into a meeting.
-2. **The house arsenal already satisfies the independence law** — four distinct bloodlines at no
-   marginal cost. A metered mirror adds a bill, not independence.
-3. **A metered council is the easiest thing in this method to run by accident** — the orchestrator
-   asks for "a council" and the transport quietly bills for it.
+The earlier version of this law admitted only flat-rate subscription seats. That was a proxy for the
+real concern and it was wrong in both directions: it barred a free seat that happened to be granted
+through a metered transport, and it would have waved through a house seat someone later attached an
+API key to. The thing being protected is the boss's money, so the test is his consent.
 
-A single cheap reserve call (one review, one tie-break, one foreign lens the house cannot supply)
-stays legal under the reserve rules. What is banned is the FAN-OUT.
+1. **A seat that cannot spend needs no permission.** Free is free; convene it.
+2. **A seat that CAN spend needs a recorded ALLOWANCE before it sits.** Asked once, in one line
+   naming the seat and the rough cost. What the boss grants is a **bound**, not a blank cheque:
+   how many metered calls, over what window, and for how long the grant itself lasts. He may make it
+   permanent or time-boxed; the default is a modest bound that expires, because a yes given once at
+   midnight should not silently govern next year.
+3. **Within the allowance, no further asking.** That is the point of granting one. Every metered
+   dispatch still prints its meter mark, so quiet is never invisible.
+4. **Past the allowance, refuse and re-ask.** Exhaustion is not an emergency and never an excuse to
+   proceed; it is a question. Widening a bound is a fresh decision, made out loud.
+5. **Unknown cost fails closed.** A seat whose spend cannot be established is not free, it is
+   unmeasured (THE METER LAW). It may not sit until it can be read or an allowance covers it.
+6. **A council is still the SPECIAL move.** Consent to spend is not consent to convene: Gate-0's
+   right-size rule and the fleet test bind first, whatever the seat costs.
 
-**THE FREE-SEAT EXCEPTION (boss ruling 2026-08-23).** A reserve model may hold a standing council
-seat when it clears BOTH tests — neither alone is enough:
+**Enforced, not merely written.** The allowance is a real record the transport checks before it
+spends, held on the operator's own machine — never in the method's repo, so no one inherits another
+shop's permission. A council that tries to exceed it trips the wire instead of the budget.
 
-1. **It costs nothing.** It sits in the transport's INCLUDED pool, so seating it cannot drain
-   anything. This is what makes the fan-out objection vanish.
-2. **Its bloodline is genuinely absent from the house.** A reserve model whose vendor already sits
-   in the house arsenal brings a duplicate, never independence — seating it puts two of the same
-   brain at one table, which is the mirror-review failure wearing a council badge.
-
-*This shop, as of 2026-08-23:* **🟣 Composer (Cursor bloodline) IS a council seat** — free, and a
-fifth vendor the house does not otherwise have. **cursor-grok-\* is NOT** — free, but xAI blood,
-the same brain as the house ⚫ Grok seat; it may build, never sit as an independent voice beside
-it. Metered seats (Kimi, GLM, every mirror) stay barred from councils until the boss rules
-otherwise. A seated reserve model signs as a bare seat (🟣), never with the transport's arrow —
-it is answering, not directing.
-
-**Enforced, not merely written:** the reserve transport refuses billable calls past a small rolling
-cap, so a council that tries to land on metered seats trips the wire instead of spending. The cap
-is lifted deliberately and out loud, never silently.
+*(Wiring — the allowance file's location and format, and the per-vendor guards — lives with the
+shop's tooling, Appendix A. It changes without notice. The duty to check it does not.)*
 
 ## THE TRANSPORT LAW — persistent seats (owner: SPINE; added v2.0, 2026-08-22)
 
@@ -821,12 +815,13 @@ plain = **gold 🟡**, and the CONDUCTOR's banner wears the **➤ baton** after 
 plain Deck, 😼🟠➤ when a crew tier's cat is hosted on Claude (boss law 2026-08-22, all tiers). A
 worn wardrobe shows both (🟠🟢 = a Claude brain on the Gemini seat).
 
-**THE NOTATION — v4.1 (boss-adopted 2026-08-23: the ➤ returns to Cursor as 🟣➤, bloodline marks, mandatory reserve meters. v4.0 2026-08-22; supersedes the 2026-08-09 marks: 🟣-building is
-repealed and the ⚪/🟤 reservations are spent). Seat first, act second. This section is the OWNER —
-tier legends (Deck SKILL, CREW) are renderings of it.**
+**THE NOTATION — v4.2 (boss-adopted 2026-08-23). Seat first, act second. This section is the OWNER —
+tier legends (Deck SKILL, CREW) are renderings of it. (v4.0 repealed the 2026-08-09 marks, including
+🟣-as-building.)**
 
-- **BUILDING = 🔨** trailing the seat: 🔵🔨 Codex building · 🟠🔨 Claude building. (**🟣 is retired
-  everywhere** — it no longer means building, council, or anything else.)
+- **BUILDING = 🔨** trailing the seat: 🔵🔨 Codex building · 🟠🔨 Claude building. **🟣 never means
+  building** — since v4.2 it belongs to the Cursor transport (🟣➤) and to a seated reserve model
+  answering bare (🟣).
 - **REVIEWING = 🔴** trailing the seat on the plain Deck: 🔵🔴 = Codex reviewing — NOT a reject.
   **Grammar scope:** the Deck is seat-first; crew tiers are character-first, where a LEADING 🔴 is
   Butch's character color — so crew tiers render the reviewing act as **📝** (*🩷⚫ Cassidy (in
@@ -894,7 +889,7 @@ A run reads as a timeline: 🩺 → 🌈👥👥 → 🟠🔨 → 🧪 → 🔵�
   doubles as a doc-checker for claim-verification tickets.
 - **Cross-vendor consensus worked as designed**: Codex and Gemini independently killed the same two
   pieces of draft advice (mill-first/burn-second; interpolate-from-3-probes) for the same physical
-  reasons. Two-vendor agreement = treat as settled.
+  reasons. Agreement is corroboration, never a ruling — the human still rules (Part V).
 - Claude-tier doc-verification subagent (Sonnet + web) is slow (~10 min) but resolves which claims
   rest on conflicting sources — its "don't publish this number" flags are the payoff.
 - **Gemini 3.6 Flash (High) is live and handled a real analysis ticket clean** (2026-07-22,
