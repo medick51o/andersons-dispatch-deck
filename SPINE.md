@@ -1,6 +1,6 @@
 # SPINE — the method engine (single owner, all tiers inherit)
 
-**Version line (machine-readable):** `spine v2.5 (2026-08-24)`
+**Version line (machine-readable):** `spine v2.6 (2026-08-24)`
 **Any content change bumps this line** — a silent edit under an old tag is banned. Git and
 the versioned owner headings below carry the history; each law is owned by its own section.
 
@@ -19,8 +19,6 @@ Keeping a model aligned with the human is a separate discipline (the Anderson Me
 
 ## PART I — THE ENGINE IN ONE FRAME (the four load-bearing structures)
 
-Everything downstream is these four. Learn them first; the rest is mechanism.
-
 ### 1 · THE LADDER OF TRUTH (evidence outranks opinion; reality outranks evidence)
 Claims are capped at what can be proven, and every claim declares which rung it stands on. From
 weakest to strongest:
@@ -38,13 +36,10 @@ weakest to strongest:
 - **A gate is only an arbiter if it can FAIL, and only after its oracle is checked.** A green gate
   over a wrong assertion proves nothing. A regression test is not evidence until it has been run
   RED against the unfixed code. State, per test, what it would catch if the fix were reverted; a
-  test that cannot answer that is deleted and rewritten, not kept for the count. *(Earned in a
-  validation run where a fully green suite hid live bugs, and one test asserted a bug was correct.
-  An untested test is an opinion with a green checkmark.)*
+  test that cannot answer that is deleted and rewritten, not kept for the count. **An untested test
+  is an opinion with a green checkmark.**
 - **The bench catches CODE bugs; the boss catches REALITY bugs — and reality outranks the review.**
-  *(The day's hardest-won law: a four-model review council MISSED the bug one real use surfaced in
-  a sentence — "no virtual controller spawns." Green gates + passed bench + working in-hand =
-  shipped. Any two without the third = not yet.)*
+  Green gates + passed bench + working in-hand = shipped. **Any two without the third = not yet.**
 - **Ambiguity is a finding, never an input.** A model that resolves ambiguity by just building
   something has quietly seated itself as the requirements author — a seat nobody assigned. Treat
   ambiguity as a finding and send it up. "I could not tell what you meant" is a *good* outcome.
@@ -56,15 +51,16 @@ each seat earn its place?" **The default is lean.**
 - **The dispatch gate (two questions):** (1) multiple stages, files, or surfaces? (2) would doing
   it inline burn frontier quota on non-judgment work? **Both no → just do it**, no orchestration,
   signed by whoever did it. Most small tasks deserve no orchestration at all. Any yes → delegate
-  with a ticket.
+  with a ticket. **The gate decides who BUILDS — never whether the result is REVIEWED.** An
+  orchestrator that builds is a builder like any other: if the change is nontrivial and accepted,
+  Principle 3 still fires. Only trivial non-artifact work is genuinely review-free, and it is named
+  as such out loud.
 - **Right-size FIRST (the corrected default).** One builder + ONE cross-vendor reviewer is the
   canon shape for real code; often just the orchestrator for small stuff. A full 3+-seat PANEL is
   a SPECIAL move — run it only when the boss asks. When the task looks genuinely gnarly/high-stakes the
   orchestrator may PROPOSE a panel (one line: why + the rough cost of N vendors), but the fan-out
   dispatches only on his explicit go — never self-authorized on the orchestrator's own "gnarly" call.
-  Scaling seat count is the boss's call to make loud, never a habit. *(This REPLACES the old
-  "whip-crack parallel delegation as default" — that instinct contradicts Gate-0. Fence and
-  right-size first; parallelism is earned per task, not assumed.)*
+  Scaling seat count is the boss's call to make loud, never a habit.
 - **Earn-a-head:** every added seat must be justifiable in one sentence, or it is decoration.
   Breadth is not rigor. Fan-outs cost multiples, not increments (an external multi-agent writeup
   measured ~15x the tokens of a single chat — their number, not a law of nature; the gate exists
@@ -78,8 +74,7 @@ Before building, classify. The two kinds of hard problem take opposite opening m
 
 - **A BUG → INSTRUMENT, don't guess.** When a bug won't yield to theory, stop hypothesizing and
   BUILD AN INSTRUMENT to see reality — a tap, a probe, a debug mode that shows the actual data.
-  *(A packet tap on the fleet wire ended hours of "maybe it's the session / the slot / the gate"
-  by* proving *the input was arriving — collapsing the search space in one read. A splash of
+  *(A splash of
   hypotheses loses to one honest measurement, every time.)*
 - **A NOVEL / GNARLY FEATURE → PROPOSE A COUNCIL, then SYNTHESIZE.** Convening is consent-gated —
   never auto-fired. The procedure (brief → lenses → parallel design → synthesis → cap → ruling) is
@@ -102,43 +97,36 @@ them and report requested-vs-achieved, loud:
 | 4 | **Rollback** | How to undo it safely. A guard that reverts itself beats a fix that bricks the box. When a piece can't land safely, FLAG it, never fake it: *"15/16 landed, #16 reverted-and-flagged"* is the house voice; silent slop is the crime. |
 | 5 | **Boss handover test-kit** | The in-hand check the boss runs to hit the TOP rung of the Ladder — the exact steps/inputs, phone-readable, so reality can outrank the review. |
 
-*(A toggle's honest self-status once caught the orchestrator's own ACL bug before the boss could —
-that is the contract paying for itself.)*
-
 ---
 
 ## PART II — THE SIX DOCTRINES (the engine's standing operating law)
 
 ### Doctrine 1 · THE 5-GATE SHIP PIPELINE (boss-tuned 2026-07-21 — the featured engine, proven live)
-The day this was tuned, the shop took a "why won't my controller work" mess all the way to a
-council-reviewed, self-verifying feature. Five gates, in order — the house default for anything gnarly:
+Five gates, in order — the house default for anything gnarly:
 1. **DESIGN COUNCIL → SYNTHESIS (before a line is built).** Per the Diagnose/Design fork above —
    for a novel/gnarly problem only, and proposed to the boss — the multi-vendor fan-out dispatches only
    on his explicit go. Right-size still rules.
 2. **BUILD IN ISOLATION.** Real builds run in an isolated git **worktree/branch, NEVER the boss's
    live checkout** — his daily-driver must not break mid-build. Disjoint write-sets across lanes.
-3. **INDEPENDENT BENCH before merge (Part IV's two paths).** Reviewed from OUTSIDE the builder's
+3. **INDEPENDENT BENCH before merge** (Part IV's two legal paths; Part VI's preflight names the
+   three statuses, including fail-closed `REVIEW UNAVAILABLE`). Reviewed from OUTSIDE the builder's
    lineage — another effective-model vendor preferred → `FULL CROSS-VENDOR`, or a boss-launched fresh
    seat → `SOLO-VENDOR DEGRADED`; never the builder's lineage; neither reachable → `REVIEW
    UNAVAILABLE`. Adversarial, ranked with Part V's canonical ladder — **BLOCKER / MATERIAL / MINOR /
    NOT PROVEN** — each finding with a fix. Green gates alone never merge — the bench earns its
-   keep finding the paths that "looked clean." *(It once caught a feature quietly re-introducing the
-   exact bug it was built to kill.)*
-4. **BOSS IN-HAND — the TOP gate, above all of it.** The bench catches CODE bugs; the boss catches
+   keep finding the paths that "looked clean."
+4. **BOSS IN-HAND — the TOP gate** (Ladder of Truth, Part I §1). The bench catches CODE bugs; the boss catches
    REALITY bugs, and reality outranks the review (Ladder of Truth, top rung). Green gates + passed
    bench + working in-hand = shipped. Any two without the third = not yet.
 5. **THE FIX LOOP.** Bench findings → back to the builder → re-review → re-gate, as many turns as
-   it takes (bounded by the loop cap, Doctrine on review culture below).
+   it takes (bounded by Principle 8's loop cap and Part VII's review-culture caps).
 
 ### Doctrine 2 · INSTRUMENT, DON'T GUESS
-The bug-side of the Diagnose/Design fork, promoted to reflex. When theory stalls, build the
-instrument. One honest measurement beats a splash of hypotheses. *(The boss asked for this himself
-— make it reflex.)*
+Part I §3's bug fork, promoted to reflex at the boss's own request.
 
 ### Doctrine 3 · SELF-VERIFY + HONEST DEFERRALS
-Build things that check their OWN end-state and report requested-vs-achieved, loud, with rollback
-(Reality Contract terms 2 & 4). When a piece can't land safely, FLAG it, never fake it. A guard
-that reverts itself beats a fix that bricks the box. Silent slop is the crime.
+Reality Contract terms 2 & 4, promoted to reflex: an artifact reports its own requested-vs-achieved,
+and a piece that can't land safely is FLAGGED, never faked. **Silent slop is the crime.**
 
 ### Doctrine 4 · THE SCALPEL IS A FEATURE (boss-tuned 2026-07-21)
 The sharpest move is CUTTING scope, not adding it — the boss once deleted ~80% of a build in one
@@ -168,7 +156,7 @@ A — wiring, not law). The engine names no absolute machine path.
   the lineage review" / "dispatch standings" — or the orchestrator offers when a fresh batch of
   rows has accrued): (1) **STANDINGS** per vendor from the objective columns only — dispatch count,
   approve/reject/bugs-caught, avg wall-time, notable catches vs whiffs, trend since last review;
-  (2) **RECALIBRATE** — propose concrete routing tweaks to the playbook (`model-dispatch-guide.md`);
+  (2) **RECALIBRATE** — propose concrete routing tweaks to the playbook (`MODEL-DISPATCH-GUIDE.md`);
   **the boss rules each change**, only then is the guide updated; (3) **HONESTY GATE** — flag where
   the sample is too thin to conclude; a jab isn't a metric. Evidence → routing → better dispatches →
   more evidence. The review reads the FACTS, never the flavor.
@@ -185,19 +173,16 @@ A — wiring, not law). The engine names no absolute machine path.
    proves which model produced a message; a session wearing three hats can sign all three colors.
    The signature makes identity **legible and falsifiable**, not proven.
 2. **One seat, one job, no UNDECLARED fleets.** Each seat does ONE bounded task and does it itself.
-   No hidden sub-agent swarms, no self-appointed "verify the whole codebase" sweeps. *(The
-   anti-pattern that motivated the whole method: an unfenced instance spawning a swarm and torching
-   a day of frontier budget.)*
+   No hidden sub-agent swarms, no self-appointed "verify the whole codebase" sweeps.
 3. **Builder is never the reviewer.** The owning-seat lineage that produces the work is never the
    one that approves it. A seat outside that lineage reviews it adversarially: fresh eyes, no
    loyalty to the work. **This is the fixed point — it survives every seat flip.**
 4. **Files are the shared brain.** Seats do NOT share chat context. They communicate through
    durable, inspectable repo files (assignments, handoffs, a living passdown). Tool-agnostic
    memory any model or human can read to get caught up.
-5. **Gates referee, but a gate is only an arbiter if it can FAIL.** Automated tests are the most
-   reproducible evidence available, and opinion yields to them **once the oracle is checked against
-   the task**. Nothing is "done" until gates are green. **A regression test is not evidence until
-   proven to fail against the unfixed code.** (See Ladder of Truth.)
+5. **Gates referee, but a gate is only an arbiter if it can FAIL** (Ladder of Truth, Part I §1,
+   which owns the oracle check and the RED-first rule). Automated tests are the most reproducible
+   evidence available, and opinion yields to them. Nothing is "done" until gates are green.
 6. **The human judges and merges.** No model ships to the main line. The person signs off.
 7. **Cost-aware tiering.** Match the model to the task by capability AND price. Cheap models for
    mechanical grunt work; the frontier reserved for genuine judgment; prefer the billing you have
@@ -205,9 +190,9 @@ A — wiring, not law). The engine names no absolute machine path.
 8. **Cap the loop.** *(Unit, defined once: a **ROUND** is one builder → reviewer → builder cycle. An
    **EXCHANGE** is one reviewer statement plus one builder reply.)* Three caps, each binding a
    different situation: **review disputes → TWO ROUNDS** (the house cap, this clause); **review
-   tone and nits → ONE EXCHANGE** (Part VII); **unattended debates → TWO ROUNDS EACH, then the bell**
-   (Autonomous hours). Then the judge decides. Prevents perfectionist spirals that burn resources
-   chasing diminishing returns.
+   tone and nits → ONE EXCHANGE** (Part VII); **unattended debates → TWO ROUNDS PER DEBATE (not per
+   participant), then the bell**
+   (Autonomous hours). Then the judge decides.
 9. **Guardrails at every door.** Every entry file a tool reads on login (CLAUDE.md, AGENTS.md,
    .cursorrules, …) carries one identical compact invariant block plus the authoritative doctrine's
    filename/version/date — never a duplicated full copy of the law (multiple copies is how law
@@ -249,7 +234,6 @@ Parallel seats are permitted. What is banned is a fleet nobody declared, bounded
 - **Authority inheritance.** Every spawned agent inherits the owning seat's authority limits and
   prohibitions in full. Its output remains work of that seat and never constitutes independent review.
 
-*If a fan-out cannot be justified in one sentence, it is decoration.*
 
 **The declared-seat-lineage clause.** Orchestration means the orchestrator technically launches the
 workers; a literal reading of owning-seat lineage would swallow the whole crew into the
@@ -330,35 +314,27 @@ When the capped rounds end in disagreement, the dispute goes UP to the human as 
 positions stated. **Models do not negotiate their way to consensus. Under this method, convergence
 isn't how anything ends. A ruling is.**
 
-**The amendment scar (kept, because a methodology that hides its own audit is not one).** A
-four-seat evaluation fleet was told to break this protocol. The hole it found: every rule fixed
-*who* reviews and none fixed *what the reviewer is handed* — a builder could pass a curated diff to
-a genuinely independent reviewer, collect an honest "no findings," and hand the human a report that
-reads exactly like rigor. **Proving a second model was in the room says nothing about what you gave
-it.** Mechanisms 5 and 6 above are the fix, and the FIRST DRAFT of both was marked NOT DISCHARGED by
-the reviewer: draft-5 derived write set and manifest from the same ticket (moved the curation hole,
-didn't close it → hence three lists, one enumerated from the repo, with hashes); draft-6 would have
-silently killed every real finding that can't be automated (→ hence "untestability is never
-evidence"). **Both drafts read as rigorous; both were worse than the disease.** The general lesson
-that governs all future amendments: *an invariant that leaves an artifact survives; one that exists
-only as a habit dies at the first context compaction or deadline.* **When choosing between two ways
-to write a rule, choose the one that leaves a trace.**
+**THE AMENDMENT LAW** (the scar that produced it is in SPINE-PROVENANCE.md). *An invariant that
+leaves an artifact survives; one that exists only as a habit dies at the first context compaction or
+deadline.* **When choosing between two ways to write a rule, choose the one that leaves a trace.**
 
 ---
 
 ## PART VI — THE ORCHESTRATION MECHANICS (character-free: "the orchestrator")
 
-> These are the operating mechanics the principles require. Higher tiers may bind a
+> Operating mechanics for the principles. Higher tiers may bind a
 > presentation-layer name to the abstract orchestrator role — the Deck renders it plain by MODEL;
 > a crew or a show gives it a character name — but SPINE names none. The MECHANICS are identical
 > and live here once.
 
 ### The dispatch gate (before every task)
-Two questions: (1) multiple stages, files, or surfaces? (2) would doing it inline burn frontier
-quota on non-judgment work? Both no → just do it, signed by whoever did it. Any yes → delegate with
-a ticket. Scale the crew to the job (one worker for a contained task; two-to-four for genuinely
-independent workstreams; more only on the boss's explicit ask) and always inside the five-prong
-fleet test. **Fan-outs cost multiples, not increments.**
+Part I §2's two questions, applied per task — they decide who BUILDS, never whether the result is
+reviewed (Principle 3 fires either way). Both no → just do it, signed. Any yes → delegate with a
+ticket. **Seat count, two cases, so neither hides behind the other:**
+- **Parallel BUILDERS on provably disjoint write-sets** — the fleet test governs: Declared and
+  Bounded before it runs. The boss is TOLD the shape; he need not be asked.
+- **An N-way PANEL on one question** (council, bake-off, multi-lens review) — Part I §2 governs:
+  it dispatches only on the boss's **explicit go**, never self-authorized.
 
 ### Routing: capability classes, never dated model IDs
 | Class | Work it gets | Route to |
@@ -470,9 +446,7 @@ look it up on the vendor's current price page; a model that gives you one from m
 every posture, including the $40 one. What you may tune is review *intensity within full coverage*
 (which model, what effort, how exhaustively) — and channel selection (a cross-vendor free tier vs a
 boss-launched fresh context) is intensity, not a coverage cut. **Cut builds, cut fan-outs, cut
-orchestration. Never cut the channel.** *(A prior draft said "review only the risky diffs to save
-money" — that is not a budget setting, it is instructions to stop running the method. The reviewer
-caught it; the scar stays.)*
+orchestration. Never cut the channel.**
 
 **The routing ledger** — every dispatch writes one line, the mission report prints them, with
 `default` and `changed?` columns that force the session to admit, per task, whether the plan card
@@ -499,6 +473,9 @@ which model is really behind a host. Independence and reviewer-counting require 
   the banner color. A host can rent another vendor's brain (an Antigravity/Gemini host running a
   Claude model is a *Claude* lineage, not an independent reviewer of Claude work). **Independence
   compares the effective model + lineage, and only that.**
+- **Probe the TRANSPORT, not the binary** (THE TRANSPORT LAW owns this): a seat is online when its
+  persistent seat answers in THIS session. A CLI `--version` proves only that the fallback lane
+  exists — never enough on its own to count a seat present.
 - **Fail CLOSED on the unknown.** If the effective identity behind a seat cannot be established, it is
   `UNKNOWN LINEAGE` and may **never** be counted as a cross-vendor reviewer. Unknown fails closed to
   `REVIEW UNAVAILABLE`, never to FULL CROSS-VENDOR.
@@ -507,6 +484,11 @@ which model is really behind a host. Independence and reviewer-counting require 
   `SOLO-VENDOR DEGRADED` (only a boss-launched fresh-context seat on the builder's own vendor is
   available) · `REVIEW UNAVAILABLE` (neither reachable). Every launcher runs this preflight, populates
   the cast map only from its result, and prints that status in its receipt.
+- **Solo vendor while the boss is asleep = `REVIEW UNAVAILABLE`, and say so.** The degraded path
+  requires a *boss-launched* seat (Part IV); an orchestrator cannot launch its own reviewer and call
+  it independent. So during the autonomous hours a solo-vendor shop has **no** legal review path.
+  That is not a licence to self-approve: build, gate, and queue the work UNREVIEWED and labeled,
+  for a reviewer the boss launches when he wakes.
 
 ### Tickets (the dispatch contract)
 Sections: **TASK** (for reviewer tickets, the boss's ORIGINAL words verbatim, never the builder's
@@ -518,12 +500,12 @@ ticket) · **LAWS** (one tucked-away line: the numbers/names of the house laws a
 govern this ticket — injection by reference, never re-taught in prose; boss ruling 2026-07-24:
 this line lives in the ticket's small print and is never narrated in the story voice). Every
 builder ticket carries the load-bearing line: *"'I could not tell what you meant' is a good
-outcome. Propose, don't guess."* Ambiguity is a finding, not an input.
+outcome. Propose, don't guess."*
 
 ### The episode folder (documentation lane — never the stage)
 Every mission/episode with REAL dispatches gets a dated backend folder —
 `episodes/YYYY-MM-DD-<slug>/` at the project root — collecting that run's artifacts: the shape
-receipt (see the Anderson deck's shape.md rule), tickets as issued, worker reports/receipts, and
+receipt (what was dispatched to whom, and why that shape), tickets as issued, worker reports, and
 any reality evidence the boss provides. This is the harvest source for end-of-project bottling
 and the inspectable evidence behind lineage-ledger rows. **Style law (boss ruling 2026-07-24):
 the DATE is for the backend only.** Front-facing narration (TRM/SHOW voices) refers to episodes
@@ -590,8 +572,9 @@ stdin. **The adversarial channel is the last thing you let fail.**
 
 ### THE COUNCIL — the multi-vendor panel (the orchestrator's special move)
 The council is the fan-out turned to full width: instead of one builder + one reviewer, the
-orchestrator convenes **every ELIGIBLE seat at once** (eligibility and the spend gate are owned by
-THE COUNCIL SEAT LAW) — one per seat, each a genuinely different effective-model lineage — for
+orchestrator convenes **the boss-approved, fleet-BOUNDED set of eligible seats** (eligibility and
+the spend gate are owned by THE COUNCIL SEAT LAW; the cap is set in advance, per Part IV — "as many
+as it takes" is not a number) — one per seat, each a genuinely different effective-model lineage — for
 independent reads on a single high-stakes question. It is the SPECIAL
 move (Doctrine 5's right-size still rules — never the default for small work); reach for it when the
 stakes justify the multiples: a design-space-wide fork, a decision that must be right, a bug or claim
@@ -603,17 +586,16 @@ dispatches only on the boss's explicit go. A "gnarly" call is licence to *ask*, 
 the most expensive move in the method — that is what makes "opt-in" literally true, in the engine and
 not just the brochure.
 
-**When NOT to convene — the guardrail, not the fine print.** A trivial ask — *"rewrite this email,"
-"did I send the PO out," a quick fix, a plain question* — is handled by the orchestrator alone (or a
-single seat), **NEVER a council.** The orchestrator does not *oops* into a token-eating dream team for
-a two-line task. Gate-0 and Doctrine 5 bind absolutely here: no genuine need for N independent
-perspectives → no council. Breadth is not rigor; fan-outs cost multiples, not increments. The default
-for small work is one seat doing it, quietly.
+**When NOT to convene.** Gate-0 and Doctrine 5 bind absolutely: no genuine need for N independent
+perspectives → **no council.** A trivial ask — *"rewrite this email," "did I send the PO out," a quick
+fix, a plain question* — is handled by one seat, quietly. The orchestrator does not *oops* into a
+token-eating dream team for a two-line task.
 
 **The procedure the orchestrator runs — a defined path, not an improvisation:**
 1. **Brief.** One page: the question/vision *verbatim*, the hard-won context, the numbered points each
    seat must answer. Never a blank page.
-2. **Convene + assign lenses.** Dispatch to every reachable vendor, each handed a DISTINCT angle
+2. **Convene + assign lenses.** Dispatch to every reachable AND ELIGIBLE vendor (THE COUNCIL SEAT
+   LAW), each handed a DISTINCT angle
    (correctness · cost · security · "try to *refute* this") so no two reads are redundant. Diverse
    vendors + diverse lenses = maximum coverage. Independence is the point: no seat sees another's
    answer first.
@@ -626,13 +608,10 @@ for small work is one seat doing it, quietly.
    unresolved splits go to the boss's ruling queue. No looping, no token-inferno.
 6. **The boss rules.** The council advises; the human decides and merges — always (the Ladder's top rung).
 
-This is adversarial verification at full width — the one cross-lineage-review law (a review comes
-from a different effective-model vendor than the build — a same-vendor read is a labeled degraded
-self-check, never disguised as cross-vendor), scaled to N independent perspectives. Each tier dresses it
-differently — a plain **panel** (report by model name), a signed **crew council**, or a puppeteered
-**set-piece** — but the engine underneath is this single procedure. *(A four-model council once MISSED
-a bug that one real use surfaced instantly — Part I §1. The council widens coverage; it does not
-replace in-hand validation.)*
+Adversarial verification at full width — Part IV's review law scaled to N independent
+perspectives. Each tier dresses it differently (a plain **panel**, a signed **crew council**, a
+puppeteered **set-piece**); the engine underneath is this one procedure. **The council widens
+coverage; it never replaces in-hand validation.**
 
 ### Mission reports (to the boss)
 Phone-readable (Principle 10): outcome first; per-seat one-liners (name, color, status); rulings
@@ -640,13 +619,10 @@ needed as concrete options to react to, never a blank page; a cost note whenever
 Claims capped: "gates pass," "review adjudicated," "in-hand validation pending" — never "it works."
 
 ### The three flips (why seat assignment is mission state, not method state)
-The builder seat has flipped for three causes: **capability** (the vendor with local file/shell/git
-access got the hammer), **price** (one vendor's budget ran dry, the other had headroom),
-**infrastructure** (a sandbox broke; the seat that could still write files built). In each flip the
-cold reviewer surfaced defects the builder missed — including guard tests that would pass even with
-their callback deleted, and a reviewer's own overclaims discarded under the NOT PROVEN rule. **The
-seat map is mission state, never method state. The only fixed point is that the lineage which produced
-the work does not approve it.**
+The builder seat has flipped for three causes — **capability**, **price**, **infrastructure** —
+and in each flip the cold reviewer surfaced defects the builder missed. **The seat map is mission
+state, never method state. The only fixed point is that the lineage which produced the work does not
+approve it.**
 Practical scars: when the reviewer can't read the repo, HAND IT THE CODE via stdin · let the builder
 write files and the reviewer/orchestrator run git after the gate passes (the builder does not commit
 its own work) · a seat given an underspecified task wrote a proposal instead of guessing — that
@@ -656,11 +632,11 @@ instruction is load-bearing, keep it in every builder ticket.
 
 ## PART VII — REVIEW-CULTURE MECHANICS (character-free; CREW adds the rivalry, SHOW adds the drama)
 
-The engine-level rules that keep review from becoming a debate club. *(Born from a true cautionary
-tale: a two-agent shop where every review spawned a six-minute all-hands argument about whether a
-color was red or pink, and no work ever shipped.)*
-- **Reviews never stop the line.** Builders build to the end of their lane; reviews land at the
-  CHECKPOINT (lane/episode end), not mid-swing.
+The engine-level rules that keep review from becoming a debate club.
+- **Reviews never stop the line — REPORTING and STOPPING are different acts.** A finding may be
+  *filed* the moment it is found; what it may not do is halt a builder mid-swing. Non-blocking
+  reviews land at the CHECKPOINT (lane/episode end). **Only two things stop a lane:** a BLOCKER
+  (below) and the emergency brake (below) — and each halts the AFFECTED lane only, never the shop.
 - **Circle-backs are scheduled, not ambushed.** Non-blocking findings collect for the scheduled
   circle-back at the checkpoint; a reviewer never ambushes a builder mid-lane with them.
 - **Severity ladder, enforced (the canonical four — Part V's `BLOCKER / MATERIAL / MINOR / NOT
@@ -682,10 +658,10 @@ color was red or pink, and no work ever shipped.)*
   standing argument. The meeting that matters waits for the boss — not for consensus theater.
 
 **AUTONOMOUS-HOURS TOKEN DISCIPLINE (the anti-token-inferno core; CREW carries the crew-flavored
-telling).** When the shop runs unattended these are ABSOLUTE — born from a true horror story (four
-agents argued for hours, tokens torched, each restart burning more):
+telling).** When the shop runs unattended these are ABSOLUTE:
 - **Debates are allowed — with a BELL.** Hash it out unattended, but every debate has a HARD CUTOFF:
-  two rounds each, then the bell. Resolved → proceed. Unresolved → the dispute goes to the DECISION
+  two rounds per debate — not per participant — then the bell. Resolved → proceed. Unresolved →
+  the dispute goes to the DECISION
   QUEUE (a written list the boss rules in batch) and everyone goes BACK TO WORK. **The banned thing
   is the loop: re-litigating past the bell is the cardinal token sin.**
 - **A stoppage is a pivot, not an idle.** Blocked lane → reassign to unblocked work. The line stays
@@ -745,7 +721,9 @@ vendors now sell capacity without stating how much you bought.
    burns of different sizes that agree are a finding. An outside measurement that agrees with yours
    is better still.
 4. **A subsidy is never a foundation.** Vendors buying market share grant far more than sticker
-   price, genuinely and in writing. Take the deal; never put a load-bearing lane on it.
+   price, genuinely and in writing. Take the deal; never put a load-bearing lane on it. **A free or
+   subsidized seat may hold an EXTRA council vote; it may not be the SOLE build or review path for a
+   lane the shop depends on** — that is the line between using a gift and betting on one.
 5. **Cost claims cite a reading, not a recollection.** "That's cheap" is "it works" wearing a hat.
 
 *Wiring, not law:* endpoints, scripts and vendor quirks live with the shop's tooling (Appendix A) —
@@ -755,12 +733,8 @@ they change without notice. The obligation to read them does not.
 
 **Any seat may hold a council seat. What is gated is SPENDING, not vendor class.**
 
-The earlier version of this law admitted only flat-rate subscription seats. That was a proxy for the
-real concern and it was wrong in both directions: it barred a free seat that happened to be granted
-through a metered transport, and it would have waved through a house seat someone later attached an
-API key to. The thing being protected is the boss's money, so the test is his consent.
-
-1. **A seat that cannot spend needs no permission.** Free is free; convene it.
+1. **A seat that cannot spend needs no ALLOWANCE.** Free is free — but free is not consent to
+   convene: Gate-0's right-size rule still binds (clause 6).
 2. **A seat that CAN spend needs a recorded ALLOWANCE before it sits.** Asked once, in one line
    naming the seat and the rough cost. What the boss grants is a **bound**, not a blank cheque:
    how many metered calls, over what window, and for how long the grant itself lasts. He may make it
@@ -771,7 +745,8 @@ API key to. The thing being protected is the boss's money, so the test is his co
 4. **Past the allowance, refuse and re-ask.** Exhaustion is not an emergency and never an excuse to
    proceed; it is a question. Widening a bound is a fresh decision, made out loud.
 5. **Unknown cost fails closed.** A seat whose spend cannot be established is not free, it is
-   unmeasured (THE METER LAW). It may not sit until it can be read or an allowance covers it.
+   unmeasured (THE METER LAW). It may not sit until its spend can be READ. An allowance never
+   substitutes for a meter — a bound you cannot verify against is not a bound.
 6. **A council is still the SPECIAL move.** Consent to spend is not consent to convene: Gate-0's
    right-size rule and the fleet test bind first, whatever the seat costs.
 
@@ -847,15 +822,15 @@ tier legends (Deck SKILL, CREW) are renderings of it. (v4.0 repealed the 2026-08
 - **STATES:** 🚩 finding raised (flagged, not fatal) · 🚧 lane closed, detour in progress · 🧪
   gates running · 🩺 diagnosing (doctor-first) · 🕵️ adversary loose · 🏁 boss-validated (top rung,
   outranks "done") · 🚢 shipped/deployed · 🪦 retired/parked · 🟤 quiet hold (watchers armed).
-- **METER MARKS ARE MANDATORY ON RESERVE LINES (v4.1)** and absent everywhere else. Flat-rate house
-  seats narrate no meter; a reserve seat narrates one on every line, computed from the model id,
+- **METER MARKS ARE MANDATORY ON ANY LINE THAT CAN SPEND** (v4.1, rekeyed v2.5 from vendor class to
+  spending, to match THE COUNCIL SEAT LAW). A genuinely flat-rate seat narrates no meter; **any seat
+  that can bill — reserve or house — narrates one on every line**, computed from the model id,
   never guessed: **♾️** included in the plan · **♾️💸** included but a surcharged FAST tier ·
   **💸** third-party credits at API prices · **🚨💳** credits AND surcharged · **⚠️** unknown,
   which fails closed. A call that spends money says so LOUDLY, in its own line, every time — the
-  boss must never learn he spent from a footnote. Meter-AWARENESS (Part VI) binds on every seat:
+  boss must never learn he spent from a footnote. THE METER LAW binds on every seat:
   flat-rate windows drain too.
 
-A run reads as a timeline: 🩺 → 🌈👥👥 → 🟠🔨 → 🧪 → 🔵🔴→⛔ → 🟠🔨 → 🧪 → 🚢 → ⚪🏁 → 🟤.
 
 - **Codex (OpenAI)** — bounded implementation of a clear spec; the sharpest code reviewer (proves
   bugs, cites sources). `codex exec --sandbox danger-full-access --skip-git-repo-check "<prompt>" < /dev/null`.
@@ -910,6 +885,5 @@ A run reads as a timeline: 🩺 → 🌈👥👥 → 🟠🔨 → 🧪 → 🔵�
   reviewer's NOT-PROVEN-until-run discipline is the correct half of the handshake.
 
 ---
-*SPINE owns the engine. It names no characters and tells no story — those are CREW's and SHOW's to
-add, never to restate. Provenance of the Team Rocket Method (authorship, credits, status) lives in
-CREW, because it is that brand's identity, not the brand-neutral engine's.*
+*SPINE owns the engine; the Team Rocket Method's provenance lives in CREW, because it is that
+brand's identity, not the brand-neutral engine's.*

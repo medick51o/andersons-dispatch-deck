@@ -1,0 +1,1 @@
+Read the file docs/council-spine-trim/pkt-grok.md in this directory, in FULL, and follow its instructions exactly. It contains your brief and the entire document under review. Output only your findings in the format the brief specifies.
