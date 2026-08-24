@@ -1,0 +1,105 @@
+I'll read the packet in full and follow it exactly.I'll pull current prices from the web, then price the four architectures and run the crossover math.I have rough numbers. Next I’ll pull official pages so the crossover math uses live rates, not roundups.Official model and GPU pages next — I need those for the crossover table, not secondary roundups.Official vendor pages next — subscriptions, API token rates, and GPU rental list prices.VERDICT
+The leak is not fixed — knowledge is not a control plane, and cloud agents still ignore every local guard. Keep the subscription stack: at current API rates a mixed frontier workload costs ~$7/M tokens, so the $200-ish stack only “loses” past ~30M billable mixed tokens, and the GPU/owned-hardware alternatives cannot serve the closed models this shop actually needs. The 13x Cursor subsidy is real, temporary, and already being clawed back by vendors; the plan for the week it ends is a pre-staged OpenRouter overflow with a hard dollar cap, not a GPU.
+
+Q1 LEAK FIXED?
+- **No.** Nothing enforceable has changed. The next cloud-agent click next week repeats the burn.
+- **Guard that would actually stop a repeat:** a **hard dollar spend limit on the Cursor account**, set in the **Cursor dashboard → Spending tab**, not in `cli-config.json`. Cursor’s own docs: when the limit is hit, AI features stop until the next cycle; on-demand must be on to even see the control. Set on-demand **off**, or on-demand **on with limit = $0** (or a tiny fuse, e.g. $10). Cloud Agents require on-demand to launch. That is the only control they cannot ignore, because it lives on **their** billing plane.[[1]](https://cursor.com/help/account-and-billing/spend-limits)
+- **Also required at launch time (vendor UI, not disk):** never stack `maxMode` + `effort: xhigh` + `speed: fast`. Those are cloud-agent fields. Local pins are irrelevant, as the incident already proved.
+- **Other lanes that bypass local guards the same way:**
+  - Cursor Cloud Agents / background agents / Bugbot (usage-based)[[2]](https://cursor.com/pricing)
+  - ChatGPT scheduled tasks, Codex cloud, mobile
+  - Claude.ai / Cowork / Claude Code in the browser (not the local CLI)
+  - Grok Build / Grok Bot (cloud)
+  - Gemini Spark — marketed as a 24/7 cloud-resident agent[[3]](https://felloai.com/best-ai-models/)
+  - Team seats: if “Only Admins Can Edit Usage Settings” is off, any member can lift the cap
+  - On-demand auto-continue after the included pool is empty (the default once you say yes once)
+- **Failure mode nobody named:** the **ToS kill-switch on the whole arbitrage**, not another agent lane. Anthropic already cut Pro/Max off from third-party agent harnesses (OpenClaw-class) on 4 Apr 2026 — a single OpenClaw day was costing them $1k–$5k of API. An MCP stdio wrapper around a consumer CLI is the same pattern. Cursor’s `bonusSpend` “may vary” is the same class of risk. A ban or a policy flip turns the shop off in an afternoon; no local arm-test catches it.[[4]](https://dapta.ai/blog-posts/ai-news-week-14-anthropic-claude-pricing/)
+
+Q2 EFFICIENCY
+- **Keep:** the MCP stdio seats that wrap **first-party CLIs** (Claude Code, Codex, Grok Build). Persistent sessions vs amnesiac one-shots is the actual product. ~400 lines is cheap if it is one adapter, not four churches.
+- **Cut:** duplicated per-seat meter/armcheck that the burning lane never ran. The 15-check arm test and the spend allowance were theater relative to Cursor cloud. Delete any wrapper whose only job is “make a consumer sub look like an API” without a **remote** spend cap. Google-as-fourth-builder is ceremony if it is already ~free and unused for hard jobs.
+- **Why:** the empty-repo incident was an orientation failure, not a missing fifth model. Four builders into a staged-empty repo is elaborate. One seat, with repo context, would have been cheaper and produced more than 586 lines.
+
+Q3 ARCHITECTURE
+
+**Current sticker (Aug 2026, official pages):**
+- Claude Max 5x $100 / 20x $200; Pro $20.[[5]](https://support.claude.com/en/articles/11049741-what-is-the-max-plan)
+- ChatGPT Plus $20; Pro from $100 (5x) / $200 (20x).[[6]](https://chatgpt.com/pricing/)
+- SuperGrok $30/mo or **$300/yr (~$25/mo)**; SuperGrok Plus $100. Annual expires ~Dec 1.[[7]](https://x.ai/pricing)
+- Cursor Pro $20 / Pro+ $60 / Ultra $200. Pro+ includes **$70 of third-party API agent usage** + a separate first-party pool (Grok 4.6 / Composer). The operator’s ~$800 “included value” is `bonusSpend`, which Cursor says may vary.[[8]](https://cursor.com/help/models-and-usage/usage-limits)
+- **ESTIMATE reconstructed shop burn today:** Claude Max 5x $100 + ChatGPT Plus $20 + SuperGrok annual $25 + Cursor Pro+ $60 + Google ~$0 = **~$205/mo**. Fits the brief’s $150–250 band.
+
+**Live per-token (1M tokens), fetched 24 Aug 2026:**
+
+| Model | Input | Output | Source |
+|---|---|---|---|
+| Claude Opus 5 | $5 | $25 | Anthropic official. Cache hit $0.50. Fast mode $10/$50. |
+| Grok 4.6 | $2 | $6 | xAI official (updated 21 Aug). Cached $0.50. Prompt ≥200k **re-bills entire request** at $4/$12. |
+| GPT-5.6 Sol | $4 | $20 | OpenAI official; **promo through at least 21 Nov 2026**. Long context $8/$30. |
+| GPT-5.6 Terra / Luna | $2/$12 · $0.20/$1.20 | OpenAI official |
+| Gemini 3.1 Pro (≤200k) | $2 | $12 | Google; doubles above 200k |
+| DeepSeek V4-Flash | $0.14 | $0.28 | DeepSeek / Spheron table |
+| OpenRouter | provider rate **+ 5.5%** | OpenRouter pricing page |
+
+OpenRouter lists the same Opus 5 $5/$25 and Grok 4.6 $2/$6 before the fee.[[9]](https://openrouter.ai/compare/anthropic/claude-opus-5/x-ai/grok-4.6)
+
+**Blended $/M — ESTIMATE, 70/30 in/out (agentic coding + reasoning tokens billed as output):**
+- Opus 5: `0.7×5 + 0.3×25` = **$11.00/M**
+- Grok 4.6 (<200k): `0.7×2 + 0.3×6` = **$3.20/M** (OpenRouter: **$3.38/M**)
+- GPT-5.6 Sol promo: **$8.80/M**
+- DeepSeek V4-Flash: **$0.182/M**
+- **Shop mix ESTIMATE** 40% Opus / 25% Grok / 20% Sol / 15% cheap (~$0.50): **$7.04/M**. OpenRouter +5.5%: **$7.42/M**.
+
+**Crossover vs ~$205/mo stack (when API spend = sticker):**
+- Mix $7.04/M → **29M tokens/mo**
+- Opus-only $11/M → **19M**
+- Grok-only $3.20/M → **64M**
+- DeepSeek $0.182/M → **1.1B**
+
+| Volume | Mix $7.04/M | Opus $11/M | Grok $3.20/M | DeepSeek $0.18/M | Status-quo sub |
+|---|---|---|---|---|---|
+| 100M | **$704** | $1,100 | $320 | $18 | $205 + hard caps |
+| 500M | **$3,518** | $5,500 | $1,600 | $91 | cannot deliver |
+| 1B | **$7,035** | $11,000 | $3,200 | $182 | cannot deliver |
+
+The brief’s “hundreds of millions of tokens” **does not mean 500M Opus tokens**. At Opus rates that is $5,500 of API. The sub stack only “contains” that volume because of (a) Cursor `bonusSpend` (~13x, measured), (b) Claude/Grok included pools, (c) cache, (d) cheap models. The two-day Cursor burn is the proof: the cap, not the sticker, is the binding constraint.
+
+**GPU rental (live / dated):**
+- Vast.ai (live on their page): H100 SXM **from $1.33 / median $1.87**; H200 **$3.68 / $4.00**; RTX 5090 **$0.29 / $0.46**.[[10]](https://vast.ai/article/how-much-does-it-cost-to-rent-a-gpu-in-the-cloud-live-pricing-guide)
+- RunPod (4 Aug 2026): Community H100 PCIe **$1.99/hr**; Secure H100 SXM **$2.99**; Serverless H100 **~$4.55/hr active, $0 idle**. Lambda official: H100 SXM **$3.99/hr**.[[11]](https://www.spheron.network/blog/runpod-vs-lambda-labs-2026/)
+- **VRAM for frontier-class open weights:** DeepSeek V3.2 671B FP8 ≈ **700 GB** → **8× H200 141GB** (8×H100 80GB = 640 GB does not fit). Llama 3.3 70B INT4 ≈ 35 GB → 1× H100. Qwen 3 72B INT4 ≈ 36 GB → 1× H100. RTX 5090 32 GB does **not** hold 70B FP16/FP8.[[12]](https://www.spheron.network/blog/gpu-requirements-cheat-sheet-2026/)
+
+**Utilization reality (one person):** idle most hours. 24/7 8×H200 at Vast from-price: `8 × $3.68 × 720` = **$21,197/mo**. Same cluster 4 h/day: **$3,533/mo**. 1× H100 Community 4 h/day: `4×30×$1.99` = **$239/mo** — *if you remember to stop the pod*. Forget once, you pay the month.
+
+**Quality gap:** you cannot rent “Opus 5” or “Grok 4.6” as a GPU. Best open API, DeepSeek V4-Flash, is Intelligence Index 52 vs Opus 5 at 63 / Grok 4.6 at 61; GLM 5.3 agentic jump shipped **without weights**. Self-hosting DeepSeek-class only beats DeepSeek’s own API at **~831–933M tokens/day**. This shop is not that.[[3]](https://felloai.com/best-ai-models/)
+
+**Owned hardware:**
+- RTX 5090: MSRP $1,999; street often **$2,500–$3,200**; TDP **575W**; 1000W+ PSU.[[13]](https://www.runpod.io/articles/guides/nvidia-rtx-5090)
+- H100 80GB new **$25k–$40k**; used **$15k–$28k**. H200 module street **$30k–$40k**; **8-GPU HGX server $350k–$420k**. TDP 700W/GPU.[[14]](https://compute.exchange/blogs/h100-gpu-price-2026)
+- Power, Hayward/CA: CA residential **33.25¢/kWh** (Aug 2026); Hayward local **43¢/kWh**. 5090 at 8 h/day: `0.575×8×30=138 kWh` → **$46–$59/mo**. 8×H200 24/7: `5.6 kW × 720 h = 4,032 kWh` → **~$1,340–$1,730/mo electricity alone**.[[15]](https://www.electricchoice.com/electricity-prices-by-state/)
+- **ESTIMATE break-even, 5090 @ $3,000 all-in vs Vast $0.40/hr × 8 h/day ($96) minus power ($59):** $3,000 / $37 ≈ **81 months**. Useful AI life of a consumer card is ~18–24 months. **Never buys back.** H100 @ $30k vs $1.99/hr 24/7 ($1,433/mo) needs **~21 months at 100% util**; a one-person shop is ~15–25% util → **7+ years**, into Blackwell already shipping (Lambda B200 **$6.69/hr**).
+
+| Option | Monthly cost | What you get | What breaks it |
+|---|---|---|---|
+| Status quo stacked subs | **~$205** (Max 5x+Plus+SuperGrok annual+Pro+) | Frontier closed models, Claude Code, Codex, Grok, Cursor agents; ~13x Cursor subsidy while it lasts | Caps; cloud-agent bypass; ToS; `bonusSpend` / promo rates expire; SuperGrok annual ~Dec 1 |
+| OpenRouter / first-party API | **$704 / $3.5k / $7.0k** at 100M / 500M / 1B mixed; **$1.1k / $5.5k / $11k** Opus-only | No caps, full model choice, metered | 5.5% OR fee; Sol promo ends ~21 Nov; long-context 2× on Grok/Gemini; you will actually see the bill |
+| Rented GPU (70B INT4, 1×H100) | **~$239** at 4 h/day Community; **$1,433** 24/7 | Open 70B, not Opus/Grok | Idle waste; must stop pods; quality gap; ops |
+| Rented GPU (DeepSeek-class 8×H200) | **$3.5k** at 4 h/day; **$21k** 24/7 | Open frontier-class MoE | Still worse than DeepSeek **API** at this volume; you still don’t have Claude |
+| Owned 5090 | **~$3k capex + $50–180 power** | 32 GB, local 7–32B | Won’t load 70B FP8; CA power; 18–24 mo obsolescence |
+| Owned H100/H200 node | **$30k–$420k capex + hundreds–$1.7k power** | Real iron | Util <60% loses to rental; no closed models; resale/Blackwell risk |
+
+**YOUR RECOMMENDATION:** Keep the subscriptions. Do not rent GPUs. Do not buy Nvidia. The operator’s “wouldn’t a datacenter GPU be ideal?” answers a different job (serving open weights at high util). This job is **frontier closed models, bursty, one human**. GPUs cannot run Opus 5. Switching cost of “move everything to OpenRouter” is an API key and a weekend — and an immediate **3–30× bill** for the same work. Switching cost of GPU is ops he does not have.
+
+**Do this week, in order:**
+1. Cursor Spending: **on-demand off, or limit $0**. Fuse, not architecture.
+2. Open an OpenRouter (or xAI+Anthropic+OpenAI) account with a **$50 hard budget**. Do not route production through it. It is the overflow valve for the week the subsidy dies.
+3. SuperGrok annual (~Dec 1): renew **monthly $30**, not another year prepaid, until the ToS/subsidy picture is stable.
+4. When Cursor `bonusSpend` goes to 1×: Pro+ is then **$70 included for $60** — still rational. If you are only buying the bonus, drop to **Pro $20** and put overflow on Grok 4.6 ($3.20/M) and DeepSeek ($0.18/M).
+5. Claude Max stays last. If Anthropic extends the April harness cutoff to this MCP wrapper, **that** is the day you pay API, not the day you buy an H100.
+
+**Plan for the week the 13× ends:** you do not fall from $205 to $7k. You fall from “$205 for a subsidized slice of frontier” to “$205 + metered overflow.” Triage: Opus for the hard coding, Grok 4.6 for volume, DeepSeek/Luna/Flash for bulk. At 100M mixed that is ~$700. At 500M mixed, $3.5k — a business-cost conversation, still not a GPU conversation. Sol’s cheap promo dies ~21 Nov; Grok long-context doubles the whole request past 200k — both will fake a “volume crisis” if you are not watching mix.
+
+BIGGEST RISK NOBODY NAMED
+**A consumer-seat ban / ToS reclassification of MCP-orchestrated CLI use as “third-party agent framework.”** Anthropic already fired that shot in April. The second silent killer is **long-context re-billing** (Grok/Gemini: cross 200k and the *entire* prompt reprices 2×) plus **Cursor on-demand as the default continue path** after the included pool — a one-time “yes” turns the next cloud-agent swarm into an uncapped API bill. A 5090 in Hayward does not hedge either.
+
+CONFIDENCE: **medium-high on prices** (official pages + live Vast.ai, 24 Aug 2026). **Medium on this shop’s true mix** — “hundreds of millions of tokens” is not audited here; if 30 days of logs show >80% uncached Opus/Sol, the API column jumps toward the $11/M line and the sub stack is even more cap-bound, not cheaper. Would change my mind if: (1) Claude Code itself gets pulled from Max the way OpenClaw did, (2) Cursor `bonusSpend` is already gone on Pro+, or (3) the shop’s actual job is batch-serving open models 24/7 rather than directing frontier agents.

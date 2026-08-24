@@ -1,0 +1,1 @@
+Read docs/council-architecture/pkt-grok.md in this directory, in FULL, and follow it exactly. SEARCH THE WEB for current prices - do not answer from memory. Output only your findings in the brief's format.
