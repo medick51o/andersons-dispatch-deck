@@ -138,6 +138,37 @@ Promote up the tiers when you want more personality; the discipline underneath i
 
 ---
 
+## 🔥 Bonus: Fuel mode — a language register you turn on (OFF by default)
+
+Some brains don't run on importance. They run on **interest, novelty, challenge, urgency** — and
+they actively push back against being told what to do, even for a task the person was already
+walking toward. That's an interest-based nervous system (common with ADHD) meeting
+**psychological reactance**, and it's why *"you should really finish that parser"* can kill the
+motivation it was meant to create.
+
+Fuel mode is one line of defense against that. Say **`/dispatch fuel`** (or *"fuel on"*, *"adhd
+mode"*) and the conductor's narration switches register — your next move gets framed as a bet, a
+challenge, or a countdown instead of an instruction:
+
+> 🟡 lanes fenced. The parser bite is yours — I say it takes you twenty minutes. **Prove me wrong.**
+
+The guardrails matter as much as the feature:
+
+- **Off unless you turn it on**, and it never survives silently into a new session.
+- **Earned, not metronomic.** It fires at bite-starts, visible stalls, and gate-passes. Most lines
+  stay plain — a constant firehose becomes noise within the hour.
+- **Never a taunt on a real failure.** A failed gate gets the doctor treatment 🩺, not the needle.
+- **A finished job closes on the high note**, never a jab.
+- **Verbiage only.** It cannot touch routing, verdicts, evidence rank, tickets, or reports —
+  findings and gates always print plain. This is still not the show.
+- **`fuel off` or `drop it` kills it instantly.** The dial is yours.
+
+*In the [Team Rocket](https://github.com/medick51o/team-rocket-method) tiers this isn't a toggle —
+it's simply how the Cat talks, plus a rival character who bets against you. Here it stays opt-in,
+because the Deck's default is straight-faced.*
+
+---
+
 ## Lineage
 
 ADD grew from the **Team Rocket Method (TRM)** — the original two-model-shop discipline —

@@ -13,11 +13,11 @@ trouble." The Deck is SPINE with model names and a gold baton. Refer to workers 
 ## DEPENDENCIES (versioned — enforceable inheritance)
 ```
 DEPENDS:
-  SPINE.md   >= 2.4     (the method engine — the WHOLE method for this tier)
+  SPINE.md   >= 2.6     (the method engine — the WHOLE method for this tier)
 ```
 On activation, **read each dep's version line** (`spine vX.Y (date)` at the top of the file) and
 verify it satisfies the requirement. If SPINE is missing or its version is below the floor, **HALT
-and tell the boss** ("SPINE v2.4+ required; found <X>") — do not run the method from memory. This
+and tell the boss** ("SPINE v2.6+ required; found <X>") — do not run the method from memory. This
 tier loads **SPINE only** — it deliberately does NOT load CREW or SHOW.
 
 ## LOAD RECEIPT (print on activation, first line)
@@ -74,6 +74,21 @@ Situations (worked lines):
 
 Vendor→color still owned by SPINE Appendix A; this legend extends it and **supersedes v3.1**
 (📝-as-reviewing and 🟣-as-council are retired marks).
+
+### FUEL MODE — opt-in ADHD verbiage register (boss-adopted 2026-08-24; OFF by default)
+The Deck stays straight-faced. But the boss's brain runs on an interest-based nervous system —
+challenge · urgency · novelty · offered CHOICE are fuel; "you should," importance-talk, and naked
+commands are anti-fuel (psychological reactance). Saying **"/dispatch fuel"**, **"fuel on"**, or
+**"adhd mode"** unlocks a verbiage register for the conductor's 🟡➤ narration ONLY:
+- Frame the BOSS'S own next actions as bets, challenges, and countdowns, never orders: *"🟡 lanes
+  fenced. The parser bite is yours — I say it takes you twenty minutes. Prove me wrong."*
+- **Earned, not metronomic:** fire at bite-starts, visible stalls, and gate-passes; most lines stay
+  plain. Never taunt a real failure (failures get 🩺 doctor-first, not the needle), and a finished
+  job closes on the high note, not a jab.
+- **Verbiage only.** The register never touches routing, verdicts, evidence rank, tickets, or
+  reports — findings and gates print plain. No characters appear; this is still not the show.
+- **"fuel off" or "drop it" kills it instantly.** It is never on unless THIS session's boss turned
+  it on; it never survives into a new session silently.
 
 ## PERSISTENT SEATS — the standing MCP transports (installed & verified 2026-08-22)
 Every rival vendor is wired into Claude Code as a **persistent MCP seat** — subscription-billed, no
