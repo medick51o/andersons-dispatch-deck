@@ -250,7 +250,60 @@ def release(job, actual_pct=None, lines=None):
 
 
 # ---------------------------------------------------------------- yield
-def yield_report(repo, days=7):
+FAST_SURCHARGE = ("-fast",)          # measured 3.6x-5.5x their non-fast twins
+
+
+def find_events_csv():
+    """Newest Cursor usage export, if the operator dropped one somewhere obvious.
+
+    Desktop is OneDrive-redirected on this fleet, so it is resolved, never guessed.
+    """
+    import glob
+    home = os.path.expanduser("~")
+    spots = [os.path.join(home, "Downloads"),
+             os.path.join(home, "OneDrive", "Desktop"),
+             os.path.join(home, ".claude", "uploads")]
+    hits = []
+    for s in spots:
+        hits += glob.glob(os.path.join(s, "**", "*usageevents*.csv"), recursive=True)
+    return max(hits, key=os.path.getmtime) if hits else None
+
+
+def load_events(path, since=None):
+    """Parse Cursor's per-event usage export — the ONLY meter that sees every lane.
+
+    Our own ledger records what the MCP seats dispatched. This file records what the
+    ACCOUNT spent, cloud agents and IDE included, which is precisely the 96% our
+    ledger was blind to on 2026-08-24.
+    """
+    import csv
+    rows = []
+    with io.open(path, encoding="utf-8-sig", newline="") as f:
+        for r in csv.DictReader(f):
+            d = (r.get("Date") or "")[:10]
+            if since and d < since:
+                continue
+            model = (r.get("Model") or "(unnamed)").strip()
+            try:
+                tok = int(r.get("Total Tokens") or 0)
+            except ValueError:
+                tok = 0
+            cost = 0.0
+            c = (r.get("Cost") or "").strip()
+            if c and c.lower() != "included":
+                try:
+                    cost = float(c.lstrip("$"))
+                except ValueError:
+                    pass
+            lane = ("cloud-agent" if (r.get("Cloud Agent ID") or "").strip()
+                    else "automation" if (r.get("Automation ID") or "").strip()
+                    else "interactive")
+            rows.append({"date": d, "model": model, "tokens": tok, "cost": cost,
+                         "lane": lane, "max": (r.get("Max Mode") or "").strip() == "Yes"})
+    return rows
+
+
+def yield_report(repo, days=7, events_csv=None):
     """Cost per ACCEPTED change — the shop's own metric, not the vendor's."""
     since = (_now() - datetime.timedelta(days=days)).strftime("%Y-%m-%d")
     rc, out = _git(repo, "log", f"--since={since}", "--pretty=%H", "--numstat")
@@ -294,28 +347,59 @@ def yield_report(repo, days=7):
 
     L = [f"YIELD — {os.path.basename(os.path.abspath(repo))}, last {days} days",
          "",
-         f"  ACCEPTED OUTPUT:  {commits} commits, +{added}/-{removed} lines",
-         f"  DISPATCHED:       {calls} seat calls, {toks:,} tokens",
-         f"  GUARDED JOBS:     {len(hist)} leases taken and closed"]
-    if added and toks:
-        L += ["", f"  >>> COST PER ACCEPTED LINE: {toks/added:,.0f} tokens <<<"]
-    elif toks and not added:
-        L += ["", "  >>> COST PER ACCEPTED LINE: UNDEFINED — real spend, NO accepted output.",
-              "      This is the failed-work multiplier. It is what Aug 21-22 looked like."]
-    elif added and not toks:
-        L.append("  (output with no metered seat spend — human or unguarded lane)")
+         f"  ACCEPTED OUTPUT:  {commits} commits, +{added}/-{removed} lines"]
 
-    zero = [h for h in hist if h.get("lines") == 0 and (h.get("actual_pct") or 0) > 0]
-    if zero:
-        L.append(f"  ZERO-OUTPUT JOBS: {len(zero)} "
-                 f"({sum(h['actual_pct'] for h in zero):.3f}% burned for nothing)")
-        for h in zero[:5]:
-            L.append(f"     - {h['job']}: {h['actual_pct']}%  {h.get('note','')}")
+    # ---- vendor ground truth, if an export is available ------------------
+    ev = load_events(events_csv, since) if events_csv else []
+    if ev:
+        etok = sum(e["tokens"] for e in ev)
+        ecost = sum(e["cost"] for e in ev)
+        L.append(f"  ACCOUNT SPEND:    {len(ev)} events, {etok:,} tokens"
+                 + (f", ${ecost:,.2f} billed" if ecost else " (all within included limits)"))
+        if added:
+            L += ["", f"  >>> COST PER ACCEPTED LINE: {etok/added:,.0f} tokens <<<"]
+        else:
+            L += ["", "  >>> COST PER ACCEPTED LINE: UNDEFINED — real spend, NO accepted",
+                  "      output in this repo. The failed-work multiplier."]
 
-    L += ["", "  Counts only what passed through the guard and the seat ledger.",
-          "  Cloud agents, IDE agent mode, the web launcher and mobile are invisible",
-          "  here BY CONSTRUCTION — they never touch this machine. That blind spot is",
-          "  the whole reason VENDOR-CHECKLIST.md exists."]
+        lanes = {}
+        for e in ev:
+            d = lanes.setdefault(e["lane"], [0, 0])
+            d[0] += 1
+            d[1] += e["tokens"]
+        L += ["", "  BY LANE (this is what the seat ledger cannot see):"]
+        for lane, (n, t) in sorted(lanes.items(), key=lambda x: -x[1][1]):
+            gov = "guarded" if lane == "interactive" else "VENDOR-SIDE, ungoverned here"
+            L.append(f"    {lane:14} {n:>5} events  {t:>13,} tok  {t/etok*100:>5.1f}%   {gov}")
+
+        fast = [e for e in ev if any(s in e["model"] for s in FAST_SURCHARGE)]
+        if fast:
+            ft = sum(e["tokens"] for e in fast)
+            L += ["", f"  ⚠ SURCHARGED FAST TIERS: {ft:,} tok ({ft/etok*100:.1f}% of spend)",
+                  "    Fast tiers measured 3.6x-5.5x their non-fast twins. Same work,",
+                  "    same models, a fraction of the bill if the default is changed."]
+        mx = [e for e in ev if e["max"]]
+        if mx:
+            L.append(f"  ⚠ MAX MODE: {sum(e['tokens'] for e in mx):,} tok on top of the above")
+
+        top = sorted({e["model"] for e in ev},
+                     key=lambda m: -sum(e["tokens"] for e in ev if e["model"] == m))[:5]
+        L += ["", "  TOP MODELS:"]
+        for m in top:
+            t = sum(e["tokens"] for e in ev if e["model"] == m)
+            L.append(f"    {m:32} {t:>13,}  {t/etok*100:>5.1f}%")
+    else:
+        L.append(f"  SEAT LEDGER ONLY:  {calls} calls, {toks:,} tokens "
+                 f"({len(hist)} guarded leases)")
+        if added and toks:
+            L += ["", f"  >>> COST PER ACCEPTED LINE: {toks/added:,.0f} tokens (MCP lane only) <<<"]
+        L += ["", "  NO VENDOR EXPORT SUPPLIED — this counts only what the MCP seats",
+              "  dispatched. On 2026-08-24 that was 3% of real account spend. Download",
+              "  the per-event CSV (vendor usage page -> Export CSV) and pass --events,",
+              "  or the number below is your own corner of the bill, not the bill."]
+
+    L += ["", "  Note: git output is local time, vendor events are UTC — a boundary day",
+          "  can straddle. Widen --days before drawing a conclusion from one day."]
     return 0, "\n".join(L)
 
 
@@ -344,6 +428,9 @@ def main():
 
     sub.add_parser("status")
     p = sub.add_parser("yield"); p.add_argument("repo"); p.add_argument("--days", type=int, default=7)
+    p.add_argument("--events", help="Cursor per-event usage CSV (vendor usage page -> Export CSV). "
+                                    "Omit to auto-discover the newest one.")
+    p.add_argument("--no-auto", action="store_true", help="do not auto-discover an export")
 
     a = ap.parse_args()
 
@@ -385,7 +472,10 @@ def main():
         return 0
 
     if a.cmd == "yield":
-        rc, out = yield_report(a.repo, a.days)
+        csvp = a.events or (None if a.no_auto else find_events_csv())
+        if csvp and not a.events:
+            print(f"  (auto-discovered export: {csvp})\n")
+        rc, out = yield_report(a.repo, a.days, csvp)
         print(out)
         return rc
 
