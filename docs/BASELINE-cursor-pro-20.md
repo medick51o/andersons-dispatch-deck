@@ -275,3 +275,72 @@ scales close to linearly; the subsidy ratio is roughly the same at both tiers.
 Pro would have died on day 10. That rate is not a valid forecast, because the thing driving it
 was 13 agents that mostly produced nothing. A real forecast needs a fresh reading after a few
 days of normal, non-max work.
+
+---
+
+# RESOLVED 2026-08-24 14:30 — the event-level export settles everything
+
+Cursor's usage page exports a per-event CSV (Usage → Export CSV): every call with its model,
+lane, cloud-agent id, automation id, max-mode flag and token counts. It is the independent
+meter the council said did not exist, and it was on the dashboard the whole time.
+
+## `sand-default` was NOT a hidden model. Correction.
+
+Earlier this session it was reported as "a model Cursor assigned you by experiment, which you
+cannot select, cannot see in any menu, and cannot turn off." **That was wrong.** It came from
+finding the string in Cursor's Statsig bootstrap and over-reading a feature-flag default as the
+billing source.
+
+The event log resolves it arithmetically:
+
+```
+cursor-grok-4.6-high-fast      18,067,178
+cursor-grok-4.6-medium-fast     2,618,089
+                    SUM        20,685,267
+billing page "sand-default"    20,700,000     -> match within 0.07%
+```
+
+The two rows that carry real names confirm the join is sound:
+`composer-2.5` 670,214 vs 670.2K, and `kimi-k3-high` 66,573 vs 66.6K — both **exact**.
+
+**`sand-default` is a billing-page alias for the Cursor Grok 4.6 FAST tiers.** Ordinary
+interactive IDE usage, on a surcharged tier, on a model that is fully selectable. Nothing
+hidden and nothing assigned.
+
+## The Aug 21-22 burn was half cloud agents and half IDE
+
+The incident write-up pinned the burn on cloud agents. The event log refines that:
+
+```
+cursor-grok-4.6-xhigh-fast, all lanes    67,110,676
+  of which cloud agents (6 with events)  36,048,930   54%
+  of which interactive IDE / local       31,061,746   46%
+```
+
+Both halves ran the same surcharged `xhigh-fast` tier. So the fix is **not only** "disable
+cloud agents" — it is **"stop defaulting to fast tiers anywhere,"** because the human at the
+keyboard spent nearly as much as the runaway fleet did.
+
+Note also: 13 cloud agents exist in the IDE's state database, but only **6** produced billable
+events. Seven burned nothing at all, which is consistent with, and sharper than, the earlier
+"eleven produced zero lines."
+
+## Spending page — the checklist, answered
+
+- **On-Demand Spending: DISABLED.** Already off, and off during the incident too. This is the
+  final proof of Codex's refutation: the burn happened with the cash fuse already pulled,
+  because it never touched cash. It ate the prepaid allowance.
+- **Monthly Limit: Disabled** — moot while on-demand is off; nothing can overflow into money.
+- **Grok Bot: live, 6% of the weekly pool used, resets Aug 31.** The thing the upgrade was for.
+- Ultra is advertised at **"20x usage limits"** for $200 — matching the community 20x figure,
+  and consistent with the measured Pro:Pro+ ratio of ~3x.
+
+## The spillover chain, in Cursor's own words
+
+> **Cursor Models:** *"Additional usage beyond limits consumes Other Models quota or on-demand spend."*
+> **Other Models:** *"Additional usage beyond limits consumes on-demand spend."*
+
+So the drain order is **Cursor Models → Other Models → on-demand cash**, one way, no return.
+This is exactly the one-way spillover `MEASURING-POOLS.md` warns about, now confirmed by the
+vendor. With on-demand disabled the chain **hard-stops at the end of the credit pool** rather
+than reaching a card — which is the correct configuration and is already in place.
