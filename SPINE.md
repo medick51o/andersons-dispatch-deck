@@ -1,6 +1,6 @@
 # SPINE — the method engine (single owner, all tiers inherit)
 
-**Version line (machine-readable):** `spine v2.6 (2026-08-24)`
+**Version line (machine-readable):** `spine v2.7 (2026-08-24)`
 **Any content change bumps this line** — a silent edit under an old tag is banned. Git and
 the versioned owner headings below carry the history; each law is owned by its own section.
 
@@ -33,6 +33,10 @@ weakest to strongest:
 
 - **"Gates pass," never "it works."** Built ≠ validated ≠ proven. No seat declares victory; when
   no one may declare victory, no one can agree their way to it.
+- **A vendor's own answer is a CLAIM, not a gate.** Documentation, a support reply and a dashboard
+  banner are evidence of what someone said or rendered — never proof of what the system does. Where
+  a claim is cheap to test, test it; a banner reading "limit reached" beside a seat that answers in
+  three seconds is the ordinary case, not the exotic one.
 - **A gate is only an arbiter if it can FAIL, and only after its oracle is checked.** A green gate
   over a wrong assertion proves nothing. A regression test is not evidence until it has been run
   RED against the unfixed code. State, per test, what it would catch if the fix were reverted; a
@@ -227,7 +231,19 @@ Parallel seats are permitted. What is banned is a fleet nobody declared, bounded
 - **Declared.** The human is told the shape of the fan-out before it runs: how many seats, doing
   what. No seat spawns seats nobody asked for.
 - **Bounded.** A hard cap on seats, set in advance. "As many as it takes" is not a number.
+  The cap must be **claimed atomically**, not merely checked: N launches can each read the same
+  free headroom before any of them is recorded, all pass, and together blow the budget. A check
+  that is not a reservation is not a cap.
+- **Destined.** Every dispatch names where its output goes, and that place must already be able to
+  receive it. **An agent with no destination still spends at full rate** — cost scales with
+  DISPATCH, never with output, so an empty write-set returns an empty diff and a full bill.
 - **Accounted.** Every seat's output is attributable to a seat. Anonymous work is banned.
+- **Governed where it RUNS.** A guard the guarded system cannot see is decoration. Anything
+  executing on a vendor's infrastructure — cloud/background agents, IDE agent modes, web and
+  mobile launchers, CI — obeys the VENDOR's settings, not the shop's config file. Such a lane is
+  closed in the vendor's own control plane or it is not closed. Know also what a given control
+  actually controls: a spend limit protects CASH and not a prepaid ALLOWANCE, and an agent can
+  exhaust the month's included pool without charging a further penny.
 - **Still Principle 3.** Fanning out does NOT let a model review its own work by proxy. A reviewer
   inside the builder's **owning-seat lineage** (that seat plus everything it spawns, transitively,
   regardless of vendor or harness) is not a reviewer.
@@ -473,6 +489,10 @@ which model is really behind a host. Independence and reviewer-counting require 
   the banner color. A host can rent another vendor's brain (an Antigravity/Gemini host running a
   Claude model is a *Claude* lineage, not an independent reviewer of Claude work). **Independence
   compares the effective model + lineage, and only that.**
+- **Probe the CAPABILITY the ticket needs, not just the pulse.** A seat that cannot reach the web
+  will answer a research question from memory and may not say so — dressing stale training data in
+  fresh-looking citations. Before a research dispatch, establish that the seat can actually search;
+  a seat that admits it cannot is worth more than one that quietly does not.
 - **Probe the TRANSPORT, not the binary** (THE TRANSPORT LAW owns this): a seat is online when its
   persistent seat answers in THIS session. A CLI `--version` proves only that the fallback lane
   exists — never enough on its own to count a seat present.
@@ -728,6 +748,14 @@ vendors now sell capacity without stating how much you bought.
    of THE COUNCIL SEAT LAW admits a free seat, while this clause bars a load-bearing lane on a
    subsidy. Both stand — they govern different things, and the line above is where.)*
 5. **Cost claims cite a reading, not a recollection.** "That's cheap" is "it works" wearing a hat.
+6. **Meter the OUTPUT, not only the input.** Every clause above measures spend against an allowance
+   the VENDOR defines and reports — the vendor's metric, not the shop's. A shop that meters only
+   what it consumes can be flawlessly "efficient" while buying nothing: the one number no vendor
+   will ever report for you is **cost per ACCEPTED change**. Track it, or the failure that looks
+   like thrift is invisible until the invoice and the repo disagree.
+7. **The vendor draws the needle.** Usage figures come from the party being measured against, and a
+   subsidy can be halved silently while the meter calmly reports the new reality as normal. Watch
+   the RATIO of value to price over time, not the balance — decay creeps, it does not cliff.
 
 *Wiring, not law:* endpoints, scripts and vendor quirks live with the shop's tooling (Appendix A) —
 they change without notice. The obligation to read them does not.
