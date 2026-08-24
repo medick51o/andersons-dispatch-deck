@@ -156,3 +156,44 @@ Applying the $70:$400 price ratio (1:5.7) to the same Ultra anchor:
 After the upgrade, read the dashboard again and divide: `tokens ÷ (percent/100)` = pool.
 Also record the new cycle start/end (tests the reset prediction) and whether the Other Models
 percentage moved (tests "both pools rise"). Compare against this file.
+
+---
+
+# SCORED — the upgrade happened 2026-08-24 ~09:05
+
+| # | Prediction | Outcome | Verdict |
+|---|---|---|---|
+| 1 | Billing cycle restarts on upgrade | cycle is now **Aug 24 → Sep 24** (was Aug 21 → Sep 21) | ✅ **RIGHT** |
+| 2 | Before/after percentages not comparable | both pools reset to **0%**, spend counters zeroed to $0.00 | ✅ **RIGHT** |
+| 3 | Consumed 32.2% might carry over into the new tier | it did **not** — full fresh allowance | ✅ resolved in the boss's favor |
+| 4 | Charged full $60 up front | charged **$60.00** | ✅ **RIGHT** |
+| 5 | "Prorated refund lands **days later**" | refund was **instant** | ❌ **WRONG** |
+| 6 | "Assume **no refund** — usage was consumed" | refunded **$16.78**, ~84% of the $20 | ❌ **WRONG** |
+| 7 | Pro+ first-party pool ≈ 1,230M tokens (band 800M–1,300M) | **not yet testable** — pool reads 0%, needs usage before `tokens ÷ %` has a value | ⏳ open |
+
+**Net cost of the upgrade today: $60.00 − $16.78 = $43.22.** Then $60/month from Sep 24.
+
+## What the two misses teach
+
+The forum reply that drove predictions 5 and 6 — *"Upgrade refunds are based on usage. If Pro
+monthly usage was already consumed, no refund"* — **did not describe what actually runs.** The
+refund was calendar-time-based and immediate. Had it been usage-based, this account's fully
+consumed $20 allowance would have returned roughly nothing; it returned ~84%.
+
+$16.78 is 83.9% of $20 — a time proration. The exact day-count does not reconcile to a clean
+fraction of the Aug 21 → Sep 21 window, so the precise formula stays unknown; the *mechanism*
+is not in doubt.
+
+**The methodological lesson, which is the durable part:** a single sourced support quote was
+treated as the operative rule and outranked the three-thread staff consensus that contradicted
+it. A vendor's own reply is evidence about what a person said, never proof of what the billing
+system does. On the Ladder of Truth that is a claim, not a gate — and the gate here was one
+button press that would have settled it in four seconds.
+
+## The measurement problem the reset creates
+
+All counters are zero, so the new pool is **unmeasurable until real usage lands** — `tokens ÷
+percent` is undefined at 0%. A calibration burn was stood down earlier today as redundant
+(the old dashboard supplied ten token/percent pairs). That reasoning no longer holds: the
+reset destroyed those pairs. **A burn is now the only way to size the Pro+ pool**, and it
+should run before ordinary use muddies the reading.
