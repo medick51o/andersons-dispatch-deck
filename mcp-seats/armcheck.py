@@ -70,8 +70,27 @@ check("gemini: a REAL project dir is still allowed (no false positive)",
       not gm("gemini",{"prompt":"reply with only OK","always_approve":True,"cwd":PLAYPEN})["isError"])
 p.stdin.close(); p.wait(timeout=10)
 
+# --- Kimi's exploit pass, 2026-08-24. The guard path was DEAD CODE (NameError on
+# every guarded write dispatch) and no test reached it, because preflight returned first.
+# This canary exercises the reserve path itself.
+p2, rpc2 = seat("wmw_cursor_mcp.py")
+rpc2({"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"arm"}}})
+_g = rpc2({"jsonrpc":"2.0","id":9,"method":"tools/call","params":{"name":"cursor","arguments":
+      {"prompt":"Reply with only: OK","always_approve":True,"cwd":SEATS,"model":"composer-2.5"}}})["result"]
+_gt = _g["content"][0]["text"]
+check("cursor: the guarded write path RUNS (no NameError in reserve)",
+      "NameError" not in _gt and "is not defined" not in _gt)
+check("cursor: write-capable rooted in APPDATA refused",
+      rpc2({"jsonrpc":"2.0","id":9,"method":"tools/call","params":{"name":"cursor","arguments":
+        {"prompt":"x","always_approve":True,"cwd":os.environ.get("APPDATA",""),"model":"composer-2.5"}}})["result"]["isError"])
+p2.stdin.close(); p2.wait(timeout=15)
+
 # --- the escalation route the Cursor seat still had open (audit 2026-08-24) ---
 _cur = io.open(os.path.join(SEATS,"wmw_cursor_mcp.py"), encoding="utf-8").read()
+
+# --- state the guards READ must not live where the guarded agent may WRITE ---
+check("cursor: spend ledger is NOT inside the playpen",
+      "PLAYPEN" not in _cur.split("SPEND_LEDGER =")[1].split("\n\n")[0])
 # anchor on the CODE line, not the word — the word also appears in the comment above it
 _apr = [i for i, l in enumerate(_cur.splitlines()) if 'cmd += ["--approve-mcps"]' in l]
 _lines = _cur.splitlines()

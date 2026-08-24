@@ -70,6 +70,19 @@ def revoke(seat):
     _save(d)
     return existed
 
+def window_seconds(seat, fallback=600):
+    """The granted window in SECONDS, so a caller enforces the operator's real bound.
+
+    The bound used to be read for its CALL COUNT only, while enforcement ran against a
+    hardcoded 10-minute window — so a grant of "10/week" was silently enforced as "10 per
+    ten minutes", roughly a thousand times looser than what was granted.
+    (Audit 2026-08-24, Kimi, CONFIRMED logic bug.)
+    """
+    g = _load().get(seat) or {}
+    days = WINDOWS.get(g.get("window", ""), 0)
+    return days * 86400 if days else fallback
+
+
 def status(seat):
     """Returns (permitted, reason). A seat with no grant is NOT permitted."""
     g = _load().get(seat)

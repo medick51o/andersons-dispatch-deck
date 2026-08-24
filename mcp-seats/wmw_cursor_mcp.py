@@ -49,6 +49,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 
 CURSOR_TIMEOUT_S = 3600
 MAX_REPLY_CHARS = 400_000
@@ -76,7 +77,13 @@ COUNCIL_LOCK_ON = os.environ.get("WMW_CURSOR_COUNCIL_LOCK", "on").lower() != "of
 PLAYPEN = os.path.abspath(os.environ.get(
     "WMW_CURSOR_PLAYPEN", os.path.join("C:" + os.sep, "Sync", "_playpen", "cursor")))
 PROMPTS_DIR = os.path.join(PLAYPEN, "prompts")
-SPEND_LEDGER = os.environ.get("WMW_CURSOR_LEDGER", os.path.join(PLAYPEN, "bench-spend.jsonl"))
+# NOT in the playpen. The playpen is the one directory a write-capable session is always
+# allowed to write, so a ledger kept there is self-serve: delete it and _recent_billable
+# reads zero, which silently unlocks the council lock. State the guards READ must not live
+# where the guarded agent may WRITE. (Audit 2026-08-24, Kimi, CONFIRMED.)
+SPEND_LEDGER = os.environ.get(
+    "WMW_CURSOR_LEDGER",
+    os.path.join(os.path.expanduser("~"), ".anderson-method", "bench-spend.jsonl"))
 
 def _ensure_playpen():
     """Create the playpen on demand. Never let this break a call."""
@@ -197,6 +204,19 @@ def _allowance(seat):
         return mod.status(seat)
     except Exception as e:
         return False, f"the allowance record could not be read ({e}); failing closed"
+
+def _allowance_window_s(seat, fallback):
+    """The operator's granted WINDOW, not a hardcoded one. See allowance.window_seconds."""
+    try:
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "_allowance_mod", os.path.join(os.path.dirname(os.path.abspath(__file__)), "allowance.py"))
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return int(mod.window_seconds(seat, fallback))
+    except Exception:
+        return fallback
+
 
 def _allowance_calls(seat, fallback):
     """The granted call bound, so the rolling cap enforces the operator's number."""
@@ -331,6 +351,16 @@ def _safe_cwd(cwd, always_approve):
         if v and _is_within(real, v):
             raise ValueError(f"refusing a write-capable session inside a system directory "
                              f"({v}) — point cwd at a project directory or the playpen")
+    # APPDATA / LOCALAPPDATA hold this rig's OWN credentials (Cursor's auth.json) and the
+    # vendor CLIs themselves. A write-capable session rooted there can rewrite the very
+    # tools that enforce these guards. (Audit 2026-08-24, Kimi, CONFIRMED gap.)
+    for env in ("APPDATA", "LOCALAPPDATA"):
+        v = os.environ.get(env)
+        if v:
+            b = _norm(os.path.realpath(v))
+            if _norm(real) == b or _norm(real).startswith(b.rstrip(os.sep) + os.sep):
+                raise ValueError(f"refusing a write-capable session at or inside {env} — "
+                                 f"credentials and the CLIs themselves live there")
     for secret in (".ssh", ".aws", ".grok", ".gemini", ".claude", ".cursor",
                    ".config", ".azure", ".kube", ".gnupg"):
         parts = [p.lower() for p in _norm(real).split(os.sep)]
@@ -404,12 +434,16 @@ def run_cursor(prompt, session_id=None, cwd=None, model=None, always_approve=Fal
                 f"(composer-2.5, cursor-grok-4.6-*) are unaffected and need no allowance.")
 
     if klass.startswith("CREDITS") and COUNCIL_LOCK_ON:
-        recent = _recent_billable(COUNCIL_LOCK_WINDOW_S)
+        # The operator's grant says "N per WINDOW". Enforcement used a hardcoded
+        # 10-minute window regardless, so "10/week" was policed as "10 per 10 minutes".
+        # Use the granted window; fall back to the house default only if none is recorded.
+        _win = _allowance_window_s("cursor", COUNCIL_LOCK_WINDOW_S)
+        recent = _recent_billable(_win)
         if recent >= _allowance_calls("cursor", COUNCIL_LOCK_MAX):
             return True, (
                 f"{CURSOR_BANNER} 🛑 COUNCIL LOCK — REFUSED\n\n"
                 f"{recent} billable Cursor calls already landed in the last "
-                f"{COUNCIL_LOCK_WINDOW_S // 60} minutes, at the operator's granted bound. "
+                f"{_win // 60} minutes, at the operator's granted bound. "
                 f"This looks like a COUNCIL fanning out onto metered seats.\n\n"
                 f"Standing boss ruling (2026-08-23): a council runs on SUBSCRIPTION seats "
                 f"only — house Claude, Codex, Grok, Gemini. Cursor-hosted models are not "
@@ -677,7 +711,7 @@ def handle(msg):
             "result": {
                 "protocolVersion": msg.get("params", {}).get("protocolVersion", "2024-11-05"),
                 "capabilities": {"tools": {}},
-                "serverInfo": {"name": "wmw-cursor", "version": "2.3.0"},
+                "serverInfo": {"name": "wmw-cursor", "version": "2.4.0"},
             },
         }
     if method == "ping":
