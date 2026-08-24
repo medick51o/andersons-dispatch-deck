@@ -54,6 +54,34 @@ BANNED_STACK = (("maxmode", "true"), ("effort", "xhigh"), ("speed", "fast"))
 
 
 # ---------------------------------------------------------------- locking
+def _lock_pid():
+    try:
+        return int(io.open(LOCK, encoding="utf-8").read().strip() or 0)
+    except (OSError, ValueError):
+        return 0
+
+
+def _pid_alive(pid):
+    """True unless we can prove the process is gone. Fails CLOSED: an unknown
+    state keeps the lock held, because a stolen lock is worse than a stuck one."""
+    if not pid:
+        return False
+    if os.name == "nt":
+        try:
+            out = subprocess.run(["tasklist", "/FI", f"PID eq {pid}", "/NH"],
+                                 capture_output=True, text=True, timeout=10).stdout
+            return str(pid) in out
+        except Exception:
+            return True
+    try:
+        os.kill(pid, 0)
+        return True
+    except ProcessLookupError:
+        return False
+    except PermissionError:
+        return True
+
+
 class Lock:
     """Atomic across processes. O_EXCL create is the portable primitive.
 
@@ -70,10 +98,15 @@ class Lock:
                 os.close(fd)
                 return self
             except FileExistsError:
+                # Age alone is NOT death. Reclaiming on a timer lets a slow-but-living
+                # holder have its lock stolen, after which two processes both believe they
+                # hold it -- which is the very race this lock exists to prevent.
+                # Verify the recorded PID is actually gone first. (Audit 2026-08-24.)
                 try:
                     if time.time() - os.path.getmtime(LOCK) > LOCK_STALE_S:
-                        os.unlink(LOCK)       # holder died; reclaim
-                        continue
+                        if not _pid_alive(_lock_pid()):
+                            os.unlink(LOCK)   # holder is genuinely dead; reclaim
+                            continue
                 except OSError:
                     pass
                 if time.time() - start > LOCK_STALE_S * 2:

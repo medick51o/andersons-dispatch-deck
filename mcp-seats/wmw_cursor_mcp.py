@@ -486,7 +486,14 @@ def run_cursor(prompt, session_id=None, cwd=None, model=None, always_approve=Fal
         # deliberately NOT the sibling wmw-* seats: a seat that can drive another
         # seat can escalate around its own read-only mode (proved on wmw-grok,
         # 2026-08-23, where a read-only Grok wrote a file via the Codex seat).
-        cmd += ["--approve-mcps"]
+        # --approve-mcps auto-approves whatever ~/.cursor/mcp.json holds. On the
+        # read-only path that is an escalation route: a seat that cannot write can ask a
+        # neighbouring MCP server to write for it — reproduced on the Grok seat
+        # 2026-08-23. The old mitigation was "just don't put writable servers in that
+        # file", which is a promise about a config, not a guard in code. Auto-approval is
+        # now confined to the already-write-capable path. (Audit 2026-08-24, two seats.)
+        if always_approve:
+            cmd += ["--approve-mcps"]
         cmd += ["-p", pointer, "--output-format", "json"]
 
         try:

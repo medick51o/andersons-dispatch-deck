@@ -55,6 +55,29 @@ check("no lease left behind after a refused dispatch",
       not (json.load(io.open(RESV, encoding="utf-8")).get("jobs") if os.path.exists(RESV) else {}))
 p.stdin.close(); p.wait(timeout=10)
 
+# --- the Gemini seat, audited 2026-08-24. Every one of these was LEGAL before. ---
+p, rpc = seat("wmw_gemini_mcp.py")
+rpc({"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"arm"}}})
+def gm(tool,args):
+    return rpc({"jsonrpc":"2.0","id":9,"method":"tools/call","params":{"name":tool,"arguments":args}})["result"]
+check("gemini: reply escalating with no cwd refused",
+      gm("gemini-reply",{"conversationId":"01a02b9c-384b-72d0-9c6f-f5ab60147aba","prompt":"x","always_approve":True})["isError"])
+check("gemini: write-capable INSIDE System32 refused",
+      gm("gemini",{"prompt":"x","always_approve":True,"cwd":os.path.join(sysroot,"System32")})["isError"])
+check("gemini: write-capable inside HOME profile refused",
+      gm("gemini",{"prompt":"x","always_approve":True,"cwd":os.path.join(os.path.expanduser("~"),"Documents")})["isError"])
+check("gemini: a REAL project dir is still allowed (no false positive)",
+      not gm("gemini",{"prompt":"reply with only OK","always_approve":True,"cwd":PLAYPEN})["isError"])
+p.stdin.close(); p.wait(timeout=10)
+
+# --- the escalation route the Cursor seat still had open (audit 2026-08-24) ---
+_cur = io.open(os.path.join(SEATS,"wmw_cursor_mcp.py"), encoding="utf-8").read()
+# anchor on the CODE line, not the word — the word also appears in the comment above it
+_apr = [i for i, l in enumerate(_cur.splitlines()) if 'cmd += ["--approve-mcps"]' in l]
+_lines = _cur.splitlines()
+check("cursor: --approve-mcps confined to the write-capable path",
+      bool(_apr) and all("if always_approve:" in _lines[i - 1] for i in _apr))
+
 p, rpc = seat("wmw_grok_mcp.py")
 rpc({"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"arm"}}})
 def gk(tool,args):

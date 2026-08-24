@@ -151,22 +151,36 @@ def run_gemini(prompt, conversation_id=None, cwd=None, model=None, always_approv
 
 def _safe_cwd(cwd, always_approve):
     """A write-capable seat may not be pointed at a home or system directory."""
-    if not always_approve or cwd is None:
+    if not always_approve:
         return cwd
+    # A write-capable reply used to arrive with NO cwd at all and run wherever this
+    # server happened to be launched. Absent is not safe -- it is unbounded.
+    if cwd is None:
+        raise ValueError("a write-capable Gemini session REQUIRES an explicit cwd — "
+                         "point it at a project directory")
     real = os.path.realpath(cwd)
     home = os.path.realpath(os.path.expanduser("~"))
-    banned = {home, os.path.realpath(os.path.abspath(os.sep))}
-    for env in ("SystemRoot", "windir", "ProgramFiles", "USERPROFILE"):
+    # The filesystem ROOT is banned exactly (everything is inside it, so containment
+    # there would ban the whole disk -- a false positive that would push the operator
+    # to disable the guard). Every other banned location is banned WITH its subtree,
+    # because equality alone left C:\Windows\System32 legal under a banned C:\Windows.
+    root = os.path.realpath(os.path.abspath(os.sep))
+    subtree = {home}
+    for env in ("SystemRoot", "windir", "ProgramFiles", "ProgramFiles(x86)", "ProgramData"):
         v = os.environ.get(env)
         if v:
-            banned.add(os.path.realpath(v))
-    if real in banned:
-        raise ValueError(f"refusing a write-capable session rooted at {real} — "
-                         f"point cwd at a project directory")
+            subtree.add(os.path.realpath(v))
+    if real == root:
+        raise ValueError("refusing a write-capable session at the filesystem root — "
+                         "point cwd at a project directory")
+    for b in subtree:
+        if real == b or real.lower().startswith(b.rstrip(os.sep).lower() + os.sep):
+            raise ValueError(f"refusing a write-capable session at or inside {b} — "
+                             f"point cwd at a project directory")
     for secret in (".ssh", ".aws", ".grok", ".gemini", ".claude", ".config"):
         if os.path.basename(real) == secret or os.sep + secret in real + os.sep:
             raise ValueError(f"refusing a write-capable session inside {secret}")
-    return cwd
+    return real   # hand back the RESOLVED path, never the caller's string
 
 def _req_str(args, key):
     v = args.get(key)
@@ -227,7 +241,8 @@ TOOLS = [
             "properties": {
                 "conversationId": {"type": "string", "description": "conversationId from a previous gemini/gemini-reply call."},
                 "prompt": {"type": "string", "description": "The follow-up message."},
-                "always_approve": {"type": "boolean", "description": "Skip tool-permission prompts this turn."},
+                "cwd": {"type": "string", "description": "Working directory. REQUIRED when always_approve is true."},
+                "always_approve": {"type": "boolean", "description": "Skip tool-permission prompts this turn. Requires cwd."},
             },
             "required": ["conversationId", "prompt"],
         },
@@ -247,10 +262,18 @@ def _tool_call(name, args):
                 always_approve=approve,
             )
         if name == "gemini-reply":
+            # A reply may escalate to write-capable exactly like a fresh call, so it must
+            # clear the SAME cwd gate. It did not: it accepted no cwd at all and handed
+            # always_approve straight through, so a continued session could run
+            # --dangerously-skip-permissions in whatever directory this server was
+            # launched from. The Grok seat has guarded this since 2026-08-23; the fix was
+            # never propagated here. (Audit 2026-08-24, Gemini seat, CONFIRMED.)
+            approve = _opt_bool(args, "always_approve")
             return run_gemini(
                 _req_str(args, "prompt"),
                 conversation_id=_safe_id(args.get("conversationId"), "conversationId"),
-                always_approve=_opt_bool(args, "always_approve"),
+                cwd=_safe_cwd(_safe_argv(_opt_str(args, "cwd"), "cwd"), approve),
+                always_approve=approve,
             )
     except ValueError as e:
         return True, f"invalid arguments: {e}"
@@ -266,7 +289,7 @@ def handle(msg):
             "result": {
                 "protocolVersion": msg.get("params", {}).get("protocolVersion", "2024-11-05"),
                 "capabilities": {"tools": {}},
-                "serverInfo": {"name": "wmw-gemini", "version": "1.4.0"},
+                "serverInfo": {"name": "wmw-gemini", "version": "1.5.0"},
             },
         }
     if method == "ping":
