@@ -16,6 +16,9 @@ could otherwise smuggle CLI flags), --conversation= equals form, absolute-path-f
 exe lookup, stdin closed. Install/registration: see README.md in this folder.
 Requires Python 3.10+ on PATH.
 
+v1.4: the read-only path now pins `--mode plan` explicitly instead of
+inheriting whatever the machine's settings happen to allow.
+
 Bakes in the two headless croak-fixes: --print-timeout 60m (the CLI default of
 5 minutes killed long tasks) and --dangerously-skip-permissions behind
 `always_approve` (headless runs can never click a permission prompt).
@@ -102,6 +105,12 @@ def run_gemini(prompt, conversation_id=None, cwd=None, model=None, always_approv
         cmd += ["--model", model]
     if always_approve:
         cmd += ["--dangerously-skip-permissions"]
+    else:
+        # Read-only used to mean "we simply omit the skip-permissions flag", i.e. we
+        # trusted whatever the machine's own settings allowed. Both Grok seats flagged
+        # that independently on 2026-08-23. Pin the CLI's own planning mode instead, so
+        # the restraint is ours and explicit rather than inherited from a config file.
+        cmd += ["--mode", "plan"]
     cmd += ["-p", prompt, "--output-format", "json", "--print-timeout", PRINT_TIMEOUT]
     try:
         proc = subprocess.run(
@@ -257,7 +266,7 @@ def handle(msg):
             "result": {
                 "protocolVersion": msg.get("params", {}).get("protocolVersion", "2024-11-05"),
                 "capabilities": {"tools": {}},
-                "serverInfo": {"name": "wmw-gemini", "version": "1.3.0"},
+                "serverInfo": {"name": "wmw-gemini", "version": "1.4.0"},
             },
         }
     if method == "ping":

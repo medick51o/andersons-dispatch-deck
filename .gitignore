@@ -1,0 +1,8 @@
+
+# Personal usage data — never public
+bench-spend.jsonl
+docs/*.json
+docs/*.time
+docs/GROK-selfaudit.md
+docs/POOL-research-grok.md
+mcp-seats/__pycache__/

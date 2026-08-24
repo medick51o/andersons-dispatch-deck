@@ -1,6 +1,8 @@
 # SPINE — the method engine (single owner, all tiers inherit)
 
-**Version line (machine-readable):** `spine v2.0 (2026-08-22)`
+**Version line (machine-readable):** `spine v2.3 (2026-08-23)`
+**v2.3 — COMPOSER SEATED:** THE COUNCIL SEAT LAW (councils run on subscription seats; the free-seat exception admits a reserve model that is BOTH free AND a bloodline the house lacks — 🟣 Composer qualifies, cursor-grok does not). NOTATION v4.2: the arrow marks whoever DIRECTS, so a summoned seat answering a council signs bare.
+**v2.1 — THE BENCH:** adds NOTATION v4.1 (🟣➤ the Cursor arrow, bloodline marks, mandatory reserve meter marks). Reserve-seat law lands with the bench ledger.
 **v2.0 — THE GREAT RE-SYNC:** the SPINE fork is healed — every tier's copy is byte-identical to
 this one from today forward (the trm copy had carried silent edits under v1.1's tag; that practice
 is banned: any content change bumps this line). New in v2.0: THE NOTATION v4.0 (supersedes the
@@ -728,6 +730,43 @@ version.*
 
 ---
 
+## THE COUNCIL SEAT LAW (owner: SPINE; added v2.3, boss ruling 2026-08-23)
+
+A **COUNCIL** — several seats answering the same brief independently — runs on **SUBSCRIPTION
+seats**: the house arsenal, flat-rate, $0 marginal. **Metered reserve models are not council
+seats**, however cheap a single call looks. Reasons, in order of weight:
+
+1. **A council is a fan-out, and fan-out is where a metered pool drains.** One review is pennies;
+   five seats on one brief, then a second round on the fixes, is how a month's pool disappears
+   into a meeting.
+2. **The house arsenal already satisfies the independence law** — four distinct bloodlines at no
+   marginal cost. A metered mirror adds a bill, not independence.
+3. **A metered council is the easiest thing in this method to run by accident** — the orchestrator
+   asks for "a council" and the transport quietly bills for it.
+
+A single cheap reserve call (one review, one tie-break, one foreign lens the house cannot supply)
+stays legal under the reserve rules. What is banned is the FAN-OUT.
+
+**THE FREE-SEAT EXCEPTION (boss ruling 2026-08-23).** A reserve model may hold a standing council
+seat when it clears BOTH tests — neither alone is enough:
+
+1. **It costs nothing.** It sits in the transport's INCLUDED pool, so seating it cannot drain
+   anything. This is what makes the fan-out objection vanish.
+2. **Its bloodline is genuinely absent from the house.** A reserve model whose vendor already sits
+   in the house arsenal brings a duplicate, never independence — seating it puts two of the same
+   brain at one table, which is the mirror-review failure wearing a council badge.
+
+*This shop, as of 2026-08-23:* **🟣 Composer (Cursor bloodline) IS a council seat** — free, and a
+fifth vendor the house does not otherwise have. **cursor-grok-\* is NOT** — free, but xAI blood,
+the same brain as the house ⚫ Grok seat; it may build, never sit as an independent voice beside
+it. Metered seats (Kimi, GLM, every mirror) stay barred from councils until the boss rules
+otherwise. A seated reserve model signs as a bare seat (🟣), never with the transport's arrow —
+it is answering, not directing.
+
+**Enforced, not merely written:** the reserve transport refuses billable calls past a small rolling
+cap, so a council that tries to land on metered seats trips the wire instead of spending. The cap
+is lifted deliberately and out loud, never silently.
+
 ## THE TRANSPORT LAW — persistent seats (owner: SPINE; added v2.0, 2026-08-22)
 
 Vendor seats are reached, by default, as **persistent MCP conversations** inside the conductor's
@@ -761,7 +800,7 @@ plain = **gold 🟡**, and the CONDUCTOR's banner wears the **➤ baton** after 
 plain Deck, 😼🟠➤ when a crew tier's cat is hosted on Claude (boss law 2026-08-22, all tiers). A
 worn wardrobe shows both (🟠🟢 = a Claude brain on the Gemini seat).
 
-**THE NOTATION — v4.0 (boss-adopted 2026-08-22; supersedes the 2026-08-09 marks: 🟣-building is
+**THE NOTATION — v4.1 (boss-adopted 2026-08-23: the ➤ returns to Cursor as 🟣➤, bloodline marks, mandatory reserve meters. v4.0 2026-08-22; supersedes the 2026-08-09 marks: 🟣-building is
 repealed and the ⚪/🟤 reservations are spent). Seat first, act second. This section is the OWNER —
 tier legends (Deck SKILL, CREW) are renderings of it.**
 
@@ -775,14 +814,30 @@ tier legends (Deck SKILL, CREW) are renderings of it.**
 - **REJECTED / BLOCKED / NEEDS-BOSS = ⛔**, never a red circle — rejection, reviewing, and Butch
   must never look alike.
 - **COUNCIL = 🌈👥👥** — every color, a crowd; a council is a special move and asks first.
+- **THE ARROW ➤ BELONGS TO WHOEVER POINTS (v4.2).** The arrow is a **cursor** — that is its
+  birthplace and its meaning: it marks a thing that DIRECTS. Two flyers, and only two:
+  **🟡➤ the conductor** (the borrowed baton — the orchestrator points work at the seats) and
+  **🟣➤ the Cursor transport** (the arrow's true home — the host summoning a pool model).
+  **A seat being directed never wears the arrow.** When a Cursor-pool model ANSWERS — sitting on a
+  council, returning a review — it signs as a bare seat: **🟣 Composer**, no arrow, because it is
+  not directing anyone. The arrow appears only on the dispatch line that summoned it.
+  A reserve dispatch shows transport + bloodline + meter: *🟣➤🌙 💸 Kimi K3 reviewing* — who
+  summoned it, whose brain thought, and what it cost, in three glyphs.
+- **BLOODLINE MARKS for the pool's own families:** 🌙 Moonshot (Kimi) · 🔷 Zhipu (GLM) ·
+  🎼 Cursor (Composer). Mirror families keep their HOUSE colour, so a Cursor-hosted Claude
+  reads 🟣➤🟠 — visibly Anthropic, and visibly not independent of Claude work.
 - **THE BOSS = ⚪** on the plain Deck, **👑** in crew tiers. Combos: ⚪🏁/👑🏁 in-hand validation ·
   ⚪⚖️/👑⚖️ ruling pending · ⚪🎮/👑🎮 on the sticks.
 - **STATES:** 🚩 finding raised (flagged, not fatal) · 🚧 lane closed, detour in progress · 🧪
   gates running · 🩺 diagnosing (doctor-first) · 🕵️ adversary loose · 🏁 boss-validated (top rung,
   outranks "done") · 🚢 shipped/deployed · 🪦 retired/parked · 🟤 quiet hold (watchers armed).
-- **Meter wrap marks (♾️/💸/🚨💳) are optional rendering** for shops that burn metered credits;
-  this shop narrates none. Meter-AWARENESS (Part VI) still binds — subscription seats have windows
-  and drainable quotas.
+- **METER MARKS ARE MANDATORY ON RESERVE LINES (v4.1)** and absent everywhere else. Flat-rate house
+  seats narrate no meter; a reserve seat narrates one on every line, computed from the model id,
+  never guessed: **♾️** included in the plan · **♾️💸** included but a surcharged FAST tier ·
+  **💸** third-party credits at API prices · **🚨💳** credits AND surcharged · **⚠️** unknown,
+  which fails closed. A call that spends money says so LOUDLY, in its own line, every time — the
+  boss must never learn he spent from a footnote. Meter-AWARENESS (Part VI) binds on every seat:
+  flat-rate windows drain too.
 
 A run reads as a timeline: 🩺 → 🌈👥👥 → 🟠🔨 → 🧪 → 🔵🔴→⛔ → 🟠🔨 → 🧪 → 🚢 → ⚪🏁 → 🟤.
 

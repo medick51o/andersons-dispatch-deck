@@ -9,6 +9,9 @@ v1.1 (2026-08-22, council findings): prompt passed via --prompt-file (no Windows
 32K command-line limit), honest error detection (nonzero exit / error JSON /
 missing sessionId => isError), strict UTF-8 stdio, argument validation,
 per-request exception boundary.
+v1.4: read-only now also denies MCPTool/WebFetch/WebSearch and pins
+--permission-mode default -- without those a "read-only" seat could call another
+MCP seat and have IT write (reproduced live, then verified fixed).
 v1.2: UUID-validated session ids + no-leading-dash argv guard (a crafted id could
 otherwise smuggle CLI flags), --resume= equals form, real read-only argv when
 always_approve is false, absolute-path-first exe lookup, stdin closed. Requires Python 3.10+ on PATH.
@@ -29,7 +32,18 @@ MAX_REPLY_CHARS = 400_000   # cap what we hand back to the client
 
 # Tools a read-only seat may never use. Deny rules bind on every platform; the CLI's
 # --sandbox does not (Landlock/Seatbelt only, silently unenforced on Windows).
-DENY_RULES = ("Write", "Edit", "MultiEdit", "NotebookEdit", "Bash")
+#
+# MCPTool IS THE IMPORTANT ONE. Denying Write/Edit/Bash locks the front door and
+# leaves every other door open: a "read-only" seat can call ANOTHER MCP server --
+# including the sibling wmw-* seats -- and have it do the writing. Reproduced live
+# 2026-08-23: a read-only Grok wrote a file through the Codex seat. Verified fixed
+# by re-running that canary with MCPTool denied.
+#
+# NOTE: MultiEdit is NOT a recognised permission name in this CLI (unknown names
+# are skipped with a warning); the real edit classes are Edit / Write /
+# NotebookEdit. It is kept only as a harmless alias guard.
+DENY_RULES = ("Write", "Edit", "MultiEdit", "NotebookEdit", "Bash",
+              "MCPTool", "WebFetch", "WebSearch")
 
 def _utf8_stdio():
     for stream in (sys.stdin, sys.stdout):
@@ -108,7 +122,15 @@ def run_grok(prompt, session_id=None, cwd=None, model=None, always_approve=False
             # write succeeded under --sandbox read-only). Deny rules were verified to block it.
             for rule in DENY_RULES:
                 cmd += ["--deny", rule]
-            cmd += ["--no-subagents", "--no-memory"]
+            # The user's ~/.grok/config.toml may set permission_mode = "always-approve".
+            # Deny rules still win for names they match, but everything NOT denied is
+            # then auto-approved. Pin the mode explicitly so config cannot widen us.
+            # --no-subagents does NOT stop a spawn: Grok proved it live on 2026-08-23 by
+            # spawning a general-purpose child that ran to completion (it could not write,
+            # because children inherit the deny rules, but it ran). `Agent` is not a valid
+            # --deny class, so removing the tool outright is the only real kill switch.
+            cmd += ["--disallowed-tools", "Agent"]
+            cmd += ["--permission-mode", "default", "--no-subagents", "--no-memory"]
             if not allow_web_search:
                 cmd += ["--disable-web-search"]
         cmd += ["--prompt-file", tmp, "--output-format", "json"]
@@ -152,22 +174,42 @@ def run_grok(prompt, session_id=None, cwd=None, model=None, always_approve=False
 
 def _safe_cwd(cwd, always_approve):
     """A write-capable seat may not be pointed at a home or system directory."""
-    if not always_approve or cwd is None:
+    if not always_approve:
         return cwd
+    if cwd is None:
+        raise ValueError("always_approve requires an explicit cwd naming the project "
+                         "directory the seat may write in")
     real = os.path.realpath(cwd)
-    home = os.path.realpath(os.path.expanduser("~"))
-    banned = {home, os.path.realpath(os.path.abspath(os.sep))}
-    for env in ("SystemRoot", "windir", "ProgramFiles", "USERPROFILE"):
+    if not os.path.isdir(real):
+        raise ValueError(f"cwd is not a directory: {cwd}")
+    norm = lambda x: os.path.normcase(os.path.realpath(x))
+    def within(child, parent):
+        c, pa = norm(child), norm(parent)
+        if c == pa:
+            return True
+        try:
+            return os.path.commonpath([c, pa]) == pa
+        except ValueError:      # different drives
+            return False
+    # Exact-root bans first (home and drive root are legitimate parents of projects).
+    for r in (os.path.expanduser("~"), os.path.abspath(os.sep)):
+        if norm(real) == norm(r):
+            raise ValueError(f"refusing a write-capable session rooted at {real} — "
+                             f"point cwd at a project directory")
+    # System trees are banned by CONTAINMENT: an exact-match check let
+    # C:\Windows\System32 through as a mere descendant. Found by Grok, 2026-08-23.
+    for env in ("SystemRoot", "windir", "ProgramFiles", "ProgramFiles(x86)", "ProgramData"):
         v = os.environ.get(env)
-        if v:
-            banned.add(os.path.realpath(v))
-    if real in banned:
-        raise ValueError(f"refusing a write-capable session rooted at {real} — "
-                         f"point cwd at a project directory")
-    for secret in (".ssh", ".aws", ".grok", ".gemini", ".claude", ".config"):
-        if os.path.basename(real) == secret or os.sep + secret in real + os.sep:
+        if v and within(real, v):
+            raise ValueError(f"refusing a write-capable session inside a system directory "
+                             f"({v}) — point cwd at a project directory")
+    # Case-insensitive segment match: ".SSH" used to slip past a case-sensitive test.
+    parts = [x.lower() for x in norm(real).split(os.sep)]
+    for secret in (".ssh", ".aws", ".grok", ".gemini", ".claude", ".cursor",
+                   ".config", ".azure", ".kube", ".gnupg"):
+        if secret in parts:
             raise ValueError(f"refusing a write-capable session inside {secret}")
-    return cwd
+    return real   # return the CANONICAL path, so a symlink cannot be re-pointed after validation
 
 def _req_str(args, key):
     v = args.get(key)
@@ -228,7 +270,8 @@ TOOLS = [
             "properties": {
                 "sessionId": {"type": "string", "description": "The sessionId returned by a previous grok/grok-reply call."},
                 "prompt": {"type": "string", "description": "The follow-up message."},
-                "always_approve": {"type": "boolean", "description": "Auto-approve Grok's tool use this turn."},
+                "cwd": {"type": "string", "description": "Working directory. REQUIRED when always_approve is true; must not be a home, system or credential directory."},
+                "always_approve": {"type": "boolean", "description": "Auto-approve Grok's tool use this turn (file writes, shell). Requires cwd."},
             },
             "required": ["sessionId", "prompt"],
         },
@@ -249,10 +292,17 @@ def _tool_call(name, args):
                 allow_web_search=_opt_bool(args, "allow_web_search"),
             )
         if name == "grok-reply":
+            # A reply may escalate a read-only thread to write-capable, so it must clear the
+            # SAME cwd guard the start tool does. Without this, the legal sequence was:
+            # grok(cwd=<somewhere sensitive>) read-only, then grok-reply(always_approve=true)
+            # with no path check at all. Found by Grok, 2026-08-23.
+            approve = _opt_bool(args, "always_approve")
+            reply_cwd = _safe_cwd(_safe_argv(_opt_str(args, "cwd"), "cwd"), approve)
             return run_grok(
                 _req_str(args, "prompt"),
                 session_id=_safe_id(args.get("sessionId"), "sessionId"),
-                always_approve=_opt_bool(args, "always_approve"),
+                cwd=reply_cwd,
+                always_approve=approve,
                 allow_web_search=_opt_bool(args, "allow_web_search"),
             )
     except ValueError as e:
@@ -269,7 +319,7 @@ def handle(msg):
             "result": {
                 "protocolVersion": msg.get("params", {}).get("protocolVersion", "2024-11-05"),
                 "capabilities": {"tools": {}},
-                "serverInfo": {"name": "wmw-grok", "version": "1.3.0"},
+                "serverInfo": {"name": "wmw-grok", "version": "1.5.0"},
             },
         }
     if method == "ping":
