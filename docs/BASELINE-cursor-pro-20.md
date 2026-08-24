@@ -98,3 +98,61 @@ Same page, same fields, so the comparison is apples to apples:
 `Included Usage` percentages for both halves · token counts per model · `On-Demand` subtotal ·
 API `totalSpend` / `bonusSpend` · cycle start and end. Then re-run the per-model cost table
 and compare against this file.
+
+---
+
+# PREDICTION, recorded BEFORE the upgrade (2026-08-24 08:57)
+
+Written down first so it can be scored honestly instead of retrofitted afterward.
+
+## What the research said (last night, sourced)
+
+**Cursor staff, [forum.cursor.com/t/166360](https://forum.cursor.com/t/question-about-first-party-models-pool-limits-between-pro-pro-plus-an):**
+> "Pro+ includes more than Pro, and Ultra includes more than Pro+."
+> "A higher tier means a higher limit for first-party models, **but we don't officially publish
+> the exact multiplier.** That's why the plans page uses the same wording for all plans, Generous
+> included usage."
+> **"Upgrading increases BOTH pools."**
+
+**Billing behavior — staff-confirmed across three forum threads:** the checkout charges the **full
+$60 immediately** and a **prorated refund lands days later**; the old Pro plan **auto-cancels the
+moment you upgrade**. Not a double charge. But one billing reply (Aug 21) contradicts the
+calendar-day explanation given elsewhere: *"Upgrade refunds are based on usage. If Pro monthly
+usage was already consumed, no refund."* Included allowance here is fully consumed, so **assume no
+refund**; treat any credit as a bonus. Several users also reported credits never arriving and had
+to chase them with an invoice ID.
+
+## The projection vs the measurement — last night's model, tested by today's dashboard
+
+An independently published Ultra measurement (~7.0B tokens/mo after the July doubling) was used to
+project the lower tiers. Today's dashboard measures the Pro pool directly for the first time:
+
+| | tokens/mo | note |
+|---|---:|---|
+| Projected Pro (assumed Ultra:Pro = 20:1) | 350M | last night |
+| **MEASURED Pro (first-party)** | **270M** | 79.8M ÷ 29.6%, today |
+| Error | **23% high** | same order; the assumed ratio was optimistic |
+| Implied real ratio Ultra:Pro | **26:1** | replaces the assumed 20:1 |
+
+## The prediction
+
+Applying the $70:$400 price ratio (1:5.7) to the same Ultra anchor:
+
+- **Pro+ first-party pool ≈ 1,230M tokens/month — about 4.6x the measured Pro pool.**
+- At the current burn (26.6M tok/day) that is **~46 days of runway**, against the **825M** a
+  31-day cycle needs at this rate. Pro should therefore go from running dry on **day ~10** to
+  covering a full cycle with roughly a third to spare.
+- **Both pools rise**, not just the first-party one (staff, above).
+- **The billing cycle restarts** on upgrade, since Pro auto-cancels. If so, before/after
+  percentages are NOT comparable and the comparison must be made on **burn rate**, not on %-used.
+
+**Confidence, stated honestly:** the Pro number is now MEASURED. The Pro+ number is a
+*projection from a price ratio*, and the same method just came in 23% high on Pro — so treat
+~1,230M as an optimistic ceiling and expect somewhere in the 800M–1,300M band. Anything below
+~825M means Pro+ still will not cover a full cycle at the current burn rate.
+
+## How to score it
+
+After the upgrade, read the dashboard again and divide: `tokens ÷ (percent/100)` = pool.
+Also record the new cycle start/end (tests the reset prediction) and whether the Other Models
+percentage moved (tests "both pools rise"). Compare against this file.
