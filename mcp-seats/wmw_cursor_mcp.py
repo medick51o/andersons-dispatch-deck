@@ -211,6 +211,20 @@ def _allowance_calls(seat, fallback):
     except Exception:
         return fallback
 
+def _guard():
+    """Load dispatch-guard, the council's controls. None if unavailable."""
+    try:
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "_guard_mod", os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                       "dispatch-guard.py"))
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return mod
+    except Exception as e:
+        print(f"[wmw-cursor] dispatch-guard unavailable: {e}", file=sys.stderr)
+        return None
+
 def _recent_billable(window_s):
     """How many billable calls landed in the last window_s seconds, per the ledger."""
     if not os.path.exists(SPEND_LEDGER):
@@ -411,6 +425,32 @@ def run_cursor(prompt, session_id=None, cwd=None, model=None, always_approve=Fal
     if not os.path.isdir(workdir):
         return True, f"cwd is not a directory: {workdir}"
 
+    # ---- THE GUARD (council 2026-08-24) ------------------------------------
+    # Two controls, and they only bind a WRITE-capable dispatch at a real repo —
+    # the shape that burned two thirds of a month on 2026-08-21/22. A read-only
+    # question costs little and is left alone deliberately.
+    guard, lease = _guard(), None
+    if guard and always_approve and cwd:
+        # PREFLIGHT: an agent with no destination still spends at full rate.
+        rc, problems, _notes = guard.preflight(workdir, model=chosen)
+        if rc:
+            return True, (
+                f"{CURSOR_BANNER} 🛑 PREFLIGHT REFUSED — dispatch would spend for nothing\n\n"
+                + "\n".join(f"  • {p}" for p in problems) +
+                "\n\nThis is the Aug 21-22 shape: 13 agents into a repo staged empty, 11 of "
+                "them returning zero lines. Point the seat at a repo with real source, or "
+                "run read-only (omit always_approve) to ask a question instead of building.")
+
+        # RESERVE: atomic, so N launches cannot each pass on the same headroom.
+        lease = f"cursor-{os.getpid()}-{int(time.time())}"
+        ok, why = guard.reserve(lease, est_pct=float(os.environ.get("WMW_EST_PCT", "2")),
+                                note=f"{chosen} @ {os.path.basename(workdir)}")
+        if not ok:
+            return True, (
+                f"{CURSOR_BANNER} 🛑 NO HEADROOM RESERVED — REFUSED BEFORE SPENDING\n\n{why}\n\n"
+                "Concurrency is the control. Thirteen launches each passed their own check "
+                "on 2026-08-21 and together took the month.")
+
     # ---- PROMPT TRANSPORT --------------------------------------------------
     # NOTHING caller-controlled goes on the command line. The Windows CLI is a
     # .cmd shim forwarding to PowerShell; a crafted prompt CAN execute host
@@ -466,6 +506,14 @@ def run_cursor(prompt, session_id=None, cwd=None, model=None, always_approve=Fal
                 os.unlink(spill_path)
             except (FileNotFoundError, OSError):
                 pass
+        # Release the lease HERE, in the finally, so a crash, a timeout or a launch
+        # failure can never leave a slot held. A stuck lease would deny the operator
+        # his own rig, which is a worse failure than the one being prevented.
+        if guard and lease:
+            try:
+                guard.release(lease)
+            except Exception as e:
+                print(f"[wmw-cursor] lease release failed: {e}", file=sys.stderr)
 
     raw = (proc.stdout or "").strip()
     err = (proc.stderr or "").strip()
@@ -622,7 +670,7 @@ def handle(msg):
             "result": {
                 "protocolVersion": msg.get("params", {}).get("protocolVersion", "2024-11-05"),
                 "capabilities": {"tools": {}},
-                "serverInfo": {"name": "wmw-cursor", "version": "2.2.0"},
+                "serverInfo": {"name": "wmw-cursor", "version": "2.3.0"},
             },
         }
     if method == "ping":

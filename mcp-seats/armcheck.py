@@ -1,7 +1,8 @@
-import json, subprocess, sys, os, glob
+import json, subprocess, sys, os, glob, io, shutil
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 SEATS = r"C:\Sync\Projects\andersons-dispatch-deck\mcp-seats"
 PLAYPEN = r"C:\Sync\_playpen\cursor"
+RESV = os.path.join(os.path.expanduser("~"), ".anderson-method", "reservations.json")
 
 def seat(server):
     p = subprocess.Popen([sys.executable, os.path.join(SEATS, server)],
@@ -41,6 +42,17 @@ sysroot = os.environ.get("SystemRoot", r"C:\Windows")
 check("write-capable in System32 refused", cur({"prompt":"x","always_approve":True,"cwd":os.path.join(sysroot,"System32")})["isError"])
 check("YOLO on a non-allowlisted model refused",
       "WRITE REFUSED" in cur({"prompt":"x","model":"gpt-5.3-codex","always_approve":True,"cwd":PLAYPEN,"spend_credits":True})["content"][0]["text"])
+
+# --- the guard, wired 2026-08-24 (council). Regression for the burn incident. ---
+_empty = os.path.join(PLAYPEN, "_armcheck_emptyrepo")
+os.makedirs(_empty, exist_ok=True)
+subprocess.run(["git","-C",_empty,"init","-q"], capture_output=True)
+check("build dispatch at an EMPTY repo refused (preflight)",
+      "PREFLIGHT REFUSED" in cur({"prompt":"build it","always_approve":True,"cwd":_empty,
+                                  "model":"composer-2.5"})["content"][0]["text"])
+shutil.rmtree(_empty, ignore_errors=True)
+check("no lease left behind after a refused dispatch",
+      not (json.load(io.open(RESV, encoding="utf-8")).get("jobs") if os.path.exists(RESV) else {}))
 p.stdin.close(); p.wait(timeout=10)
 
 p, rpc = seat("wmw_grok_mcp.py")

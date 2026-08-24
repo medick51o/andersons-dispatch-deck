@@ -269,27 +269,53 @@ def yield_report(repo, days=7):
 
     d = _load()
     hist = [h for h in d.get("history", []) if h.get("closed", "") >= since]
-    spent = sum(h.get("actual_pct") or 0 for h in hist)
-    zero = [h for h in hist if h.get("lines") == 0 and (h.get("actual_pct") or 0) > 0]
+
+    # Token truth comes from the spend ledger the seats already write, not from
+    # hand-entered numbers. A metric nobody has to remember to record is the only
+    # kind that survives contact with a real week.
+    ledger = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "bench-spend.jsonl")
+    calls, toks = 0, 0
+    if os.path.exists(ledger):
+        for line in io.open(ledger, encoding="utf-8"):
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                r = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if r.get("ts", "") < since:
+                continue
+            calls += 1
+            u = r.get("usage") or {}
+            if isinstance(u, dict):
+                toks += sum(int(u.get(k, 0) or 0) for k in
+                            ("inputTokens", "outputTokens", "cacheReadTokens"))
 
     L = [f"YIELD — {os.path.basename(os.path.abspath(repo))}, last {days} days",
          "",
-         f"  accepted:  {commits} commits, +{added}/-{removed} lines",
-         f"  dispatched: {len(hist)} guarded jobs, {spent:.3f}% of the month's allowance"]
-    if added and spent:
-        L.append(f"  COST PER ACCEPTED LINE: {spent/added:.5f}% of the month")
-    if spent and not added:
-        L.append("  COST PER ACCEPTED LINE: undefined — spend with NO accepted output.")
+         f"  ACCEPTED OUTPUT:  {commits} commits, +{added}/-{removed} lines",
+         f"  DISPATCHED:       {calls} seat calls, {toks:,} tokens",
+         f"  GUARDED JOBS:     {len(hist)} leases taken and closed"]
+    if added and toks:
+        L += ["", f"  >>> COST PER ACCEPTED LINE: {toks/added:,.0f} tokens <<<"]
+    elif toks and not added:
+        L += ["", "  >>> COST PER ACCEPTED LINE: UNDEFINED — real spend, NO accepted output.",
+              "      This is the failed-work multiplier. It is what Aug 21-22 looked like."]
+    elif added and not toks:
+        L.append("  (output with no metered seat spend — human or unguarded lane)")
+
+    zero = [h for h in hist if h.get("lines") == 0 and (h.get("actual_pct") or 0) > 0]
     if zero:
         L.append(f"  ZERO-OUTPUT JOBS: {len(zero)} "
                  f"({sum(h['actual_pct'] for h in zero):.3f}% burned for nothing)")
         for h in zero[:5]:
             L.append(f"     - {h['job']}: {h['actual_pct']}%  {h.get('note','')}")
-    if not hist:
-        L += ["", "  No guarded jobs recorded. Either nothing ran through the guard,",
-              "  or dispatches are bypassing it — which is the thing to check."]
-    L += ["", "  Note: only dispatches that passed through this guard are counted.",
-          "  Cloud/IDE/web lanes are invisible here by construction."]
+
+    L += ["", "  Counts only what passed through the guard and the seat ledger.",
+          "  Cloud agents, IDE agent mode, the web launcher and mobile are invisible",
+          "  here BY CONSTRUCTION — they never touch this machine. That blind spot is",
+          "  the whole reason VENDOR-CHECKLIST.md exists."]
     return 0, "\n".join(L)
 
 
