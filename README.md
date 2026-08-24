@@ -22,6 +22,23 @@ Heavy multi-model agentic orchestration — conducted from **one Cursor chat**.
 
 ---
 
+
+> **Status note, 23 Aug 2026.** This branch was written on the premise that in Cursor, the Cursor
+> chat conducts and Claude is a called CLI. Extensive live testing since has landed somewhere
+> different: **Cursor works best as a metered RESERVE BENCH driven from Claude Code**, not as the
+> conductor. The trunk now carries that doctrine as law — SPINE v2.4's `THE TRANSPORT LAW`,
+> `THE COUNCIL SEAT LAW` and `THE METER LAW`, plus `MEASURING-POOLS.md` and the `mcp-seats/` tooling,
+> all of which are now on this branch too.
+>
+> What survives from this branch and was promoted to the trunk: the **➤ arrow** (it is a *cursor* —
+> that is its birthplace), the **red-dot-on-the-seat** reviewing mark, **⛔** for reject so it can
+> never be confused with reviewing, the **🌈👥👥** council mark, and the **meter wraps**, which now
+> earn their keep on reserve lines.
+>
+> The Cursor-native loader that once lived here is archived at `legacy/cursor-native/` on the trunk.
+> Treat this branch as the **Cursor-edition landing page and emoji legend**, not as a live method.
+
+
 ## What it is
 
 Most people talk to one AI. **ADD treats models as a toolbox with a foreman.**
