@@ -13,11 +13,11 @@ trouble." The Deck is SPINE with model names and a gold baton. Refer to workers 
 ## DEPENDENCIES (versioned — enforceable inheritance)
 ```
 DEPENDS:
-  SPINE.md   >= 2.0     (the method engine — the WHOLE method for this tier)
+  SPINE.md   >= 2.4     (the method engine — the WHOLE method for this tier)
 ```
 On activation, **read each dep's version line** (`spine vX.Y (date)` at the top of the file) and
 verify it satisfies the requirement. If SPINE is missing or its version is below the floor, **HALT
-and tell the boss** ("SPINE v2.0+ required; found <X>") — do not run the method from memory. This
+and tell the boss** ("SPINE v2.4+ required; found <X>") — do not run the method from memory. This
 tier loads **SPINE only** — it deliberately does NOT load CREW or SHOW.
 
 ## LOAD RECEIPT (print on activation, first line)
@@ -103,6 +103,31 @@ permission prompt; without it a build task stalls until the timeout kills it).
   both (read-only default).
 - Raw one-shots (`grok -p`, `codex exec`, `agy -p`) stay legal as fallback transport; the MCP seats
   are the default.
+
+## THE RESERVE BENCH — 🟣➤ a metered transport (SPINE v2.4: BENCH + METER laws)
+Beside the flat-rate house seats sits an optional **reserve**: one transport fronting a large pool of
+models, drawing metered credit instead of a flat window. It is never in the standing lineup. SPINE
+owns the rules (THE COUNCIL SEAT LAW · THE METER LAW · THE TRANSPORT LAW); this is the Deck rendering.
+
+**The three things the conductor must hold in mind:**
+- **Free before paid.** A reserve pool usually splits into an INCLUDED tier (the host's own models,
+  no marginal cost) and a CREDIT tier (third-party models at API prices). Default to included; a
+  credit call is a deliberate act, announced, never a silent upgrade.
+- **A pool is not a vendor.** Lineage is the model family behind the transport, never the transport's
+  brand. A reserve-hosted Claude is Anthropic blood and cannot independently review Claude's work.
+  An unmappable family is `UNKNOWN LINEAGE` and fails closed. The banner shows both: 🟣➤🟠.
+- **Read the meter, don't trust the adjective.** "Generous" is not a number. Where a vendor
+  publishes no allowance, the shop's figure comes from measurement, and cost claims cite a reading.
+
+**Narration.** A reserve dispatch flies the transport's arrow, the bloodline, and the meter:
+`🟣➤🌙 💸 Kimi reviewing the parser` — who summoned it, whose brain thought, what it cost. A reserve
+model **answering** (a review returned, a council seat) signs bare — 🟣 — because it is not directing.
+Meter marks are mandatory on reserve lines and absent everywhere else: ♾️ included · ♾️💸 included but
+a surcharged tier · 💸 credits · 🚨💳 credits and surcharged · ⚠️ unknown, fails closed.
+
+**Wiring** (shop-specific, changes without notice): `BENCH-LEDGER.md` for what the reserve can reach
+and what it has proven · `MEASURING-POOLS.md` for how to size an unpublished pool ·
+`mcp-seats/read-meters.py` and `bench-burn.py` for the readings themselves.
 
 ## RUNNING THE DECK (all mechanics are SPINE's — this is the plain-render checklist)
 1. **Plan first** (SPINE Part I — Gate-0 + the Diagnose/Design fork). State the goal back; write a

@@ -30,6 +30,7 @@ import io
 import json
 import os
 import sys
+import time
 import urllib.request
 
 TIMEOUT = 45
@@ -39,29 +40,65 @@ def _get(url, headers, data=None):
     with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
         return json.load(r)
 
-def _find_jwt(o):
-    """Walk an arbitrary structure for the first JWT-shaped string."""
-    if isinstance(o, dict):
-        for v in o.values():
-            if isinstance(v, str) and v.count(".") == 2 and len(v) > 100:
-                return v
-            found = _find_jwt(v)
-            if found:
-                return found
-    elif isinstance(o, list):
-        for v in o:
-            found = _find_jwt(v)
-            if found:
-                return found
-    return None
+def _as_epoch(v):
+    """expires_at may be a unix number or an ISO-8601 string; accept either."""
+    if v is None:
+        return None
+    try:
+        return float(v)
+    except (TypeError, ValueError):
+        pass
+    try:
+        t = str(v).replace("Z", "+00:00")
+        # trim sub-second precision beyond microseconds, which fromisoformat rejects
+        if "." in t:
+            head, _, tail = t.partition(".")
+            frac = "".join(ch for ch in tail if ch.isdigit())[:6]
+            rest = tail[len(frac):].lstrip("0123456789")
+            t = f"{head}.{frac}{rest}"
+        return datetime.datetime.fromisoformat(t).timestamp()
+    except (TypeError, ValueError):
+        return None
+
+def _grok_token(auth):
+    """Pull the access token and its expiry out of the CLI's auth file.
+
+    The file is keyed by issuer+client id, with the token under 'key' and a unix
+    'expires_at' beside it. These are short-lived (about an hour); the CLI itself
+    refreshes on use, so an expired token means 'run a grok command', not 'broken'.
+    """
+    for node in auth.values():
+        if isinstance(node, dict) and isinstance(node.get("key"), str):
+            return node.get("key"), node.get("expires_at")
+    # fall back to any JWT-shaped string, in case the layout changes
+    def walk(o):
+        if isinstance(o, dict):
+            for v in o.values():
+                if isinstance(v, str) and v.count(".") == 2 and len(v) > 100:
+                    return v
+                r = walk(v)
+                if r:
+                    return r
+        elif isinstance(o, list):
+            for v in o:
+                r = walk(v)
+                if r:
+                    return r
+        return None
+    return walk(auth), None
 
 def read_grok():
     path = os.path.expanduser(r"~\.grok\auth.json")
     if not os.path.exists(path):
         return {"error": "no ~/.grok/auth.json — is the Grok CLI logged in?"}
-    tok = _find_jwt(json.load(io.open(path, encoding="utf-8")))
+    tok, expires_at = _grok_token(json.load(io.open(path, encoding="utf-8")))
     if not tok:
         return {"error": "no bearer token found in ~/.grok/auth.json"}
+    exp_ts = _as_epoch(expires_at)
+    if exp_ts and exp_ts < time.time():
+        age = int(time.time() - exp_ts)
+        return {"error": (f"the CLI's access token expired {age // 60} min ago. It refreshes itself "
+                          f"on use — run any grok command (e.g. `grok -p hi`) and read again.")}
     try:
         d = _get("https://cli-chat-proxy.grok.com/v1/billing?format=credits",
                  {"Authorization": "Bearer " + tok, "User-Agent": "grok-cli"})

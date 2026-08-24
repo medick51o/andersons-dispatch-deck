@@ -1,6 +1,7 @@
 # SPINE — the method engine (single owner, all tiers inherit)
 
-**Version line (machine-readable):** `spine v2.3 (2026-08-23)`
+**Version line (machine-readable):** `spine v2.4 (2026-08-23)`
+**v2.4 — THE METER LAW:** a seat that costs money must be readable; measure a pool, never infer it; two agreeing burns beat one precise-looking reading; a subsidy is never a foundation.
 **v2.3 — COMPOSER SEATED:** THE COUNCIL SEAT LAW (councils run on subscription seats; the free-seat exception admits a reserve model that is BOTH free AND a bloodline the house lacks — 🟣 Composer qualifies, cursor-grok does not). NOTATION v4.2: the arrow marks whoever DIRECTS, so a summoned seat answering a council signs bare.
 **v2.1 — THE BENCH:** adds NOTATION v4.1 (🟣➤ the Cursor arrow, bloodline marks, mandatory reserve meter marks). Reserve-seat law lands with the bench ledger.
 **v2.0 — THE GREAT RE-SYNC:** the SPINE fork is healed — every tier's copy is byte-identical to
@@ -729,6 +730,26 @@ verified byte-identical across SPINE and all three launchers; do not change it t
 version.*
 
 ---
+
+## THE METER LAW (owner: SPINE; added v2.4, 2026-08-23)
+
+*Claims are capped at evidence* — pointed at the shop's suppliers instead of its own code, because
+vendors now sell capacity without stating how much you bought.
+
+1. **A seat that costs money must be READABLE** — on demand, before and after. A metered seat whose
+   usage cannot be observed may not carry a lane the shop depends on.
+2. **Measure, never infer.** A published allowance is evidence; an adjective is not. "Generous,"
+   "significantly higher," "unlimited" are marketing until a number is attached. Where a vendor
+   publishes no size, the shop's number comes from burning a known amount and reading the movement.
+3. **One reading is a rumour.** Meters report integers, so a small burn carries large error. Two
+   burns of different sizes that agree are a finding. An outside measurement that agrees with yours
+   is better still.
+4. **A subsidy is never a foundation.** Vendors buying market share grant far more than sticker
+   price, genuinely and in writing. Take the deal; never put a load-bearing lane on it.
+5. **Cost claims cite a reading, not a recollection.** "That's cheap" is "it works" wearing a hat.
+
+*Wiring, not law:* endpoints, scripts and vendor quirks live with the shop's tooling (Appendix A) —
+they change without notice. The obligation to read them does not.
 
 ## THE COUNCIL SEAT LAW (owner: SPINE; added v2.3, boss ruling 2026-08-23)
 
