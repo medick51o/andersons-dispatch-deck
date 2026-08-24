@@ -5,7 +5,7 @@ seen their proposals and must not guess at them. Design from the facts below.
 
 ## The situation
 
-the operator runs a multi-model dev shop orchestrated from Claude Code. His method has three tiers that
+The operator runs a multi-model dev shop orchestrated from Claude Code. His method has three tiers that
 share one engine (SPINE v2.0): **the Dispatch Deck** (straight-faced, model names, a gold conductor)
 and two Team Rocket variants (same engine, a permanent character crew, one with a full show layer).
 
@@ -45,7 +45,7 @@ also disappears the day that plan lapses. The shop's doctrine is subscription-on
 5. *Model tiering:* don't burn a frontier seat on mechanical work.
 6. *Preflight probes the transport, not the binary; unknown lineage fails closed.*
 
-## the operator's actual ask (verbatim intent)
+## The operator's actual ask (verbatim intent)
 
 The bench is **NOT** part of the standing lineup in any tier. The house seats handle almost
 everything. But the orchestrator (and the cat, in the crew tiers) should carry **foreknowledge**:
