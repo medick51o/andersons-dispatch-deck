@@ -724,6 +724,9 @@ vendors now sell capacity without stating how much you bought.
    price, genuinely and in writing. Take the deal; never put a load-bearing lane on it. **A free or
    subsidized seat may hold an EXTRA council vote; it may not be the SOLE build or review path for a
    lane the shop depends on** — that is the line between using a gift and betting on one.
+   *(Boss ruling 2026-08-24, ratifying the fix for the contradiction a council seat raised: clause 1
+   of THE COUNCIL SEAT LAW admits a free seat, while this clause bars a load-bearing lane on a
+   subsidy. Both stand — they govern different things, and the line above is where.)*
 5. **Cost claims cite a reading, not a recollection.** "That's cheap" is "it works" wearing a hat.
 
 *Wiring, not law:* endpoints, scripts and vendor quirks live with the shop's tooling (Appendix A) —
