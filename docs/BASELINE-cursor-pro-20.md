@@ -197,3 +197,81 @@ percent` is undefined at 0%. A calibration burn was stood down earlier today as 
 (the old dashboard supplied ten token/percent pairs). That reasoning no longer holds: the
 reset destroyed those pairs. **A burn is now the only way to size the Pro+ pool**, and it
 should run before ordinary use muddies the reading.
+
+---
+
+# THE LEAK — root cause found 2026-08-24 09:20 (the boss called it)
+
+## Not the config. Not the rig. Cloud agents, launched at maximum, into an empty repo.
+
+`cli-config.json` was clean the whole time: `composer-2.5`, `fast:false`, grok pinned to
+`effort:high`/`fast:false`. The MCP seat logged **5 calls, none of them grok**. Neither could
+have produced 51.9M tokens.
+
+The IDE's `state.vscdb` holds the answer — **13 Cursor CLOUD AGENTS**, launched Aug 21–22:
+
+```
+10x  cursor-grok-4.6-xhigh-fast   maxMode: TRUE
+ 2x  cursor-grok-4.6-high-fast    maxMode: TRUE
+ 1x  default                      maxMode: false
+```
+
+Three cost multipliers stacked on twelve of thirteen: `maxMode` + `effort:xhigh` + `speed:fast`.
+Cloud agents carry their own model selection and **never read `cli-config.json`**, so every local
+guard was irrelevant to them.
+
+## Why they produced almost nothing — the boss's hypothesis, confirmed
+
+His read: *"during those times of building, our MCP wasn't setup maybe, and it was just vibe
+coding into the void and it didn't know where to put the code."*
+
+The timeline confirms it exactly:
+
+| | |
+|---|---|
+| Cloud agents ran | **Aug 21 15:55 → Aug 22 12:24** (10 of 13 on Aug 21) |
+| MCP seats first committed | **Aug 22** — *after* most of the burn |
+| Target repo state | `"Stage mk3: empty home for controller v3, **no app code yet**"` |
+| Also in-window | `"Passdown for the next Agents Window chat: Remote Control, **no app code**"` |
+| Output | **11 of 13 agents produced ZERO lines.** Two produced code, and the 586/-4 result is the same changeset counted twice |
+
+Thirteen max-mode agents were pointed at a repo deliberately staged **empty**, with no MCP
+wiring to orient them. They had nowhere to put anything, so they burned context and returned
+nothing. **Two-thirds of a month's allowance bought one 586-line changeset.**
+
+**The lesson is not "cap the model."** It is that an agent with no destination still spends at
+full rate. Cost scales with *dispatch*, not with *output* — an empty write-set produces an empty
+diff and a full bill.
+
+---
+
+# PRO+ POOL — MEASURED 2026-08-24 09:19 (calibration burn)
+
+Two burns on a fresh cycle, using the cheapest included model (composer-2.5, non-fast):
+
+| burn | tokens | needle moved | spend | implied pool |
+|---|---:|---:|---:|---:|
+| probe (1 call) | 48,587 | 0.0025 pp | 2c | 1,943M tok · **$800/mo** |
+| full (8 calls) | 388,452 | 0.0175 pp | 14c | 2,220M tok · **$800/mo** |
+
+**The dollar figure is the solid one: ~$800/month of included model value on a $60 plan —
+about 13.3x sticker.** Both burns agree to the cent, from different sample sizes.
+
+**The token figure carries a real uncertainty and should not be quoted as a single number.**
+It depends on whether cache-read tokens bill at full rate. Counting them gives 2,220M;
+excluding them gives ~1,243M. The honest range is **1,240M – 2,220M**.
+
+## Scoring the prediction
+
+Predicted **1,230M tokens, band 800M–1,300M**. Measured **1,240M–2,220M**.
+**The prediction was LOW** — at best it grazed the bottom of the true range, at worst it was
+off by 1.8x. The price-ratio method under-projected here after over-projecting on Pro, which
+is a good reason to stop using it now that direct measurement works.
+
+Against Pro's measured ~$279/month: **Pro+ delivers ~2.9x the value for 3x the price.** Value
+scales close to linearly; the subsidy ratio is roughly the same at both tiers.
+
+**Does it cover a full cycle?** At the OLD burn rate — dominated by max-mode cloud agents —
+Pro would have died on day 10. That rate is not a valid forecast, because the thing driving it
+was 13 agents that mostly produced nothing. A real forecast needs a fresh reading after a few
+days of normal, non-max work.
