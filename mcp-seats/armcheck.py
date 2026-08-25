@@ -153,6 +153,10 @@ else:
     shutil.rmtree(_sbx, ignore_errors=True); os.makedirs(_sbx)
     try:
         shutil.copy2(os.path.join(SEATS, "wmw_cursor_mcp.py"), _sbx)
+        # seat_core must travel WITH the adapter. Without it the adapter used to
+        # fall back to searching $CWD for its own guard module -- the reviewer's
+        # one required fix. The canary supplies it so the fallback can stay deleted.
+        shutil.copy2(os.path.join(SEATS, "seat_core.py"), _sbx)
         io.open(os.path.join(_sbx, "dispatch-guard.py"), "w", encoding="utf-8",
                 newline="").write("raise RuntimeError('canary')")
         _p, _rpc = seat(os.path.join(_sbx, "wmw_cursor_mcp.py"))

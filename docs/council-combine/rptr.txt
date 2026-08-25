@@ -1,0 +1,1 @@
+Read docs/council-combine/REVIEW-PKT.md in this directory, in FULL, and follow it exactly. You are the independent cross-vendor reviewer of a refactor built by OpenAI's Codex. This is a SECURITY review. Output only your findings.
