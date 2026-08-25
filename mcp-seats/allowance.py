@@ -70,35 +70,58 @@ def revoke(seat):
     _save(d)
     return existed
 
-def window_seconds(seat, fallback=600):
-    """The granted window in SECONDS, so a caller enforces the operator's real bound.
+def snapshot(seat):
+    """Return one validated authority record, freshly loaded for this dispatch."""
+    refused = {"permitted": False, "reason": "", "calls": 0,
+               "window_seconds": 0, "expires": None}
+    records = _load()
+    grant_record = records.get(seat) if isinstance(records, dict) else None
+    if not isinstance(grant_record, dict):
+        refused["reason"] = ("no allowance recorded — this seat may not spend. Ask the "
+                             f"operator, then: python allowance.py grant {seat} {DEFAULT_BOUND}")
+        return refused
 
-    The bound used to be read for its CALL COUNT only, while enforcement ran against a
-    hardcoded 10-minute window — so a grant of "10/week" was silently enforced as "10 per
-    ten minutes", roughly a thousand times looser than what was granted.
-    (Audit 2026-08-24, Kimi, CONFIRMED logic bug.)
-    """
-    g = _load().get(seat) or {}
-    days = WINDOWS.get(g.get("window", ""), 0)
-    return days * 86400 if days else fallback
+    calls, window = grant_record.get("calls"), grant_record.get("window")
+    if isinstance(calls, bool) or not isinstance(calls, int) or calls < 1:
+        refused["reason"] = "allowance has an invalid call bound; re-grant it"
+        return refused
+    if window not in WINDOWS:
+        refused["reason"] = "allowance has an invalid window; re-grant it"
+        return refused
+
+    expires = grant_record.get("expires")
+    if expires is not None:
+        if not isinstance(expires, str):
+            refused["reason"] = "allowance has an unreadable expiry; re-grant it"
+            return refused
+        try:
+            expiry = datetime.datetime.fromisoformat(expires)
+        except ValueError:
+            refused["reason"] = "allowance has an unreadable expiry; re-grant it"
+            return refused
+        if expiry < datetime.datetime.now(expiry.tzinfo):
+            refused["reason"] = (f"the allowance expired on {expires[:10]} — grants expire "
+                                 "on purpose. Re-ask the operator, then re-grant.")
+            refused["expires"] = expires
+            return refused
+
+    return {"permitted": True,
+            "reason": f"{calls} calls per {window}" + (
+                "" if expires is None else f", until {expires[:10]}"),
+            "calls": calls, "window_seconds": WINDOWS[window] * 86400,
+            "expires": expires}
 
 
 def status(seat):
-    """Returns (permitted, reason). A seat with no grant is NOT permitted."""
-    g = _load().get(seat)
-    if not g:
-        return False, ("no allowance recorded — this seat may not spend. Ask the operator, "
-                       f"then: python allowance.py grant {seat} {DEFAULT_BOUND}")
-    exp = g.get("expires")
-    if exp:
-        try:
-            if datetime.datetime.fromisoformat(exp) < datetime.datetime.now():
-                return False, (f"the allowance expired on {exp[:10]} — grants expire on purpose. "
-                               f"Re-ask the operator, then re-grant.")
-        except ValueError:
-            return False, "allowance has an unreadable expiry; re-grant it"
-    return True, f"{g['calls']} calls per {g['window']}" + (
-        "" if not exp else f", until {exp[:10]}")
+    """Return (permitted, reason) from a fresh validated snapshot."""
+    record = snapshot(seat)
+    return record["permitted"], record["reason"]
+
+
+def window_seconds(seat, fallback=600):
+    """Return the validated grant window in seconds, or the caller's fallback."""
+    record = snapshot(seat)
+    return record["window_seconds"] if record["permitted"] else fallback
 
 def main():
     a = sys.argv[1:]

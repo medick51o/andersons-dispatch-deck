@@ -18,8 +18,6 @@ import seat_core as core
 
 CURSOR_TIMEOUT_S = 3600
 DEFAULT_MODEL = "composer-2.5"
-COUNCIL_LOCK_MAX = int(os.environ.get("WMW_CURSOR_COUNCIL_MAX", "2"))
-COUNCIL_LOCK_WINDOW_S = int(os.environ.get("WMW_CURSOR_COUNCIL_WINDOW", "600"))
 COUNCIL_LOCK_ON = os.environ.get("WMW_CURSOR_COUNCIL_LOCK", "on").lower() != "off"
 PLAYPEN = os.path.abspath(os.environ.get(
     "WMW_CURSOR_PLAYPEN", os.path.join("C:" + os.sep, "Sync", "_playpen", "cursor")))
@@ -104,45 +102,6 @@ def _log_spend(model, lineage, klass, usage, session_id, ok, write_capable):
         print(f"[wmw-cursor] spend-ledger write failed: {exc}", file=sys.stderr)
 
 
-def _allowance(seat):
-    try:
-        import importlib.util
-        spec = importlib.util.spec_from_file_location(
-            "_allowance_mod", os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                            "allowance.py"))
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-        return module.status(seat)
-    except Exception as exc:
-        return False, f"the allowance record could not be read ({exc}); failing closed"
-
-
-def _allowance_window_s(seat, fallback):
-    try:
-        import importlib.util
-        spec = importlib.util.spec_from_file_location(
-            "_allowance_mod", os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                            "allowance.py"))
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-        return int(module.window_seconds(seat, fallback))
-    except Exception:
-        return fallback
-
-
-def _allowance_calls(seat, fallback):
-    try:
-        import importlib.util
-        spec = importlib.util.spec_from_file_location(
-            "_allowance_mod", os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                            "allowance.py"))
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-        return int((module._load().get(seat) or {}).get("calls", fallback))
-    except Exception:
-        return fallback
-
-
 def _guard():
     try:
         import importlib.util
@@ -223,16 +182,25 @@ def run_cursor(prompt, session_id=None, cwd=None, model=None, always_approve=Fal
         return True, (f"{CURSOR_BANNER} 🛑 WRITE REFUSED — '{chosen}' is not on the YOLO "
                       "allowlist. Only composer-* and cursor-grok-* may write or execute.")
 
+    allowance_record = None
     if klass.startswith("CREDITS"):
-        ok, why = _allowance("cursor")
-        if not ok:
+        try:
+            import allowance
+            allowance_record = allowance.snapshot("cursor")
+        except Exception as exc:
+            allowance_record = {
+                "permitted": False,
+                "reason": f"the allowance record could not be read ({exc}); failing closed",
+            }
+        if not allowance_record["permitted"]:
             return True, (f"{CURSOR_BANNER} 🛑 NO ALLOWANCE — REFUSED BEFORE SPENDING\n\n"
-                          f"'{chosen}' bills the third-party credit pool, and {why}\n\n"
+                          f"'{chosen}' bills the third-party credit pool, and "
+                          f"{allowance_record['reason']}\n\n"
                           "Free INCLUDED models are unaffected and need no allowance.")
     if klass.startswith("CREDITS") and COUNCIL_LOCK_ON:
-        window = _allowance_window_s("cursor", COUNCIL_LOCK_WINDOW_S)
+        window = allowance_record["window_seconds"]
         recent = _recent_billable(window)
-        if recent >= _allowance_calls("cursor", COUNCIL_LOCK_MAX):
+        if recent >= allowance_record["calls"]:
             return True, (f"{CURSOR_BANNER} 🛑 COUNCIL LOCK — REFUSED\n\n{recent} billable "
                           f"Cursor calls already landed in the last {window // 60} minutes, "
                           "at the operator's granted bound. Councils use subscription seats.")

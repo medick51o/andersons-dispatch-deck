@@ -70,9 +70,10 @@ each seat earn its place?" **The default is lean.**
   Breadth is not rigor. Fan-outs cost multiples, not increments (an external multi-agent writeup
   measured ~15x the tokens of a single chat — their number, not a law of nature; the gate exists
   because of that shape).
-- **A fleet is legal only if all five hold** (the fleet-legality test, Part IV): Declared ·
-  Bounded · Accounted · still-Principle-3 · Authority-inheritance. A fleet nobody declared,
-  bounded, or counted is banned.
+- **A fan-out is legal only if it passes the FLEET TEST in full (Part IV).** Do not carry a
+  summary of it here — an earlier one said "all five" while Part IV listed seven, and a
+  mnemonic that contradicts its owner is worse than no mnemonic. A fleet nobody declared,
+  bounded or counted is banned.
 
 ### 3 · THE DIAGNOSE / DESIGN FORK (what KIND of problem is this?)
 Before building, classify. The two kinds of hard problem take opposite opening moves:
@@ -161,7 +162,7 @@ them and report requested-vs-achieved, loud:
 ## PART IV — THE FLEET-LEGALITY TEST (character-free)
 
 Parallel seats are permitted. What is banned is a fleet nobody declared, bounded, or counted.
-**A fleet is legal only if all five hold:**
+**A fleet is legal only if ALL SEVEN hold:**
 - **Declared.** The human is told the shape of the fan-out before it runs: how many seats, doing
   what. No seat spawns seats nobody asked for.
 - **Bounded.** A hard cap on seats, set in advance. "As many as it takes" is not a number.
@@ -375,12 +376,8 @@ the adjudication ladder. One axis per line, never mixed.
 Never a third identical retry. Never re-try a cheaper seat on a task that proved it needs a bigger one.
 
 ### Review dispatch
-**Who may review** (the two legal paths, from Part IV's anti-laundering guard): a **different
-effective-model vendor + lineage** (preferred — different weights/training/context; a different
-account merely hosting the builder's own brain does NOT count, see the effective-model preflight),
-OR a **boss-launched fresh
-seat** (legal, weaker, flagged) — never the builder's own producing lineage. **Route by FIT within
-those paths:** send each review to the strongest-fit independent seat for the work TYPE — the
+**Who may review** is owned by Part IV's anti-laundering guard and is not restated here.
+**Route by FIT within those paths:** send each review to the strongest-fit independent seat for the work TYPE — the
 sharpest bug-proving seat for code, the frontier seat for architecture/judgment, a cheap independent
 seat for a scan or a tie-breaking extra vote — always outside the builder's lineage. Which concrete
 model that is, is the shop's wiring (`SPINE-WIRING.md`), not the engine's law.
@@ -399,7 +396,7 @@ stdin. **The adversarial channel is the last thing you let fail.**
 ### THE COUNCIL — the multi-vendor panel (the orchestrator's special move)
 The council is the fan-out turned to full width: instead of one builder + one reviewer, the
 orchestrator convenes **the boss-approved, fleet-BOUNDED set of eligible seats** (eligibility and
-the spend gate are owned by THE COUNCIL SEAT LAW; the cap is set in advance, per Part IV — "as many
+the spend gate are owned by THE SPEND LAW; the cap is set in advance, per Part IV — "as many
 as it takes" is not a number) — one per seat, each a genuinely different effective-model lineage — for
 independent reads on a single high-stakes question. It is the SPECIAL
 move (Gate-0's right-size still rules — never the default for small work); reach for it when the
@@ -533,50 +530,44 @@ version.*
 
 ---
 
-## THE METER LAW (owner: SPINE)
+## THE SPEND LAW (owner: SPINE — one law for money, formerly the Meter Law and the Council Seat Law)
 
+**Any seat may sit. What is gated is SPENDING, not vendor class.**
+
+**Seeing the cost**
 1. **A seat that costs money must be READABLE** — before and after. Unreadable spend may not
-   carry a lane the shop depends on, and unknown cost fails closed.
+   carry a lane the shop depends on, and **unknown cost fails closed.**
 2. **Measure, never infer.** "Generous" is not a number. Where a vendor publishes no size, the
    shop's figure comes from burning a known amount and reading the movement — and cost claims
    cite that reading, never a recollection.
-3. **A subsidy is never a foundation.** Take the deal; never put a load-bearing lane on it. A
-   free or subsidized seat may hold an EXTRA council vote, never the SOLE build or review path.
+3. **The vendor draws the needle.** Usage figures come from the party being measured against,
+   and a subsidy can be halved silently. Watch the RATIO of value to price over time, not the
+   balance; decay creeps, it does not cliff.
 4. **Meter the OUTPUT, not only the input.** Spend is the vendor's metric. The number no vendor
    reports is **cost per ACCEPTED change** — a shop that meters only what it consumes can be
    flawlessly efficient while buying nothing.
 
-*How to actually size an unpublished pool, and what this shop measured, is written down and NOT
-loaded on a summon: `MEASURING-POOLS.md` and `docs/`. Methodology is not law.*
-
-## THE COUNCIL SEAT LAW (owner: SPINE)
-
-**Any seat may hold a council seat. What is gated is SPENDING, not vendor class.**
-
-1. **A seat that cannot spend needs no ALLOWANCE.** Free is free — but free is not consent to
-   convene: Gate-0's right-size rule still binds (clause 6).
-2. **A seat that CAN spend needs a recorded ALLOWANCE before it sits.** Asked once, in one line
-   naming the seat and the rough cost. What the boss grants is a **bound**, not a blank cheque:
-   how many metered calls, over what window, and for how long the grant itself lasts. He may make it
-   permanent or time-boxed; the default is a modest bound that expires, because a yes given once at
-   midnight should not silently govern next year.
-3. **Within the allowance, no further asking.** That is the point of granting one. Every metered
-   dispatch still prints its meter mark, so quiet is never invisible.
-4. **Past the allowance, refuse and re-ask.** Exhaustion is not an emergency and never an excuse to
-   proceed; it is a question. Widening a bound is a fresh decision, made out loud.
-5. **Unknown cost fails closed.** A seat whose spend cannot be established is not free, it is
-   unmeasured (THE METER LAW). It may not sit until its spend can be READ. An allowance never
-   substitutes for a meter — a bound you cannot verify against is not a bound.
-6. **A council is still the SPECIAL move.** Consent to spend is not consent to convene: Gate-0's
-   right-size rule and the fleet test bind first, whatever the seat costs.
+**Permission to spend**
+5. **A seat that cannot spend needs no ALLOWANCE** — but free is not consent to convene. Gate-0
+   still binds.
+6. **A seat that CAN spend needs a recorded ALLOWANCE before it sits.** What is granted is a
+   **bound**, not a blank cheque: how many metered calls, over what window, and for how long the
+   grant itself lasts. The default is modest and expires, because a yes given once at midnight
+   should not silently govern next year.
+7. **Within the allowance, no further asking; past it, refuse and re-ask.** Exhaustion is a
+   question, never an emergency. Every metered dispatch still prints its meter mark, so quiet is
+   never invisible.
+8. **A subsidy is never a foundation.** Take the deal; never put a load-bearing lane on it. A
+   free or subsidized seat may hold an EXTRA council vote, never the SOLE build or review path.
+9. **Permission is never inferred from a healthy meter.** "May this seat spend" and "what has
+   been spent" are different questions with different answers.
 
 **Enforced, not merely written.** The allowance is a real record the transport checks before it
-spends, held on the operator's own machine — never in the method's repo, so no one inherits another
-shop's permission. A council that tries to exceed it trips the wire instead of the budget.
+spends, held on the operator's own machine — never in the method's repo, so no one inherits
+another shop's permission.
 
-*(Wiring — the allowance record's location and format, and the per-vendor guards — is CODE, not
-prose: `mcp-seats/allowance.py` holds the record and the seat wrappers refuse before spending.
-It changes without notice. The duty to check it does not.)*
+*(How to size an unpublished pool is documented, not loaded: `MEASURING-POOLS.md`. The allowance
+record's format and the per-vendor guards are CODE, not prose.)*
 
 ## THE TRANSPORT LAW — persistent seats (owner: SPINE)
 
@@ -639,12 +630,12 @@ tier legends (Deck SKILL, CREW) are renderings of it. (v4.0 repealed the 2026-08
   gates running · 🩺 diagnosing (doctor-first) · 🕵️ adversary loose · 🏁 boss-validated (top rung,
   outranks "done") · 🚢 shipped/deployed · 🪦 retired/parked · 🟤 quiet hold (watchers armed).
 - **METER MARKS ARE MANDATORY ON ANY LINE THAT CAN SPEND** (v4.1, rekeyed v2.5 from vendor class to
-  spending, to match THE COUNCIL SEAT LAW). A genuinely flat-rate seat narrates no meter; **any seat
+  spending, to match THE SPEND LAW). A genuinely flat-rate seat narrates no meter; **any seat
   that can bill — reserve or house — narrates one on every line**, computed from the model id,
   never guessed: **♾️** included in the plan · **♾️💸** included but a surcharged FAST tier ·
   **💸** third-party credits at API prices · **🚨💳** credits AND surcharged · **⚠️** unknown,
   which fails closed. A call that spends money says so LOUDLY, in its own line, every time — the
-  boss must never learn he spent from a footnote. THE METER LAW binds on every seat:
+  boss must never learn he spent from a footnote. THE SPEND LAW binds on every seat:
   flat-rate windows drain too.
 
 
