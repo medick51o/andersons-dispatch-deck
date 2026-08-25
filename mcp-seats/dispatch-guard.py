@@ -220,6 +220,11 @@ def reserve(job, est_pct, note=""):
     Returns (ok, message). A refusal here is cheap; the alternative is thirteen
     agents that each passed a check and together took two thirds of the month.
     """
+    # A negative or zero claim passed the upper cap and SUBTRACTED from outstanding,
+    # manufacturing headroom out of arithmetic. (Audit 2026-08-24, Kimi finding 8.)
+    if not (est_pct > 0):
+        return False, (f"a reservation must claim a positive share; got {est_pct}. "
+                       f"Negative claims manufacture headroom.")
     with Lock():
         d = _load()
         dropped = _expire(d)
@@ -241,26 +246,36 @@ def reserve(job, est_pct, note=""):
             return False, (f"outstanding {outstanding}% + this {est_pct}% would exceed the "
                            f"{MAX_OUTSTANDING_PCT}% ceiling on committed-but-unspent allowance.")
 
+        # A lease now carries an owner token. Without it `release <victim>` freed any
+        # lease, so two cheap reservations could hold the whole cap for the TTL and lock
+        # the operator out of his own rig. (Audit 2026-08-24, Kimi finding 8.)
+        token = f"{os.getpid()}-{int(_now().timestamp())}"
         open_jobs[job] = {
             "est_pct": est_pct,
             "state": "open",
+            "owner": token,
             "note": note,
             "opened": _now().isoformat(timespec="seconds"),
             "expires": (_now() + datetime.timedelta(minutes=LEASE_TTL_MIN)
                         ).isoformat(timespec="seconds"),
         }
         _save(d)
-        msg = (f"RESERVED  {job}  {est_pct}% for up to {LEASE_TTL_MIN} min "
+        msg = (f"RESERVED  {job}  {est_pct}% [owner {token}] for up to {LEASE_TTL_MIN} min "
                f"({len(open_jobs)}/{MAX_CONCURRENT} leases, {outstanding + est_pct}% committed)")
         if dropped:
             msg += f"\n  (expired and reclaimed: {', '.join(dropped)})"
         return True, msg
 
 
-def release(job, actual_pct=None, lines=None):
+def release(job, actual_pct=None, lines=None, owner=None):
     with Lock():
         d = _load()
         _expire(d)
+        held = d["jobs"].get(job)
+        if held and held.get("owner") and owner != held["owner"]:
+            return False, (f"'{job}' is held by another owner; refusing to release it. "
+                           f"A lease is freed by its holder or by its TTL, never by a "
+                           f"passer-by.")
         v = d["jobs"].pop(job, None)
         if not v:
             return False, f"no open lease named '{job}'"

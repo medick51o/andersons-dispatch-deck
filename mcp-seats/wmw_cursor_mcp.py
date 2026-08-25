@@ -242,8 +242,13 @@ def _guard():
         spec.loader.exec_module(mod)
         return mod
     except Exception as e:
+        # FAIL CLOSED. This used to return None, and the caller's
+        # `if guard and always_approve and cwd:` then skipped preflight AND the
+        # reservation without a word — so corrupting one file disarmed the guard
+        # silently. A control that disappears when its file breaks is not a control.
+        # (Audit 2026-08-24, Kimi finding 7, CONFIRMED.)
         print(f"[wmw-cursor] dispatch-guard unavailable: {e}", file=sys.stderr)
-        return None
+        return e
 
 def _recent_billable(window_s):
     """How many billable calls landed in the last window_s seconds, per the ledger."""
@@ -464,7 +469,13 @@ def run_cursor(prompt, session_id=None, cwd=None, model=None, always_approve=Fal
     # the shape that burned two thirds of a month on 2026-08-21/22. A read-only
     # question costs little and is left alone deliberately.
     guard, lease = _guard(), None
-    if guard and always_approve and cwd:
+    if isinstance(guard, Exception) and always_approve:
+        return True, (
+            f"{CURSOR_BANNER} 🛑 GUARD UNAVAILABLE — WRITE REFUSED\n\n"
+            f"dispatch-guard could not be loaded ({guard}).\n\n"
+            f"A write-capable dispatch is refused while its guard is missing. Read-only "
+            f"calls are unaffected. Repair mcp-seats/dispatch-guard.py, or run read-only.")
+    if guard and not isinstance(guard, Exception) and always_approve and cwd:
         # PREFLIGHT: an agent with no destination still spends at full rate.
         rc, problems, _notes = guard.preflight(workdir, model=chosen)
         if rc:
@@ -479,6 +490,7 @@ def run_cursor(prompt, session_id=None, cwd=None, model=None, always_approve=Fal
         lease = f"cursor-{os.getpid()}-{int(time.time())}"
         ok, why = guard.reserve(lease, est_pct=float(os.environ.get("WMW_EST_PCT", "2")),
                                 note=f"{chosen} @ {os.path.basename(workdir)}")
+        lease_owner = (guard._load().get("jobs", {}).get(lease) or {}).get("owner") if ok else None
         if not ok:
             return True, (
                 f"{CURSOR_BANNER} 🛑 NO HEADROOM RESERVED — REFUSED BEFORE SPENDING\n\n{why}\n\n"
@@ -552,7 +564,7 @@ def run_cursor(prompt, session_id=None, cwd=None, model=None, always_approve=Fal
         # his own rig, which is a worse failure than the one being prevented.
         if guard and lease:
             try:
-                guard.release(lease)
+                guard.release(lease, owner=lease_owner)
             except Exception as e:
                 print(f"[wmw-cursor] lease release failed: {e}", file=sys.stderr)
 
@@ -711,7 +723,7 @@ def handle(msg):
             "result": {
                 "protocolVersion": msg.get("params", {}).get("protocolVersion", "2024-11-05"),
                 "capabilities": {"tools": {}},
-                "serverInfo": {"name": "wmw-cursor", "version": "2.4.0"},
+                "serverInfo": {"name": "wmw-cursor", "version": "2.5.0"},
             },
         }
     if method == "ping":
@@ -736,7 +748,13 @@ def handle(msg):
 def main():
     _utf8_stdio()
     _ensure_playpen()
+    # An unbounded readline is a memory-exhaustion primitive: one enormous frame and
+    # the seat dies. MCP frames are small. (Audit 2026-08-24, Kimi finding 10.)
+    MAX_FRAME = 8 * 1024 * 1024
     for line in sys.stdin:
+        if len(line) > MAX_FRAME:
+            print(f"[wmw-cursor] frame over {MAX_FRAME} bytes refused", file=sys.stderr)
+            continue
         line = line.strip()
         if not line:
             continue
