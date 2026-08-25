@@ -75,3 +75,67 @@ every line cannot be fetched per line.
 ---
 *SPINE owns the engine; the Team Rocket Method's provenance lives in CREW, because it is that
 brand's identity, not the brand-neutral engine's.*
+
+
+---
+
+# MOVED OUT OF THE LOADER (2026-08-24)
+
+The Deck's SKILL.md restated these on every summon. The LAW is SPINE's; this is the wiring.
+
+## PERSISTENT SEATS — the standing MCP transports (installed & verified 2026-08-22)
+Every rival vendor is wired into Claude Code as a **persistent MCP seat** — subscription-billed, no
+API keys, no per-token bills. The orchestrator dispatches through these tools by default:
+
+| Banner | Server | Start tool | Continue tool | Under the hood |
+|---|---|---|---|---|
+| 🔵 Codex | `wmw-codex` | `codex` | `codex-reply` + conversationId | `codex mcp-server` (built in) |
+| ⚫ Grok | `wmw-grok` | `grok` | `grok-reply` + sessionId | Grok Build CLI `-p` / `--resume` |
+| 🟢 Gemini | `wmw-gemini` | `gemini` | `gemini-reply` + conversationId | Antigravity `agy -p` / `--conversation` |
+
+Wrapper source: `C:\Sync\Projects\andersons-dispatch-deck\mcp-seats\`. The Grok/Gemini wrappers bake in
+the two headless croak-killers found 2026-08-22: a 60-minute timeout (agy's default was 5 minutes —
+long tasks died mid-thought) and an `always_approve` switch (headless runs can never click a
+permission prompt; without it a build task stalls until the timeout kills it).
+
+**Transport doctrine (owner: SPINE v2.0, THE TRANSPORT LAW — this is the Deck rendering):**
+- **Fresh call = blind seat — necessary, not sufficient.** A new `codex`/`grok`/`gemini` call
+  remembers nothing from any other session. Reviewers are ALWAYS fresh calls; never brief a
+  reviewer through a session that saw the build (anchoring law). Fresh alone is not independence —
+  the reviewer must also sit on a different effective-model vendor than the build, or be
+  boss-launched (SPINE Part IV's two legal paths).
+- **Reply-chain = the same seat continuing.** `*-reply` keeps one seat's thread alive for follow-ups
+  inside its own lane (ticket clarification, build iteration). A reply-chained session is inside its
+  owning-seat lineage forever — it can never become the independent reviewer of work its thread touched.
+- **Build tickets:** pass `always_approve: true` and `cwd` = the repo. Research/review tickets: omit
+  both (read-only default).
+- Raw one-shots (`grok -p`, `codex exec`, `agy -p`) stay legal as fallback transport; the MCP seats
+  are the default.
+
+
+
+## THE RESERVE BENCH — 🟣➤ a metered transport (SPINE v2.4: BENCH + METER laws)
+Beside the flat-rate house seats sits an optional **reserve**: one transport fronting a large pool of
+models, drawing metered credit instead of a flat window. It is never in the standing lineup. SPINE
+owns the rules (THE COUNCIL SEAT LAW · THE METER LAW · THE TRANSPORT LAW); this is the Deck rendering.
+
+**The three things the conductor must hold in mind:**
+- **Free before paid.** A reserve pool usually splits into an INCLUDED tier (the host's own models,
+  no marginal cost) and a CREDIT tier (third-party models at API prices). Default to included; a
+  credit call is a deliberate act, announced, never a silent upgrade.
+- **A pool is not a vendor.** Lineage is the model family behind the transport, never the transport's
+  brand. A reserve-hosted Claude is Anthropic blood and cannot independently review Claude's work.
+  An unmappable family is `UNKNOWN LINEAGE` and fails closed. The banner shows both: 🟣➤🟠.
+- **Read the meter, don't trust the adjective.** "Generous" is not a number. Where a vendor
+  publishes no allowance, the shop's figure comes from measurement, and cost claims cite a reading.
+
+**Narration.** A reserve dispatch flies the transport's arrow, the bloodline, and the meter:
+`🟣➤🌙 💸 Kimi reviewing the parser` — who summoned it, whose brain thought, what it cost. A reserve
+model **answering** (a review returned, a council seat) signs bare — 🟣 — because it is not directing.
+Meter marks are mandatory on reserve lines and absent everywhere else: ♾️ included · ♾️💸 included but
+a surcharged tier · 💸 credits · 🚨💳 credits and surcharged · ⚠️ unknown, fails closed.
+
+**Wiring** (shop-specific, changes without notice): `BENCH-LEDGER.md` for what the reserve can reach
+and what it has proven · `MEASURING-POOLS.md` for how to size an unpublished pool ·
+`mcp-seats/read-meters.py` and `bench-burn.py` for the readings themselves.
+

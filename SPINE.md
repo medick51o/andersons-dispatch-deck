@@ -132,8 +132,7 @@ them and report requested-vs-achieved, loud:
    tone and nits → ONE EXCHANGE** (Part VII); **unattended debates → TWO ROUNDS PER DEBATE (not per
    participant), then the bell**
    (Autonomous hours). Then the judge decides.
-9. **Guardrails at every door.** Every entry file a tool reads on login (CLAUDE.md, AGENTS.md,
-   .cursorrules, …) carries one identical compact invariant block plus the authoritative doctrine's
+9. **Guardrails at every door.** Every entry file a tool reads on login (CLAUDE.md, AGENTS.md, .cursorrules, …) carries one identical compact invariant block plus the authoritative doctrine's
    filename/version/date — never a duplicated full copy of the law (multiple copies is how law
    forks). The block is not a mere pointer: it carries the operative invariants, sufficient to
    govern behavior even if the doctrine is never opened. Canonical text is defined once (Part VIII).
@@ -266,7 +265,6 @@ positions stated. **Models do not negotiate their way to consensus. Under this m
 isn't how anything ends. A ruling is.**
 
 
-
 ---
 
 ## PART VI — THE ORCHESTRATION MECHANICS (character-free: "the orchestrator")
@@ -354,7 +352,7 @@ Every mission/episode with REAL dispatches gets a dated backend folder —
 `episodes/YYYY-MM-DD-<slug>/` at the project root — collecting that run's artifacts: the shape
 receipt (what was dispatched to whom, and why that shape), tickets as issued, worker reports, and
 any reality evidence the boss provides. This is the harvest source for end-of-project bottling
-and the inspectable evidence behind lineage-ledger rows. **Style law (boss ruling 2026-07-24):
+and the inspectable evidence behind lineage-ledger rows. **Style law:
 the DATE is for the backend only.** Front-facing narration (TRM/SHOW voices) refers to episodes
 by NAME — the jargon and datestamps stay in the folder, visible if the boss peeks, never
 paraded in the story. **One sanctioned exception (boss amendment, same day): the ENDING
@@ -364,7 +362,7 @@ dates belong, movie-style (*"filmed on location · 2026-07-23 → 2026-07-24"*).
 close are part of the fun; dates mid-story are jargon. **The dispatch deck does NOT roll
 credits** — the plain tier closes plainly; its dates live in the backend folder only.
 
-**Visuals (boss ruling 2026-07-24): the boss's screenshots are reality evidence — file them,
+**Visuals: the boss's screenshots are reality evidence — file them,
 cheaply.** When the boss drops a screenshot during an episode (a bug's face, an in-hand proof,
 a before/after), the crew quietly copies it into `episodes/<slug>/visuals/` — RE-COMPRESSED to
 economical JPEG (cap ~1280px on the long edge, quality ~70; a full-HD PNG becomes a small JPG).
@@ -563,7 +561,6 @@ version.*
    cite that reading, never a recollection.
 3. **A subsidy is never a foundation.** Take the deal; never put a load-bearing lane on it. A
    free or subsidized seat may hold an EXTRA council vote, never the SOLE build or review path.
-   *(Boss ruling 2026-08-24.)*
 4. **Meter the OUTPUT, not only the input.** Spend is the vendor's metric. The number no vendor
    reports is **cost per ACCEPTED change** — a shop that meters only what it consumes can be
    flawlessly efficient while buying nothing.
@@ -571,7 +568,7 @@ version.*
 *How to actually size an unpublished pool, and what this shop measured, is written down and NOT
 loaded on a summon: `MEASURING-POOLS.md` and `docs/`. Methodology is not law.*
 
-## THE COUNCIL SEAT LAW (owner: SPINE; v2.3, rewritten v2.5 on the boss's ruling 2026-08-24)
+## THE COUNCIL SEAT LAW (owner: SPINE)
 
 **Any seat may hold a council seat. What is gated is SPENDING, not vendor class.**
 
@@ -600,7 +597,7 @@ shop's permission. A council that tries to exceed it trips the wire instead of t
 prose: `mcp-seats/allowance.py` holds the record and the seat wrappers refuse before spending.
 It changes without notice. The duty to check it does not.)*
 
-## THE TRANSPORT LAW — persistent seats (owner: SPINE; added v2.0, 2026-08-22)
+## THE TRANSPORT LAW — persistent seats (owner: SPINE)
 
 Vendor seats are reached, by default, as **persistent MCP conversations** inside the conductor's
 harness — a start tool returns the reply plus a session id; a `*-reply` tool continues that exact
@@ -626,9 +623,9 @@ and install commands live with the Deck (`mcp-seats/` — wiring detail, not law
    read-only by default.
 
 ## THE NOTATION (owner: SPINE — the marks an orchestrator must PRODUCE, not look up)
-*(Kept in the trunk on the 2026-08-24 council's ruling: a grammar applied to every line cannot be fetched per line. The vendor list, paths and field notes it used to sit beside are in `SPINE-WIRING.md`.)*
+**
 
-**v4.2 (boss-adopted 2026-08-23). Seat first, act second. SPINE owns these marks —
+**v4.2. Seat first, act second. SPINE owns these marks —
 tier legends (Deck SKILL, CREW) are renderings of it. (v4.0 repealed the 2026-08-09 marks, including
 🟣-as-building.)**
 
@@ -668,7 +665,6 @@ tier legends (Deck SKILL, CREW) are renderings of it. (v4.0 repealed the 2026-08
   which fails closed. A call that spends money says so LOUDLY, in its own line, every time — the
   boss must never learn he spent from a footnote. THE METER LAW binds on every seat:
   flat-rate windows drain too.
-
 
 
 ---

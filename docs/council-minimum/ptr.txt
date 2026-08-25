@@ -1,0 +1,1 @@
+Read docs/council-minimum/pkt-grok.md in this directory, in FULL, and follow it exactly. Answer the MINIMUM question. Do not propose additions. Output only your findings in the brief's format.
