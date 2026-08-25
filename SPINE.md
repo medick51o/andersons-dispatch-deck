@@ -64,7 +64,7 @@ each seat earn its place?" **The default is lean.**
   a SPECIAL move — run it only when the boss asks. When the task looks genuinely gnarly/high-stakes the
   orchestrator may PROPOSE a panel (one line: why + the rough cost of N vendors), but the fan-out
   dispatches only on his explicit go — never self-authorized. **This clause OWNS the consent gate.
-  It is deliberately restated at Doctrine 1, Doctrine 5, the dispatch gate and THE COUNCIL: a
+  It is deliberately restated at the dispatch gate and THE COUNCIL: a
   reflex wants redundancy, and the Amendment Law prefers the rule that leaves a trace.** Scaling seat count is the boss's call to make loud, never a habit.
 - **Earn-a-head:** every added seat must be justifiable in one sentence, or it is decoration.
   Breadth is not rigor. Fan-outs cost multiples, not increments (an external multi-agent writeup
@@ -101,72 +101,6 @@ them and report requested-vs-achieved, loud:
 | 3 | **Protected invariants** | What must NOT change — the fence, the correctness properties, the boss's box staying bootable. Violating one is a BLOCKER even if the feature works. |
 | 4 | **Rollback** | How to undo it safely. A guard that reverts itself beats a fix that bricks the box. When a piece can't land safely, FLAG it, never fake it: *"15/16 landed, #16 reverted-and-flagged"* is the house voice; silent slop is the crime. |
 | 5 | **Boss handover test-kit** | The in-hand check the boss runs to hit the TOP rung of the Ladder — the exact steps/inputs, phone-readable, so reality can outrank the review. |
-
----
-
-## PART II — THE SIX DOCTRINES (the engine's standing operating law)
-
-### Doctrine 1 · THE 5-GATE SHIP PIPELINE (boss-tuned 2026-07-21 — the featured engine, proven live)
-Five gates, in order — the house default for anything gnarly:
-1. **DESIGN COUNCIL → SYNTHESIS (before a line is built).** Per the Diagnose/Design fork above —
-   for a novel/gnarly problem only, and proposed to the boss — the multi-vendor fan-out dispatches only
-   on his explicit go. Right-size still rules.
-2. **BUILD IN ISOLATION.** Real builds run in an isolated git **worktree/branch, NEVER the boss's
-   live checkout** — his daily-driver must not break mid-build. Disjoint write-sets across lanes.
-3. **INDEPENDENT BENCH before merge** (Part IV's two legal paths; Part VI's preflight names the
-   three statuses, including fail-closed `REVIEW UNAVAILABLE`). Reviewed from OUTSIDE the builder's
-   lineage — another effective-model vendor preferred → `FULL CROSS-VENDOR`, or a boss-launched fresh
-   seat → `SOLO-VENDOR DEGRADED`; never the builder's lineage; neither reachable → `REVIEW
-   UNAVAILABLE`. Adversarial, ranked with Part V's canonical ladder — **BLOCKER / MATERIAL / MINOR /
-   NOT PROVEN** — each finding with a fix. Green gates alone never merge — the bench earns its
-   keep finding the paths that "looked clean."
-4. **BOSS IN-HAND — the TOP gate.** Part I §1 owns the ship rule. The bench catches CODE bugs; the boss catches
-   REALITY bugs, and reality outranks the review (Ladder of Truth, top rung). Green gates + passed
-   bench + working in-hand = shipped. Any two without the third = not yet.
-5. **THE FIX LOOP.** Bench findings → back to the builder → re-review → re-gate, as many turns as
-   it takes (bounded by Principle 8's loop cap and Part VII's review-culture caps).
-
-### Doctrine 2 · INSTRUMENT, DON'T GUESS
-Part I §3's bug fork, promoted to reflex at the boss's own request.
-
-### Doctrine 3 · SELF-VERIFY + HONEST DEFERRALS
-Reality Contract terms 2 & 4, promoted to reflex: an artifact reports its own requested-vs-achieved,
-and a piece that can't land safely is FLAGGED, never faked. **Silent slop is the crime.**
-
-### Doctrine 4 · THE SCALPEL IS A FEATURE (boss-tuned 2026-07-21)
-The sharpest move is CUTTING scope, not adding it — the boss once deleted ~80% of a build in one
-sentence ("we don't have to make them deaf — just listen on the right slot"). The crew's job is to
-surface the MINIMAL honest version and hand him the scalpel; **a scope cut is a WIN celebrated,
-never a loss mourned.** (The rarest, highest-value product skill in the room, and it's his.)
-
-### Doctrine 5 · RIGHT-SIZE THE DISPATCH (boss ruling 2026-07-18; amended 2026-08-24)
-Gate-0's lean default and the consent-gated panel — owned by Part I §2. Gnarly work may justify
-PROPOSING a panel; it convenes only on the boss's explicit go, never self-authorized. **The Lineage
-Ledger recalibrates WHO gets a job, never "spawn more heads."**
-
-### Doctrine 6 · THE LINEAGE ENGINE (boss idea 2026-07-18 — track who's actually good)
-The routing memory that turns experience into better casting. After an episode/run with REAL
-dispatches, the orchestrator appends objective rows to the **shop's declared Model Lineage Ledger**
-(default: project-relative `model-lineage-ledger.md` at the project root, next to `PLAN-CARD.md`; a
-shop may point it elsewhere on the plan card, and this shop's actual location is recorded in
-`SPINE-WIRING.md` — wiring, not law). The engine names no absolute machine path.
-- **THE ONE RULE — FACTS ≠ FLAVOR (logging form).** Log only OBJECTIVE dispatch signals: vendor,
-  seat/wardrobe worn, task type, outcome (APPROVE/REJECT/found-N-real-bugs/shipped/failed),
-  wall-time, and the specific real catch or contribution. Banter is the ACT — **never logged as
-  data.** A line with no real dispatch behind it gets no row. *(SHOW owns the narration form of
-  Facts≠Flavor — the firewall that story may never rewrite a real event. Same principle, two layers;
-  SPINE owns what the ledger records.)*
-- **Timing is a real column.** Slow-but-right vs fast-but-shallow is genuine signal.
-- **THE WEEKLY LINEAGE REVIEW (the recalibration loop).** ~Once a week (the boss calls it — "run
-  the lineage review" / "dispatch standings" — or the orchestrator offers when a fresh batch of
-  rows has accrued): (1) **STANDINGS** per vendor from the objective columns only — dispatch count,
-  approve/reject/bugs-caught, avg wall-time, notable catches vs whiffs, trend since last review;
-  (2) **RECALIBRATE** — propose concrete routing tweaks to the playbook (`MODEL-DISPATCH-GUIDE.md`);
-  **the boss rules each change**, only then is the guide updated; (3) **HONESTY GATE** — flag where
-  the sample is too thin to conclude; a jab isn't a metric. Evidence → routing → better dispatches →
-  more evidence. The review reads the FACTS, never the flavor.
-- **Don't bend the work to feed the ledger.** It is a quiet background record to mine, not gospel;
-  accuracy is imperfect (small sample, subjective "real catch").
 
 ---
 
@@ -331,9 +265,7 @@ When the capped rounds end in disagreement, the dispute goes UP to the human as 
 positions stated. **Models do not negotiate their way to consensus. Under this method, convergence
 isn't how anything ends. A ruling is.**
 
-**THE AMENDMENT LAW** (the scar that produced it is in SPINE-PROVENANCE.md). *An invariant that
-leaves an artifact survives; one that exists only as a habit dies at the first context compaction or
-deadline.* **When choosing between two ways to write a rule, choose the one that leaves a trace.**
+
 
 ---
 
@@ -366,116 +298,10 @@ ticket. **Seat count, two cases, so neither hides behind the other:**
 - Dispatching a second vendor spends that account's billing. A standing rotation the boss consented
   to is fine; any NEW billing surface gets asked first.
 
-### The plan card and budget postures (plan-aware routing)
-A standing declaration of the shop's billing (primary vendor+tier band, support vendor+tier band,
-known headroom), saved dated to `PLAN-CARD.md`. First-run interview = **three** questions, not
-twenty: "Who's your primary?" · "Who's riding second?" · "Any tanks already low?" The card is the
-boss's declaration, re-run whenever subscriptions change — a declaration, never a contract, and
-never something the orchestrator can read off the account (see the currency rule below).
-
-**Tier bands** (future-proof — tier names and quotas are the vendors' and change often; bands don't;
-illustrations are date-bound, verify against your own account): **FLAGSHIP** (a vendor's top consumer
-tier) · **MID** (middle tier) · **ENTRY** ($20-class) · **MINIMAL** (a free tier) · **NONE** (no
-second vendor). The band map is total — every legal card lands on exactly one row. MINIMAL is never a
-*primary* band (a primary seat needs a paid window to hold a mission; below ENTRY, run tasks by hand
-and skip the orchestration layer). **Posture map:** FLAGSHIP+FLAGSHIP/MID → **WAR CHEST**;
-FLAGSHIP+lesser (or thin) support, or MID+any → **CRUISE**; ENTRY+any → **SHOESTRING**; a vendor dying
-mid-mission → **LIMP HOME** (runtime posture only, never a card mapping). With MINIMAL or NONE support,
-WAR CHEST is unreachable by design (fan-out freedom assumes a second pair of eyes with capacity).
-
-**The card is an INPUT, not a lever.** Declaring "CRUISE" changes nothing by itself — it changes what
-the orchestrator *decides*, and those decisions are the only things in this method that move real
-money or real quality. **If a mission runs and none of the five levers below changed, the posture did
-nothing, and the session must say so out loud.** The five levers:
-1. **Fan-out width** (spawning N seats multiplies tokens) — the model can pull this wherever it can
-   dispatch at all.
-2. **The dispatch gate itself** (deciding NOT to orchestrate is a real, costed choice) — same.
-3. **Model tier per task** — CONDITIONAL on the harness letting a dispatch name its model.
-4. **Reasoning effort per dispatch** — CONDITIONAL on a per-dispatch effort knob.
-5. **Which vendor's quota absorbs the work** — CONDITIONAL on this session reaching a second vendor.
-
-**An N/A lever is reported as N/A, never quietly claimed.** Capability preflight, written into the
-card once: CAN I DISPATCH ANOTHER SEAT? (if NO, levers 1 and 2 are N/A too — nothing to fan out,
-nothing to orchestrate; work solo) · SET MODEL PER SEAT? · SET EFFORT PER DISPATCH? · REACH A SECOND
-VENDOR? A method that describes knobs the harness lacks is a costume.
-
-**What each posture DOES — defined SOLELY as choices over the five levers** (a posture that pulls no
-lever is a costume; the label is not the behavior):
-
-| Posture | When | How it spends the levers |
-|---|---|---|
-| **WAR CHEST** | primary FLAGSHIP, support MID or better | FRONTIER seat hosts judgment work freely; fan-outs allowed per the fleet test (lever 1 open); full-rigor review on everything nontrivial; builds ride either frontier seat. Down-tier pressure LOW. |
-| **CRUISE** | primary FLAGSHIP/MID with lesser or thin support | Implementation defaults to WORKHORSE/FAST seats (lever 3 pushed down); FRONTIER reserved for routing, architecture, and adversarial review; fan-outs modest; soak the idler vendor's quota first when headroom is lopsided (lever 5). Down-tier pressure MEDIUM. |
-| **SHOESTRING** | primary ENTRY | Dispatch gate tightens (lever 2): solo work is the default, orchestration only when the job genuinely fans out; fan-outs OFF by default (lever 1 closed); builds ride whichever vendor's window is freshest (lever 5); the strongest VERIFIED seat appears only as the routing brain and the final review pass. Down-tier pressure HIGH. |
-| **LIMP HOME** | a vendor rate-limited or down mid-mission (runtime only) | Flip the seats (the three-flips law — seat maps are mission state); shed FAST work first; the adversarial channel is the last thing you let fail. |
-
-**When the support seat is thin or missing.** The adversarial channel does not require a rich second
-vendor: the anti-laundering guard's two legal review paths — a different effective-model vendor, OR a
-boss-launched fresh-context seat — are what keep budget shops honest.
-- **Support = ENTRY:** the second vendor reviews everything nontrivial; it takes the hammer only when
-  the primary's window is drained. (A review reads a diff and a build writes one, so a review is
-  *usually* the cheaper of the two — "usually" is doing real work there, and it is not a measurement.)
-- **Support = MINIMAL (free tier):** spend the tiny allowance where cross-vendor eyes matter most —
-  the riskiest diffs, safety-rule code, anything about to ship. **Everything else** gets a
-  boss-launched fresh-context reviewer on the primary vendor. (Channel selection is intensity, not a
-  coverage cut — see "Review coverage is NOT a lever.")
-- **Support = NONE (solo vendor):** every review is a boss-launched fresh seat on the primary vendor,
-  given the original task verbatim and none of the builder's narrative. Stated once, honestly:
-  cross-vendor review is the strongest form available (different weights, training, no shared
-  context), but it **reduces correlated blind spots; it does not eliminate them** — two vendors can
-  still share training sources and failure modes. It is a diversity heuristic, not an independence
-  proof; a solo shop runs a weaker version of an already-imperfect guarantee. The process still runs,
-  the law still binds, and the boss's own eyes matter more.
-
-**When the primary is ENTRY ($20-class).** A $20 primary may not offer the vendor's frontier model at
-all, and its windows are tight. Adjust expectations, not the law: the orchestrator is hosted by the
-strongest VERIFIED available seat (never call a seat FRONTIER unless it verifiably is — hosting is a
-seat property); missions stay small and single-sliced; fan-outs are off by default; the dispatch gate
-treats almost everything as "just do it"; the review channel leans on the second vendor's entry tier,
-often the budget shop's best asset. When no available seat clearly clears a task's judgment bar, the
-honest moves are: slice the task smaller, draft a proposal for the boss instead of an implementation,
-or say so and stop. **Pretending a mid seat is a frontier seat is how the quality bar dies in the
-dark. A two-seat $40 shop runs this method in the small the way a $400 shop runs it in the large:
-same law, same colors, same boss.**
-
-**The headroom rule.** When two seats both clearly clear a task's quality bar, route to the fuller
-tank. An idle subscription is money already spent; a drained one is a mission that stops on Thursday.
-Headroom beats habit.
-
-**Honesty limits, stated plainly (what the orchestrator CANNOT do):** it cannot read your
-subscription tier (there is no "what plan am I on" API — entitlement ≠ documentation, and a model
-cannot verify entitlement at all) · cannot meter your spend in real time · cannot down-tier the model
-you are already typing into (only the seats it *dispatches*) · cannot promise savings (this project
-has never measured what a posture saves vs solo, and knows of no published number).
-
-**The currency rule (applies to plans, not just models).** Quota mechanics (window lengths, weekly
-caps, per-tier model access), prices, and tier access are the vendors' and change often. **The
-orchestrator never states a quota number, a price, or a tier's model access from memory, and never
-states a model's availability from training data — an unfamiliar model name means check live docs;
-model IDs can differ by auth mode, and the shop has the scar.** It relies only on the three signals it
-can actually observe, and it keeps them distinct: what the **boss declared** on the card, what the
-**harness reports** as the effective model, and an **explicit error** (a rate limit, a refusal, an
-unavailable model). A response that merely "felt weak" is **noise, not telemetry** — never a signal.
-When a runtime signal contradicts the card, say so and downshift one posture. If you want a number,
-look it up on the vendor's current price page; a model that gives you one from memory guessed.
-
-**Review coverage is NOT a lever.** Every nontrivial accepted change gets its adversarial review at
-every posture, including the $40 one. What you may tune is review *intensity within full coverage*
-(which model, what effort, how exhaustively) — and channel selection (a cross-vendor free tier vs a
-boss-launched fresh context) is intensity, not a coverage cut. **Cut builds, cut fan-outs, cut
-orchestration. Never cut the channel.**
-
-**The routing ledger** — every dispatch writes one line, the mission report prints them, with
-`default` and `changed?` columns that force the session to admit, per task, whether the plan card
-actually moved anything. A ledger of all-NO rows is a plan card that did nothing, and it will say so
-on its own. **It is an honesty aid, not proof:** a model can write "I used the fast tier" while using
-whatever it was already using, and nothing here independently verifies a dispatch used the model it
-claims. Until a harness emits execution receipts an outsider can check (effective model, effort,
-vendor, token counts, per dispatch), it makes lying a deliberate act instead of a lazy one — worth
-something, worth less than proof. **And the honesty test cannot prove causation:** one mission's
-ledger cannot show what the *other* posture would have done. That needs the same missions run at two
-postures with token counts compared, by someone who is not us. **This project has never run that
-comparison. If you do, we will publish it whichever way it falls.**
+### Routing under a thin budget
+Route among seats that clear the quality bar, then prefer the fuller tank. **Review coverage is
+never the thing you cut** — cut builds, cut fan-outs, cut orchestration, never the adversarial
+channel. Pretending a mid-tier seat is frontier does not save money, it lowers the bar.
 
 ### Reachability & effective-model preflight (declaration ≠ detection)
 The three-question interview above is a **declaration** — it records the billing bands the boss
@@ -597,7 +423,7 @@ orchestrator convenes **the boss-approved, fleet-BOUNDED set of eligible seats**
 the spend gate are owned by THE COUNCIL SEAT LAW; the cap is set in advance, per Part IV — "as many
 as it takes" is not a number) — one per seat, each a genuinely different effective-model lineage — for
 independent reads on a single high-stakes question. It is the SPECIAL
-move (Doctrine 5's right-size still rules — never the default for small work); reach for it when the
+move (Gate-0's right-size still rules — never the default for small work); reach for it when the
 stakes justify the multiples: a design-space-wide fork, a decision that must be right, a bug or claim
 that has to survive real scrutiny.
 
@@ -607,7 +433,7 @@ dispatches only on the boss's explicit go. A "gnarly" call is licence to *ask*, 
 the most expensive move in the method — that is what makes "opt-in" literally true, in the engine and
 not just the brochure.
 
-**When NOT to convene.** Gate-0 and Doctrine 5 bind absolutely: no genuine need for N independent
+**When NOT to convene.** Gate-0 binds absolutely: no genuine need for N independent
 perspectives → **no council.** A trivial ask — *"rewrite this email," "did I send the PO out," a quick
 fix, a plain question* — is handled by one seat, quietly. The orchestrator does not *oops* into a
 token-eating dream team for a two-line task.
@@ -728,38 +554,22 @@ version.*
 
 ---
 
-## THE METER LAW (owner: SPINE; added v2.4, 2026-08-23)
+## THE METER LAW (owner: SPINE)
 
-*Claims are capped at evidence* — pointed at the shop's suppliers instead of its own code, because
-vendors now sell capacity without stating how much you bought.
+1. **A seat that costs money must be READABLE** — before and after. Unreadable spend may not
+   carry a lane the shop depends on, and unknown cost fails closed.
+2. **Measure, never infer.** "Generous" is not a number. Where a vendor publishes no size, the
+   shop's figure comes from burning a known amount and reading the movement — and cost claims
+   cite that reading, never a recollection.
+3. **A subsidy is never a foundation.** Take the deal; never put a load-bearing lane on it. A
+   free or subsidized seat may hold an EXTRA council vote, never the SOLE build or review path.
+   *(Boss ruling 2026-08-24.)*
+4. **Meter the OUTPUT, not only the input.** Spend is the vendor's metric. The number no vendor
+   reports is **cost per ACCEPTED change** — a shop that meters only what it consumes can be
+   flawlessly efficient while buying nothing.
 
-1. **A seat that costs money must be READABLE** — on demand, before and after. A metered seat whose
-   usage cannot be observed may not carry a lane the shop depends on.
-2. **Measure, never infer.** A published allowance is evidence; an adjective is not. "Generous,"
-   "significantly higher," "unlimited" are marketing until a number is attached. Where a vendor
-   publishes no size, the shop's number comes from burning a known amount and reading the movement.
-3. **One reading is a rumour.** Meters report integers, so a small burn carries large error. Two
-   burns of different sizes that agree are a finding. An outside measurement that agrees with yours
-   is better still.
-4. **A subsidy is never a foundation.** Vendors buying market share grant far more than sticker
-   price, genuinely and in writing. Take the deal; never put a load-bearing lane on it. **A free or
-   subsidized seat may hold an EXTRA council vote; it may not be the SOLE build or review path for a
-   lane the shop depends on** — that is the line between using a gift and betting on one.
-   *(Boss ruling 2026-08-24, ratifying the fix for the contradiction a council seat raised: clause 1
-   of THE COUNCIL SEAT LAW admits a free seat, while this clause bars a load-bearing lane on a
-   subsidy. Both stand — they govern different things, and the line above is where.)*
-5. **Cost claims cite a reading, not a recollection.** "That's cheap" is "it works" wearing a hat.
-6. **Meter the OUTPUT, not only the input.** Every clause above measures spend against an allowance
-   the VENDOR defines and reports — the vendor's metric, not the shop's. A shop that meters only
-   what it consumes can be flawlessly "efficient" while buying nothing: the one number no vendor
-   will ever report for you is **cost per ACCEPTED change**. Track it, or the failure that looks
-   like thrift is invisible until the invoice and the repo disagree.
-7. **The vendor draws the needle.** Usage figures come from the party being measured against, and a
-   subsidy can be halved silently while the meter calmly reports the new reality as normal. Watch
-   the RATIO of value to price over time, not the balance — decay creeps, it does not cliff.
-
-*Wiring, not law:* endpoints, scripts and vendor quirks live in `SPINE-WIRING.md` —
-they change without notice. The obligation to read them does not.
+*How to actually size an unpublished pool, and what this shop measured, is written down and NOT
+loaded on a summon: `MEASURING-POOLS.md` and `docs/`. Methodology is not law.*
 
 ## THE COUNCIL SEAT LAW (owner: SPINE; v2.3, rewritten v2.5 on the boss's ruling 2026-08-24)
 

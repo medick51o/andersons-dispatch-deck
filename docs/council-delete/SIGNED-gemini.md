@@ -1,0 +1,41 @@
+# DELETE LIST
+
+[DELETE] `mcp-seats/dispatch-guard.py`
+EVIDENCE: Added today (2026-08-24) and immediately proven to be dead code that crashed on every use in adversarial testing. An audit confirmed it offers false assurance: `cwd` is not an OS boundary, and the guard executes with the exact same authority as the code it claims to restrict. At 543 lines, it adds substantial maintenance bloat for zero real security.
+COST IF WRONG: File access outside `cwd` will not be intercepted by a Python script wrapper. The shop would notice if a seat attempts to write outside the workspace directory without triggering an in-wrapper exception (though `git status`/`git diff` and OS permissions still catch it).
+
+[DELETE] `SPINE.md` lines 142–170 (`PART II · Doctrine 6 · THE LINEAGE ENGINE`)
+EVIDENCE: Transcript analysis across 25 sessions shows `THE LINEAGE ENGINE` scored 6 (wallpaper status — loaded on summon, but referenced 0 times in reasoning). Maintaining `model-lineage-ledger.md` and weekly review cycles creates documentation friction without improving dispatch quality, as routing is already governed by Gate-0 and the capability matrix in Part VI.
+COST IF WRONG: Historical dispatch metrics per model/vendor will no longer be logged to `model-lineage-ledger.md`. The shop would notice when weekly routing recalibration proposals lack an accumulated ledger table.
+
+[DELETE] `mcp-seats/bench-burn.py`
+EVIDENCE: A 94-line redundant burn script. Highlighted in the brief as duplicate machinery ("two burn tools"). `read-meters.py` and `calibrate-pool.py` already cover meter readings and pool testing. `bench-burn.py` duplicates synthetic token burn logic without providing unique utility.
+COST IF WRONG: Automated synthetic token-burn testing script will be absent. The shop would notice when meter drops must be observed via manual dispatches rather than running `bench-burn.py`.
+
+[DELETE] `SPINE.md` lines 173–213 (`PART III — THE TEN PRINCIPLES`)
+EVIDENCE: Usage data across 25 sessions reveals `THE TEN PRINCIPLES` scored 6 (wallpaper — loaded into context every session, never once cited in active reasoning). The concrete rules are already operationalized in detail in Part I (Ladder of Truth, Gate-0, Reality Contract), Part IV (Fleet Legality), Part V (Adjudication), and Part VI (Orchestration Mechanics). Keeping abstract preamble text wastes ~1,000+ context tokens per summon.
+COST IF WRONG: Broad philosophical summary statements (e.g. Principle 1 distinct identity, Principle 7 cost-aware tiering) are removed. The shop would notice only if a model fails to apply concrete rules in Parts I, IV, V, and VI.
+
+[DELETE] `mcp-seats/calibrate-pool.py`
+EVIDENCE: 137 lines of secondary calibration script overlapping with `read-meters.py` and seat preflight mechanics. Metering and transport checks are already handled by `read-meters.py` and Part VI preflights (`Reachability & effective-model preflight`). Separate calibration code adds redundant maintenance surface.
+COST IF WRONG: Synthetic pool calibration sweeps cannot be run via script. The shop would notice if pool seat responsiveness has to be verified directly during session preflight rather than running `calibrate-pool.py`.
+
+---
+
+# DEFEND
+
+- `SPINE.md` lines 20–104 (`PART I — THE ENGINE IN ONE FRAME`): Contains the primary operational core (Ladder of Truth, Gate-0 / Right-Size Dispatch, Diagnose/Design Fork, Reality Contract). `RIGHT-SIZE DISPATCH` (21 invocations), `SELF-VERIFY` (18 invocations), and `INSTRUMENT DON'T GUESS` (16 invocations) actively drive model reasoning during dispatches.
+- `mcp-seats/allowance.py`: Enforces hard financial spending bounds on local operator hardware per `THE COUNCIL SEAT LAW`. Unlike `dispatch-guard.py`, `allowance.py` prevents unauthorized quota burn.
+- `SPINE.md` lines 818–861 (`THE NOTATION`): Actively invoked 93 times (`ALIVE`). The notation grammar is required for state legibility across all seat messages and orchestrator receipts.
+
+---
+
+# THE ONE THING I would delete if I could only pick one
+
+`mcp-seats/dispatch-guard.py` — 543 lines of broken, unproven code added today that crashed on every run and provides false security assurance while consuming context and maintenance effort.
+
+---
+
+# CONFIDENCE
+
+HIGH — The evidence from 25 session transcripts and the adversarial audit results directly point to `dispatch-guard.py` as dead ceremony and unused SPINE sections as token wallpaper.

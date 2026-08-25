@@ -1,0 +1,96 @@
+Reading the council brief and following its format for delete votes.
+Exploring the codebase to anchor deletion votes with exact paths and evidence.
+```
+DELETE LIST — ranked, in the format above
+
+[DELETE] `docs/council-spine-trim/` (entire directory, including `apply-r2*.py`, `BRIEF*.md`, `pkt-*.md`, `SIGNED-*.md`, `OUT-*.json`)
+EVIDENCE: Council output archive, not loaded on summon, not referenced in 25 sessions. Contains one-off trim scripts and duplicate SPINE excerpts — maintenance surface with zero runtime role.
+COST IF WRONG: Lose historical record of how SPINE was trimmed. Notice immediately only if someone goes looking for a past council packet; git history retains commits.
+
+[DELETE] `docs/council-lighten/` (entire directory)
+EVIDENCE: Same class as above — deliberation artifacts from a completed pass. Not in the manifest’s on-demand operational set; duplicates arguments already folded into SPINE or abandoned.
+COST IF WRONG: Lose lighten-council reasoning. No harness, seat, or summon path breaks.
+
+[DELETE] `docs/council-harness-audit/` (entire directory)
+EVIDENCE: Post-incident audit transcripts and embedded code dumps (~2k+ lines in `pkt-codex-deep.md` alone). Findings were already applied to `mcp-seats/`; keeping the packets is relocation, not law.
+COST IF WRONG: Lose the paper trail for why guards exist. Fixes already live in code; rediscover via `armcheck.py` comments and git if needed.
+
+[DELETE] `docs/council-architecture/` (entire directory)
+EVIDENCE: One-shot architecture council (subs vs API vs GPU). Recommendations are dated analysis, not executable method. Never loaded on summon.
+COST IF WRONG: Lose crossover math and cloud-agent bypass analysis. `docs/BASELINE-cursor-pro-20.md` and `MEASURING-POOLS.md` retain the measurements that matter.
+
+[DELETE] `legacy/` (entire directory: `legacy/cursor-native/*`, `legacy/SKILL-standalone.md`)
+EVIDENCE: Superseded fork of SPINE/SKILL/CURSOR-NATIVE. Current canon is repo root `SPINE.md` + `SKILL.md`. Duplicate engine = fork risk without users.
+COST IF WRONG: Lose the pre-merge cursor-native experiment. Nothing in the active harness imports or points here.
+
+[DELETE] `docs/BAKEOFF-cursor-grok.md`, `docs/BAKEOFF-cursor-grok-ARMED.md`, `docs/BAKEOFF-house-grok.md`, `docs/H2H-cursor-grok.md`, `docs/H2H-cursor-grok-ARMED-WRITE.md`, `docs/H2H-house-grok.md`, `docs/H2H-cursor-grok-ARMED-WRITE.md`, `docs/POOL-research.md`, `docs/POOL-research-grok.md`, `docs/AB-cursor-codex.md`, `docs/GROK-selfaudit.md`, `docs/sweep-gemini.md`, `docs/burn-1.md`, `docs/bakeoff-task.md`, `docs/headtohead-task.md`, `docs/pool-research-task.md`, `docs/ab-review-task.md`, `docs/q-cursor-value.md`, `docs/Q-CURSOR-VALUE-composer.md`, `docs/Q-CURSOR-VALUE-grok.md`, `docs/cursor-pool-classified.md`, `docs/ticket-composer-001.md`, `docs/DISCORD-BRIEF.md`
+EVIDENCE: Manifest lists every item as never auto-loaded; bakeoff/H2H/pool-research sessions are finished experiments. Usage table shows models reason from alive law (Council, Meter, Transport), not from these packets.
+COST IF WRONG: Lose comparative research notes. Routing memory in `MODEL-DISPATCH-GUIDE.md` / lineage ledger is the live artifact; these are stale inputs to it.
+
+[DELETE] `SPINE.md` § "PART II — THE SIX DOCTRINES" (lines 107–170)
+EVIDENCE: Usage table: "THE SIX DOCTRINES" — 6 hits, load-only wallpaper. Each doctrine is a pointer or restatement of Part I §1–§4 already present above; Doctrine 5/6 duplicate Gate-0 and wiring pointers. Argue: never-invoked is sufficient here because nothing in Part II is the sole home of a live invariant.
+COST IF WRONG: Orchestrator loses the named "5-gate pipeline" framing. Part I §2–§4 and Part VI review dispatch still carry the operative rules.
+
+[DELETE] `SPINE.md` Part VI § "The plan card and budget postures" through § "The routing ledger" (lines 369–478)
+EVIDENCE: ~110 lines of posture tables, five-lever disclaimers, and "this project has never run that comparison" honesty boilerplate — zero appearances in 25-session reasoning. Part I §2 already owns lean dispatch and consent-gated fan-out; posture labels do not enforce anything (SPINE admits the card is "an INPUT, not a lever").
+COST IF WRONG: Lose explicit WAR CHEST / CRUISE / SHOESTRING vocabulary. `PLAN-CARD.md` and orchestrator habit can continue without the essay; worst case is less explicit cost narration in mission reports.
+
+[DELETE] `SPINE.md` paragraph **THE AMENDMENT LAW** in Part V (lines 334–336)
+EVIDENCE: 6 load-only hits; meta-rule about how to write rules. The scar story already lives in `SPINE-PROVENANCE.md` (also delete). No session invoked it to decide behavior.
+COST IF WRONG: Lose "choose the rule that leaves a trace" as named law. Operative trace requirements (write set, three lists, tickets) remain elsewhere in Part V/VI.
+
+[DELETE] `SPINE-PROVENANCE.md` (entire file)
+EVIDENCE: File states it is "never auto-loaded." War stories behind laws already taught; keeping them is the relocation the new constraint rejects.
+COST IF WRONG: Lose origin stories for Ladder/review culture. Laws stand without the anecdotes.
+
+[DELETE] `mcp-seats/dispatch-guard.py` — `yield_report()`, `find_events_csv()`, `load_events()`, and the `yield` subcommand (lines ~300–459, 486–536)
+EVIDENCE: Third burn/yield tool beside `read-meters.py` and `bench-burn.py`. Own docstring admits MCP lane was ~3% of real spend without vendor CSV; today's incident included yield reading the wrong source and reporting zero. Ceremony that duplicates git log + vendor export + seat ledger.
+COST IF WRONG: Lose one-command "cost per accepted line." Operator can still run `git log --stat`, `read-meters.py`, and vendor CSV export manually; THE METER LAW clause 6 obligation remains, tool wrapper does not.
+
+[DELETE] `mcp-seats/calibrate-pool.py` (entire file)
+EVIDENCE: One-shot pool-sizing burn; method is fully documented in `MEASURING-POOLS.md`. Harness audit marked it unaudited; spends real allowance for a measurement the shop runs rarely after initial calibration.
+COST IF WRONG: Lose scripted burn harness. `MEASURING-POOLS.md` + `read-meters.py` before/after still works; operator reruns a manual burn if tier changes.
+
+[DELETE] `mcp-seats/bench-burn.py` (entire file)
+EVIDENCE: Overlaps `read-meters.py` (vendor ground truth) and `dispatch-guard.py` reservation history / `bench-spend.jsonl` written by the cursor seat. Architecture council seat already flagged calibrate + bench-burn overlap. Not on the summon path; duplicate reporting surface.
+COST IF WRONG: Lose formatted ledger summary. Raw `bench-spend.jsonl` and `read-meters.py --json` remain; only the pretty-printer goes.
+
+[DELETE] `mcp-seats/dispatch-guard.py` — `reserve()`, `release()`, `Lock` class, and `status` subcommand (lines ~56–115, 216–297, 504–528), plus `wmw_cursor_mcp.py` calls to `guard.reserve()` / lease bookkeeping
+EVIDENCE: False-assurance against the actual burn: cloud/IDE lanes never touch it; `yield_report` itself says guarded MCP was 3% of account spend. Layered on top of `allowance.py` (also rate-limits cursor). Same-day fix churn: owner-token on reserve, then owner check removed on release because it broke the CLI path — fix-for-fix signal. `COUNCIL_LOCK` in `wmw_cursor_mcp.py` (lines 65–72, 441–458) is env-bypassable (`WMW_CURSOR_COUNCIL_LOCK=off`) and duplicates allowance window enforcement.
+COST IF WRONG: Lose atomic TOCTOU cap on concurrent MCP write dispatches. The 13-agent race was real on MCP path; without reserve, operator relies on `allowance.py` bounds and manual discipline — may see repeat overspend on orchestrated fan-outs.
+
+[DELETE] `wmw_cursor_mcp.py` — `COUNCIL_LOCK_ON`, `COUNCIL_LOCK_MAX`, `COUNCIL_LOCK_WINDOW_S`, and the billable-call throttle block (lines 65–72, 441–458)
+EVIDENCE: Duplicates `allowance.py` window/call limits; bypassable by env var; did not constrain the cloud-agent burn that consumed most of the pool (`docs/BASELINE-cursor-pro-20.md`). Maintained complexity with no incident coverage on the dominant lane.
+COST IF WRONG: Lose a second, harder-to-bypass throttle on credit-model dispatches. Primary enforcement remains `allowance.py` + operator grant.
+
+[DELETE] `armcheck.py` — default-mode verdict that prints `ALL ARMED` without running §2b (lines 127–130, 201)
+EVIDENCE: In default (free) mode, behavioural canaries that ask read-only seats to write files are skipped; suite still ends `ALL ARMED`. Audit found argument-only checks gave false assurance before §2b existed; keeping skip + green verdict recreates it. Canary that cannot fail the thing it claims to test.
+COST IF WRONG: If interpreted as deleting the file: lose cheap regression checks. Intended delete is the false-green default path — operator must run `--deep` for a trusted verdict (behavior change only if boss accepts stricter gate).
+
+[DELETE] `BENCH-LEDGER.md` (entire file)
+EVIDENCE: ~1,735 tokens, never auto-loaded, not in usage table. Bench methodology is in SPINE Part IV/V; project uses `model-lineage-ledger.md` per Doctrine 6 / `SPINE-WIRING.md`. Appears to be an abandoned parallel ledger.
+COST IF WRONG: Lose bench-specific rows if any were manually kept only here. Check for unique rows before delete; if empty/duplicate, zero cost.
+
+DEFEND — what must NOT go, and why
+
+- **`SPINE.md` Part I (Ladder, Gate-0, Diagnose/Design fork, Reality Contract)** — alive in usage (Meter, Council, Transport, Right-size, Self-verify, Instrument). This is what models actually reason from.
+- **`SPINE.md` THE METER LAW, THE COUNCIL SEAT LAW, THE TRANSPORT LAW, THE NOTATION, THE COUNCIL (Part VI)** — high invocation counts; deleting these removes live dispatch law.
+- **`SPINE.md` Part III Ten Principles and Part IV Fleet-legality / anti-laundering** — wallpaper by count, but Principle 3 and fleet bounds are structural; no other section is the sole home of builder≠reviewer or declared/bounded fleet rules. "Never invoked" is not sufficient grounds here.
+- **`SPINE.md` Part V Adjudication Protocol (except THE AMENDMENT LAW paragraph)** — three-list containment and BLOCKER/MATERIAL ladder are load-bearing review law even if rarely named.
+- **`mcp-seats/wmw_grok_mcp.py`, `wmw_gemini_mcp.py`, `wmw_cursor_mcp.py`** — the fleet; duplicate JSON-RPC boilerplate is ugly but deleting seats ends multi-vendor orchestration.
+- **`mcp-seats/allowance.py`** — enforced in `wmw_cursor_mcp.py` before credit-model spend; THE COUNCIL SEAT LAW’s code embodiment.
+- **`mcp-seats/dispatch-guard.py` `preflight()`** — proved value: empty-repo refusal, banned mode stack; `armcheck.py` lines 61–63 regression-test it. Honest accident-prevention on the write path.
+- **`mcp-seats/read-meters.py`** — only read-only meter for opaque pools; THE METER LAW depends on it.
+- **`mcp-seats/armcheck.py` §1–§2 argument-validation checks (lines 32–119)** — free, caught injection/cwd/YOLO regressions; keep even if default verdict changes.
+- **`SPINE-WIRING.md`, `MEASURING-POOLS.md`, `MODEL-DISPATCH-GUIDE.md`, `FIELD-NOTES.md`** — on-demand operational truth (paths, model strings, proven capabilities); not summon tax.
+- **`SKILL.md`** — summon load is real, but it is the Deck entry point; delete would orphan the method.
+- **`docs/BASELINE-cursor-pro-20.md`** — incident measurement record for the cloud-agent burn; not wallpaper, it is evidence the guards’ scope limit was measured.
+
+THE ONE THING I would delete if I could only pick one
+
+`SPINE.md` Part VI § "The plan card and budget postures" through § "The routing ledger" (lines 369–478) — largest block of summon-tax prose that never shaped behavior in 25 sessions, while alive law already lives in Part I.
+
+CONFIDENCE
+
+**Medium-high** on council archives, legacy, and research `docs/` (clearly non-operational). **Medium** on deleting `dispatch-guard` reserve/yield and `bench-burn`/`calibrate-pool` (real MCP-path value vs measured 3% coverage tradeoff). **Medium-low** on SPINE section deletes (correct bloat diagnosis, but boss may want named doctrines/postures for human readability even when models ignore them).
+```
