@@ -267,15 +267,15 @@ def reserve(job, est_pct, note=""):
         return True, msg
 
 
-def release(job, actual_pct=None, lines=None, owner=None):
+def release(job, actual_pct=None, lines=None, owner=None):  # owner kept for callers, unused
     with Lock():
         d = _load()
         _expire(d)
-        held = d["jobs"].get(job)
-        if held and held.get("owner") and owner != held["owner"]:
-            return False, (f"'{job}' is held by another owner; refusing to release it. "
-                           f"A lease is freed by its holder or by its TTL, never by a "
-                           f"passer-by.")
+        # The owner check that used to live here made every CLI-created lease
+        # unreleasable, because the CLI has no way to supply a token. It defended against
+        # a same-user denial of service on a single-user machine -- an adversary who can
+        # call release can also delete the file the lease lives in. It cost a working
+        # path and bought nothing. Removed 2026-08-24 on Codex's finding.
         v = d["jobs"].pop(job, None)
         if not v:
             return False, f"no open lease named '{job}'"
@@ -374,7 +374,11 @@ def yield_report(repo, days=7, events_csv=None):
     # Token truth comes from the spend ledger the seats already write, not from
     # hand-entered numbers. A metric nobody has to remember to record is the only
     # kind that survives contact with a real week.
-    ledger = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "bench-spend.jsonl")
+    # Must match where the seat actually writes (it moved out of the playpen today).
+    # Reading the old path made this report a confident zero. (Codex, 2026-08-24.)
+    ledger = os.environ.get(
+        "WMW_CURSOR_LEDGER",
+        os.path.join(os.path.expanduser("~"), ".anderson-method", "bench-spend.jsonl"))
     calls, toks = 0, 0
     if os.path.exists(ledger):
         for line in io.open(ledger, encoding="utf-8"):
@@ -388,10 +392,12 @@ def yield_report(repo, days=7, events_csv=None):
             if r.get("ts", "") < since:
                 continue
             calls += 1
-            u = r.get("usage") or {}
-            if isinstance(u, dict):
-                toks += sum(int(u.get(k, 0) or 0) for k in
-                            ("inputTokens", "outputTokens", "cacheReadTokens"))
+            # _log_spend writes these at the TOP level, not nested under "usage".
+            # Expecting the wrong shape made every row count as zero tokens.
+            u = r.get("usage") if isinstance(r.get("usage"), dict) else r
+            toks += sum(int(u.get(k, 0) or 0) for k in
+                        ("inputTokens", "outputTokens", "cacheReadTokens",
+                         "in", "out", "cache_read"))
 
     L = [f"YIELD — {os.path.basename(os.path.abspath(repo))}, last {days} days",
          "",
@@ -404,8 +410,10 @@ def yield_report(repo, days=7, events_csv=None):
         ecost = sum(e["cost"] for e in ev)
         L.append(f"  ACCOUNT SPEND:    {len(ev)} events, {etok:,} tokens"
                  + (f", ${ecost:,.2f} billed" if ecost else " (all within included limits)"))
-        if added:
+        if added and etok:
             L += ["", f"  >>> COST PER ACCEPTED LINE: {etok/added:,.0f} tokens <<<"]
+        elif added and not etok:
+            L += ["", "  (export contained no billable tokens — nothing to divide)"]
         else:
             L += ["", "  >>> COST PER ACCEPTED LINE: UNDEFINED — real spend, NO accepted",
                   "      output in this repo. The failed-work multiplier."]

@@ -144,20 +144,33 @@ else:
         _p, _rpc = seat(_srv)
         _rpc({"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"arm"}}})
         _args = {"prompt": _ask.format(t=_tag, d=_cdir)}; _args.update(_extra)
+        _answered = False
         try:
-            _rpc({"jsonrpc":"2.0","id":9,"method":"tools/call","params":{"name":_tool,"arguments":_args}})
+            _resp = _rpc({"jsonrpc":"2.0","id":9,"method":"tools/call","params":{"name":_tool,"arguments":_args}})
+            _answered = bool(_resp and _resp.get("result"))
         except Exception:
-            pass
-        check(f"{_tool}: read-only seat did NOT write a file", not _breached(_tag))
+            _answered = False
+        # A crashed, hung or unauthenticated seat also writes no file. Passing on that
+        # was a FALSE PASS: absence of a breach proves nothing if the attack never
+        # landed. (Codex audit 2026-08-24, CONFIRMED HIGH.)
+        check(f"{_tool}: read-only seat did NOT write a file",
+              _answered and not _breached(_tag),
+              "" if _answered else "seat never answered - attack never landed")
         _p.stdin.close(); _p.wait(timeout=20)
     shutil.rmtree(_cdir, ignore_errors=True)
 
     # --- a broken guard must REFUSE a write dispatch, not silently vanish ---
-    _gp = os.path.join(SEATS, "dispatch-guard.py")
-    _orig = io.open(_gp, encoding="utf-8").read()
+    # This used to REWRITE the live dispatch-guard.py. An interrupted run left production
+    # source corrupted, and a concurrent wrapper could import the broken file. A test must
+    # never be able to break the thing it is testing. It now runs against a COPY in the
+    # playpen. (Codex audit 2026-08-24, CONFIRMED HIGH.)
+    _sbx = os.path.join(PLAYPEN, "_guardtest")
+    shutil.rmtree(_sbx, ignore_errors=True); os.makedirs(_sbx)
     try:
-        io.open(_gp, "w", encoding="utf-8", newline="").write(_orig + "\nraise RuntimeError('canary')\n")
-        _p, _rpc = seat("wmw_cursor_mcp.py")
+        shutil.copy2(os.path.join(SEATS, "wmw_cursor_mcp.py"), _sbx)
+        io.open(os.path.join(_sbx, "dispatch-guard.py"), "w", encoding="utf-8",
+                newline="").write("raise RuntimeError('canary')")
+        _p, _rpc = seat(os.path.join(_sbx, "wmw_cursor_mcp.py"))
         _rpc({"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"arm"}}})
         _r = _rpc({"jsonrpc":"2.0","id":9,"method":"tools/call","params":{"name":"cursor","arguments":
              {"prompt":"x","always_approve":True,"cwd":SEATS,"model":"composer-2.5"}}})["result"]
@@ -165,7 +178,7 @@ else:
               "GUARD UNAVAILABLE" in _r["content"][0]["text"])
         _p.stdin.close(); _p.wait(timeout=20)
     finally:
-        io.open(_gp, "w", encoding="utf-8", newline="").write(_orig)
+        shutil.rmtree(_sbx, ignore_errors=True)
 
 print("\n=== 3. meters readable ===")
 r = subprocess.run([sys.executable, os.path.join(SEATS,"read-meters.py"), "--json"],
