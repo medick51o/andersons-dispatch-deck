@@ -11,7 +11,7 @@ gated, and reported plainly. The powerhouse, straight-faced.
 
 `•` no persona `•` no theater `•` right-model-right-job `•` honest cross-vendor review `•` cost-aware
 
-**`spine v2.6`** `•` persistent seats `•` a 200-model bench `•` spend gated by consent `•` meters read, never guessed
+**`spine v2.8`** `•` persistent seats `•` a 200-model bench `•` spend gated by consent `•` meters read, never guessed
 
 </div>
 
@@ -26,9 +26,9 @@ gated, and reported plainly. The powerhouse, straight-faced.
 | 💳 | **Spend gated by consent** | A seat that *can* spend needs a recorded allowance first — a bound, with an expiry. No allowance, no spend. Free seats never ask. |
 | 📊 | **Meters read, never guessed** | Live usage pulled from each vendor's own billing endpoint. Cost claims cite a reading, not a recollection. |
 | 🛡️ | **Read-only actually read-only** | Three real escape routes found and closed: argument injection through a Windows shim, a "read-only" flag that only meant *authorize*, and a seat escalating by driving another seat. |
-| 🧪 | **A 15-check arm test** | `armcheck.py` proves every guard still holds before you trust the rig. |
+| 🧪 | **An arm test that says what it actually did** | `armcheck.py` validates the guards free and in a second; `--deep` *attacks* the seats and only then claims ALL ARMED. |
 | ⚖️ | **Contradiction-swept law** | A four-vendor blind council re-read the engine and found nine places two rules disagreed. All nine repaired. |
-| 📜 | **Nothing deleted, only un-billed** | War stories moved to `SPINE-PROVENANCE.md`, which no summon loads. The law stays; the story keeps its home. |
+| 🪶 | **Deliberately small** | The engine states rules, not its own history. Dates, incident scars and shop wiring were cut so a stranger doesn't pay for them on every prompt — the load is a third lighter than it was, with no rule changed. |
 
 ## What it is
 
@@ -110,7 +110,7 @@ For a call that has to be *right* — a design fork, a decision, a claim that mu
 | [`dispatch-console.html`](dispatch-console.html) | a color-coded visual quick-reference |
 | [`mcp-seats/`](mcp-seats/) | **the wiring** — one small MCP server per vendor, plus the guards |
 | [`mcp-seats/allowance.py`](mcp-seats/allowance.py) | the spend record a metered seat checks before it bills |
-| [`mcp-seats/armcheck.py`](mcp-seats/armcheck.py) | **15 checks** — proves every guard still holds |
+| [`mcp-seats/armcheck.py`](mcp-seats/armcheck.py) | the canaries — free by default, `--deep` to attack the seats for real |
 | [`mcp-seats/read-meters.py`](mcp-seats/read-meters.py) | live usage, straight from each vendor's billing endpoint |
 | [`MEASURING-POOLS.md`](MEASURING-POOLS.md) | **how to measure a usage pool a vendor won't publish** — generalizes to any vendor |
 | [`BENCH-LEDGER.md`](BENCH-LEDGER.md) | the bench roster: which models are free, which bill, and their track records |
