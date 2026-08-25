@@ -468,7 +468,7 @@ def run_cursor(prompt, session_id=None, cwd=None, model=None, always_approve=Fal
     # Two controls, and they only bind a WRITE-capable dispatch at a real repo —
     # the shape that burned two thirds of a month on 2026-08-21/22. A read-only
     # question costs little and is left alone deliberately.
-    guard, lease = _guard(), None
+    guard = _guard()
     if isinstance(guard, Exception) and always_approve:
         return True, (
             f"{CURSOR_BANNER} 🛑 GUARD UNAVAILABLE — WRITE REFUSED\n\n"
@@ -486,16 +486,6 @@ def run_cursor(prompt, session_id=None, cwd=None, model=None, always_approve=Fal
                 "them returning zero lines. Point the seat at a repo with real source, or "
                 "run read-only (omit always_approve) to ask a question instead of building.")
 
-        # RESERVE: atomic, so N launches cannot each pass on the same headroom.
-        lease = f"cursor-{os.getpid()}-{int(time.time())}"
-        ok, why = guard.reserve(lease, est_pct=float(os.environ.get("WMW_EST_PCT", "2")),
-                                note=f"{chosen} @ {os.path.basename(workdir)}")
-        lease_owner = (guard._load().get("jobs", {}).get(lease) or {}).get("owner") if ok else None
-        if not ok:
-            return True, (
-                f"{CURSOR_BANNER} 🛑 NO HEADROOM RESERVED — REFUSED BEFORE SPENDING\n\n{why}\n\n"
-                "Concurrency is the control. Thirteen launches each passed their own check "
-                "on 2026-08-21 and together took the month.")
 
     # ---- PROMPT TRANSPORT --------------------------------------------------
     # NOTHING caller-controlled goes on the command line. The Windows CLI is a
@@ -559,14 +549,6 @@ def run_cursor(prompt, session_id=None, cwd=None, model=None, always_approve=Fal
                 os.unlink(spill_path)
             except (FileNotFoundError, OSError):
                 pass
-        # Release the lease HERE, in the finally, so a crash, a timeout or a launch
-        # failure can never leave a slot held. A stuck lease would deny the operator
-        # his own rig, which is a worse failure than the one being prevented.
-        if guard and lease:
-            try:
-                guard.release(lease, owner=lease_owner)
-            except Exception as e:
-                print(f"[wmw-cursor] lease release failed: {e}", file=sys.stderr)
 
     raw = (proc.stdout or "").strip()
     err = (proc.stderr or "").strip()
@@ -723,7 +705,7 @@ def handle(msg):
             "result": {
                 "protocolVersion": msg.get("params", {}).get("protocolVersion", "2024-11-05"),
                 "capabilities": {"tools": {}},
-                "serverInfo": {"name": "wmw-cursor", "version": "2.5.0"},
+                "serverInfo": {"name": "wmw-cursor", "version": "2.6.0"},
             },
         }
     if method == "ping":
