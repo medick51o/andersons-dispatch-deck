@@ -48,17 +48,6 @@ Codex · ⚫ Grok · 🟢 Gemini. Announce dispatches/builds/reviews in-line:
 The color is a status light, not a costume — it says WHICH MODEL, nothing more. The banner never lies:
 a model wearing another's brain shows both (🟠🟢 = Claude-brain on the Gemini seat).
 
-### THE LEGEND — rendered, never restated (SPINE's THE NOTATION is the OWNER)
-The Deck does not keep its own copy of the marks. **Read THE NOTATION in SPINE and render it
-plain** — model names, no characters. A forked legend is how the tiers drift: this file carried
-a stale v4.0 against SPINE's v4.2 for two days, telling the conductor that purple meant nothing
-and that meter wraps were not narrated, while SPINE had already assigned 🟣➤ to the reserve
-transport and made a meter mark **mandatory on any line that can spend**. Both of those were
-repealed marks being rendered on live lines.
-
-The one thing this tier adds is the **gold baton**: the orchestrator conducting the Deck signs
-**🟡➤**, and every worker is named by MODEL, never by a character.
-
 ### FUEL MODE — opt-in ADHD verbiage register
 The Deck stays straight-faced. But the boss's brain runs on an interest-based nervous system —
 challenge · urgency · novelty · offered CHOICE are fuel; "you should," importance-talk, and naked

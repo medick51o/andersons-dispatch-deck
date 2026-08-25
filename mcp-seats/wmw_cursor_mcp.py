@@ -730,13 +730,12 @@ def handle(msg):
 def main():
     _utf8_stdio()
     _ensure_playpen()
-    # An unbounded readline is a memory-exhaustion primitive: one enormous frame and
-    # the seat dies. MCP frames are small. (Audit 2026-08-24, Kimi finding 10.)
-    MAX_FRAME = 8 * 1024 * 1024
+    # A frame-size check used to sit here. It was removed on 2026-08-24 because it did
+    # not work: `for line in sys.stdin` has ALREADY allocated the whole line before any
+    # len() check can run, so it detected an oversized frame strictly after the
+    # exhaustion it claimed to prevent. A guard that fires after the damage is worse
+    # than none — it reads as protection. Bounding this properly needs a chunked reader.
     for line in sys.stdin:
-        if len(line) > MAX_FRAME:
-            print(f"[wmw-cursor] frame over {MAX_FRAME} bytes refused", file=sys.stderr)
-            continue
         line = line.strip()
         if not line:
             continue

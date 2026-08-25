@@ -35,18 +35,7 @@ import sys
 import time
 
 HOME = os.path.expanduser("~")
-STORE = os.environ.get("WMW_GUARD_FILE",
-                       os.path.join(HOME, ".anderson-method", "reservations.json"))
-LOCK = STORE + ".lock"
 
-MAX_CONCURRENT = int(os.environ.get("WMW_MAX_CONCURRENT_JOBS", "2"))
-LEASE_TTL_MIN = int(os.environ.get("WMW_LEASE_TTL_MIN", "90"))
-LOCK_STALE_S = 30
-
-# a dispatch may not claim more than this share of the month in one go
-MAX_SINGLE_CLAIM_PCT = float(os.environ.get("WMW_MAX_SINGLE_CLAIM_PCT", "10"))
-# total outstanding reservations may not exceed this share of the month
-MAX_OUTSTANDING_PCT = float(os.environ.get("WMW_MAX_OUTSTANDING_PCT", "25"))
 
 BANNED_STACK = (("maxmode", "true"), ("effort", "xhigh"), ("speed", "fast"))
 

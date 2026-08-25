@@ -193,7 +193,6 @@ def main():
             if c.get("display_message"):
                 print(f"                    vendor says: {c['display_message']}")
     print("\n  Neither vendor publishes a pool SIZE — only a percentage. To learn the size,")
-    print("  burn a known amount and watch the percentage move (see bench-burn.py).")
 
 if __name__ == "__main__":
     main()

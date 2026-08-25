@@ -12,7 +12,6 @@ import json, subprocess, sys, os, glob, io, shutil
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 SEATS = r"C:\Sync\Projects\andersons-dispatch-deck\mcp-seats"
 PLAYPEN = r"C:\Sync\_playpen\cursor"
-RESV = os.path.join(os.path.expanduser("~"), ".anderson-method", "reservations.json")
 DEEP = "--deep" in sys.argv
 
 def seat(server):

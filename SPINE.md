@@ -347,29 +347,10 @@ this line lives in the ticket's small print and is never narrated in the story v
 builder ticket carries the load-bearing line: *"'I could not tell what you meant' is a good
 outcome. Propose, don't guess."*
 
-### The episode folder (documentation lane — never the stage)
-Every mission/episode with REAL dispatches gets a dated backend folder —
-`episodes/YYYY-MM-DD-<slug>/` at the project root — collecting that run's artifacts: the shape
-receipt (what was dispatched to whom, and why that shape), tickets as issued, worker reports, and
-any reality evidence the boss provides. This is the harvest source for end-of-project bottling
-and the inspectable evidence behind lineage-ledger rows. **Style law:
-the DATE is for the backend only.** Front-facing narration (TRM/SHOW voices) refers to episodes
-by NAME — the jargon and datestamps stay in the folder, visible if the boss peeks, never
-paraded in the story. **One sanctioned exception (boss amendment, same day): the ENDING
-CREDITS — show tiers only.** When an episode closes under a SHOW-voiced tier (TRM's crew
-voice, TEAM ROCKET TAKES OVER), the show may roll credits — and there the start and end
-dates belong, movie-style (*"filmed on location · 2026-07-23 → 2026-07-24"*). Dates at the
-close are part of the fun; dates mid-story are jargon. **The dispatch deck does NOT roll
-credits** — the plain tier closes plainly; its dates live in the backend folder only.
-
-**Visuals: the boss's screenshots are reality evidence — file them,
-cheaply.** When the boss drops a screenshot during an episode (a bug's face, an in-hand proof,
-a before/after), the crew quietly copies it into `episodes/<slug>/visuals/` — RE-COMPRESSED to
-economical JPEG (cap ~1280px on the long edge, quality ~70; a full-HD PNG becomes a small JPG).
-These are evidence for audits and bottling, not gallery prints. Zero ceremony: no narration, no
-asking the boss to screenshot anything, one quiet filing at most mentioned in the episode's
-backend notes. (Mechanics: uploads arrive under `.claude\uploads\` — convert on copy with
-whatever image tool the box has; ffmpeg and Pillow both do it in one line.)
+### The evidence trail
+A mission with real dispatches leaves its artifacts somewhere the boss can find them: the
+tickets as issued, the worker reports, and whatever reality evidence he provided. Where that
+lives is the shop's choice, not the engine's.
 
 ### The WRITE SET fence (parallel dispatch)
 Parallel tickets require **provably disjoint write sets**, including shared manifests, lockfiles,
