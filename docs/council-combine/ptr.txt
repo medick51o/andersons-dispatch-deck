@@ -1,0 +1,1 @@
+Read docs/council-combine/pkt-grok.md in this directory, in FULL, and follow it exactly. This is a COMBINE/MERGE scan — no deletions. Output only your findings in the brief's format.
