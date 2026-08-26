@@ -83,20 +83,33 @@ chk("brief's own template line cannot be counted as turnout",
 chk("an anchor with no WHY within reach is not a finding",
     c.anchors("[FINDING] a bare title nobody explained") == [])
 
-chk("a short startup banner cannot become the review (longest content wins)",
-    c._reply('{"text":"initializing"}\n{"text":"the real review, at length"}')
+def rep(raw, transport):
+    return c._reply(raw, transport)[0]
+
+
+chk("a short startup banner cannot become the review",
+    rep('{"text":"initializing"}\n{"text":"the real review, at length"}', "grok")
     == "the real review, at length")
 chk("a TRAILING status object cannot overwrite a finished review",
-    c._reply('{"result":"a long and complete review of the code"}\n{"result":"ok"}')
+    rep('{"result":"a long and complete review of the code"}\n{"result":"ok"}', "cursor")
     == "a long and complete review of the code")
-chk("a top-level `text` cannot shadow longer content under `result`",
-    c._reply('{"text":"done","result":"the actual review body goes here"}')
-    == "the actual review body goes here")
+chk("SCHEMA FIRST: the transport's own key beats a longer foreign key",
+    rep('{"text":"the grok answer","result":"a much longer telemetry payload"}', "grok")
+    == "the grok answer")
+chk("...and the same bytes under cursor resolve to cursor's key instead",
+    rep('{"text":"the grok answer","result":"a much longer telemetry payload"}', "cursor")
+    == "a much longer telemetry payload")
 chk("a NESTED object cannot shadow its parent's result",
-    c._reply('{"result":"REAL ANSWER","meta":{"text":"nested decoy"}}') == "REAL ANSWER")
+    rep('{"result":"REAL ANSWER","meta":{"text":"nested decoy"}}', "cursor")
+    == "REAL ANSWER")
+chk("a reply nested one level under its own key is still found",
+    rep('{"result":{"text":"the body of the review"}}', "cursor")
+    == "the body of the review")
 chk("junk between objects does not break parsing",
-    c._reply('noise {"text":"a"} more noise {"result":"b"} tail') == "b")
-chk("no parseable object yields empty, not a crash", c._reply("total garbage") == "")
+    rep('noise {"text":"a"} more noise {"result":"b"} tail', "cursor") == "b")
+chk("no parseable object yields empty, not a crash", rep("total garbage", "grok") == "")
+chk("the candidate count is reported so a silent steal becomes visible",
+    c._reply('{"text":"one"}\n{"text":"two"}', "grok")[1] == 2)
 
 chk("grok --cwd is absolute (a relative path failed every dispatch at 23:17)",
     grok_cwd_is_absolute())
@@ -277,7 +290,10 @@ chk("finding ids carry no seat and no per-seat count",
     not any("-" in i for i in FIRST_ID_SEEN))
 
 # ---- round 4's carried findings
-r, _ = _council({**REPLIES, "gemini": "[CLEAN] I checked every claim and found nothing."},
+CLEAN_REPLY = ("[CLEAN]\nI checked every claim in the brief against the code "
+               "line by line, traced the reply parser, the tally, the audit and the "
+               "verdict tiers, and found nothing worth raising as a finding.")
+r, _ = _council({**REPLIES, "gemini": CLEAN_REPLY},
                 "auto", 2, ["grok", "composer", "cgrok", "gemini"])
 chk("a CLEAN review is a vote, not a malformed reply",
     "gemini" in r["findings"] and "gemini" not in r["malformed"])
@@ -302,6 +318,21 @@ chk("an invented id is reported, not silently filtered",
 chk("prose echoing the template in its own words is not a finding",
     c.anchors("[FINDING] <short name>\nWHY: x") == []
     and c.anchors("[FINDING] name\nWHY: x") == [])
+
+chk("a bare [CLEAN] with no substance behind it is NOT a vote", not c.is_clean("[CLEAN]"))
+chk("[CLEAN] mentioned mid-prose is not a clean vote",
+    not c.is_clean("I considered marking this [CLEAN] but " + "x" * 200))
+chk("an anchor whose name appears verbatim in the packet is a template echo",
+    c.anchors("[FINDING] short name, under 60 chars\nWHY: y",
+              "the brief says [FINDING] short name, under 60 chars") == [])
+chk("...but a genuine finding is unaffected by the packet check",
+    c.anchors("[FINDING] the tally can be gamed\nWHY: y", "unrelated packet") ==
+    ["the tally can be gamed"])
+
+r, _ = _council({"grok": CLEAN_REPLY, "composer": CLEAN_REPLY}, "auto", 2,
+                ["grok", "composer"])
+chk("an all-clean council is OK, not DEGRADED for failing to group nothing",
+    r["verdict"] == "OK" and not r["degraded"] and r["carried"] == [])
 
 section("")
 print(f"  {sum(OK)}/{len(OK)} checks pass")

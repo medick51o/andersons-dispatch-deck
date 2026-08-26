@@ -156,24 +156,40 @@ def _argv(seat, packet_path, sandbox):
             "-p", ask, "--output-format", "json"], None
 
 
-def _reply(raw):
+REPLY_KEY = {"grok": "text", "cursor": "result", "agy": "response"}
+
+
+def _reply(raw, transport=None):
     """Every vendor buries the answer under a different key. This is the tax the
     hand-run version paid six times a day, in my head, with a fresh mistake available
-    each time.
+    each time. Returns (text, candidates_seen).
 
-    Scans TOP-LEVEL objects only and keeps the LONGEST content found, across objects and
-    across the three keys. Three separate bugs lived here, all found by review:
-      * taking the FIRST match let a startup banner become a seat's entire review;
-      * scanning every `{` let a NESTED object shadow its parent, because the child
-        starts later than the parent does. Advancing past each decoded object — rather
-        than one character — makes nested objects unreachable;
-      * then taking the LAST match let a trailing status or telemetry object overwrite a
-        finished review with "ok".
-    Longest-wins is a heuristic, and it is named as one: it assumes a review is the
-    largest thing a seat emits, which is true of every transport here and would not
-    survive a vendor that padded its status frames. Ties go to the later object.
+    Four bugs have lived here, every one found by review rather than by me:
+      * FIRST match let a startup banner become a seat's entire review;
+      * scanning every `{` let a NESTED object shadow its parent, since the child starts
+        later. Advancing past each decoded object makes nested objects unreachable;
+      * LAST match let a trailing status frame overwrite a finished review with "ok";
+      * LONGEST match across every key was graded false assurance by four labs: any
+        vendor padding a telemetry frame past the review's length silently wins, and the
+        brief certified "last object" while the code did something else entirely.
+
+    So the field is narrowed by SCHEMA before length is ever consulted. Each transport
+    declares the key it actually answers under, and only values under that key compete;
+    the other two keys are a fallback for a transport that changes its shape. The
+    candidate count is returned so a run can say when more than one plausible reply was
+    in play — a steal is then visible in the artifacts instead of silent.
     """
-    best, i, dec, n = "", 0, json.JSONDecoder(), len(raw)
+    want = REPLY_KEY.get(transport)
+    onkey, anykey, i, dec, n = [], [], 0, json.JSONDecoder(), len(raw)
+
+    def harvest(obj, depth=0):
+        for k in ("text", "result", "response"):
+            s = obj.get(k)
+            if isinstance(s, str) and s.strip():
+                (onkey if k == want else anykey).append(s)
+            elif isinstance(s, dict) and depth < 1:
+                harvest(s, depth + 1)      # {"result": {"text": ...}} — one level down
+
     while i < n:
         j = raw.find("{", i)
         if j == -1:
@@ -184,15 +200,16 @@ def _reply(raw):
             i = j + 1
             continue
         if isinstance(v, dict):
-            for k in ("text", "result", "response"):
-                s = v.get(k)
-                if isinstance(s, str) and len(s) >= len(best):
-                    best = s
+            harvest(v)
         i = max(end, j + 1)
-    return best
+
+    pool = onkey or anykey
+    if not pool:
+        return "", 0
+    return max(pool, key=len), len(pool)
 
 
-def anchors(text):
+def anchors(text, packet=""):
     """The findings a reply actually raised.
 
     A bare `[FINDING]` match is not a vote. The brief itself prints a template line, so a
@@ -204,9 +221,14 @@ def anchors(text):
     out = []
     for m in ANCHOR.finditer(text):
         name = m.group(1).strip(" *`")
-        # Reject the brief's own template however it is echoed. Matching only the exact
-        # phrase let a seat quoting the instructions in its own words score a vote.
         if "<" in name or ">" in name or len(name.split()) < 2:
+            continue
+        # THE GENERAL FORM OF THE TEMPLATE GUARD: anything the packet already said is not
+        # a finding. The bracket check above only caught `<placeholder>` styles, and when
+        # the brief's own template was rewritten WITHOUT brackets it started scoring as a
+        # vote -- a phantom finding named "short name, under 60 chars" flowing into
+        # synthesis. A seat restating the instructions has not found anything.
+        if packet and name.lower() in packet.lower():
             continue
         if not re.search(r"\bWHY\s*:", text[m.end():m.end() + 400], re.I):
             continue
@@ -221,8 +243,15 @@ def is_clean(text):
     format and wrong for a seat reporting clean code -- two labs caught it. Left as it
     was, a council could agree unanimously that something is fine and report INCONCLUSIVE,
     which is the turnout-vs-verdict confusion all over again, inverted.
+
+    A clean vote is still only a seat's word. Nothing here can verify it actually looked,
+    and three labs said so. What IS enforced is that the marker opens a line of its own
+    and the reply carries some substance behind it, so a stray mention inside prose or a
+    one-word reply cannot pass as a review.
     """
-    return bool(re.search(r"\[(?:CLEAN|NO FINDINGS|NOTHING FOUND)\]", text, re.I))
+    if not re.search(r"^\s*\[(?:CLEAN|NO FINDINGS|NOTHING FOUND)\]", text, re.I | re.M):
+        return False
+    return len(text.strip()) >= 120
 
 
 async def _run_seat(seat, packet_path, sandbox, timeout_s, retries=1):
@@ -259,12 +288,15 @@ async def _dispatch_once(seat, packet_path, sandbox, timeout_s):
         proc.kill()
         return seat, "", f"timed out after {timeout_s}s", time.perf_counter() - t0, None
     secs = time.perf_counter() - t0
-    text = _reply((out or b"").decode("utf-8", "replace"))
+    text, cands = _reply((out or b"").decode("utf-8", "replace"),
+                         SEATS[seat]["transport"])
     tail = (errb or b"").decode("utf-8", "replace").strip()[-300:]
     if not text:
         rc = f"exit {proc.returncode}. " if proc.returncode else ""
         return seat, "", f"{rc}no parseable reply. {tail}", secs, None
     warn = f"exit {proc.returncode}: {tail[:110]}" if proc.returncode else None
+    if cands > 1 and not warn:
+        warn = f"{cands} candidate replies under its own key — longest taken"
     return seat, text, None, secs, warn
 
 
@@ -367,7 +399,7 @@ async def synthesize(items, seat, rundir, sandbox_root, timeout_s):
     return sorted(groups, key=lambda g: -len(g[1])), None, audit
 
 
-def tally(findings):
+def tally(findings, packet=""):
     """Fallback counter: group on a normalized title and count distinct seats.
 
     Deliberately dumb, and KNOWN INADEQUATE -- it cannot see that two differently-worded
@@ -378,7 +410,7 @@ def tally(findings):
     """
     votes = {}
     for seat, text in findings.items():
-        for name in anchors(text):
+        for name in anchors(text, packet):
             key = re.sub(r"[`*_\"']", "", name).strip().lower()[:70]
             votes.setdefault(key, set()).add(seat)
     return sorted(votes.items(), key=lambda x: -len(x[1]))
@@ -442,7 +474,8 @@ async def run_council(brief, material=(), seats=None, rule=3, timeout_s=1800,
             rundir = cand
         except FileExistsError:
             n += 1
-    sandbox_root = tempfile.mkdtemp(prefix="council-")
+    sandbox_root = tempfile.mkdtemp(prefix="council-SYNTH-")
+    sandboxes = [sandbox_root]
 
     body = [brief, ""]
     for path in material:
@@ -480,9 +513,13 @@ async def run_council(brief, material=(), seats=None, rule=3, timeout_s=1800,
     print()
 
     jobs = []
-    for s in seats:                      # one packet, one private sandbox, per seat
-        sb = os.path.join(sandbox_root, s)
-        os.makedirs(sb, exist_ok=True)
+    for s in seats:
+        # A SEPARATE TEMP ROOT PER SEAT, not siblings under one parent. Sharing a parent
+        # meant `..` from any sandbox reached every other seat's directory; the packets
+        # are identical so no answer leaked, but the layout invited exactly the traversal
+        # two labs raised. Each seat now sits alone.
+        sb = tempfile.mkdtemp(prefix=f"council-{s}-")
+        sandboxes.append(sb)
         p = os.path.join(sb, "pkt.md")
         io.open(p, "w", encoding="utf-8", newline="").write(packet)
         jobs.append(_run_seat(s, p, sb, timeout_s))
@@ -497,7 +534,7 @@ async def run_council(brief, material=(), seats=None, rule=3, timeout_s=1800,
             continue
         io.open(os.path.join(rundir, f"SIGNED-{seat}.md"), "w",
                 encoding="utf-8", newline="").write(text)
-        found = anchors(text)
+        found = anchors(text, packet)
         if not found and is_clean(text):
             # A seat that reviewed and found nothing is a VOTE OF CLEAN, and it counts
             # toward turnout with zero findings. Without this a council can agree
@@ -525,14 +562,24 @@ async def run_council(brief, material=(), seats=None, rule=3, timeout_s=1800,
 
     degraded = [f"{s} exited nonzero but its reply was counted" for s in warns]
     rows, audit, synth_used = None, {}, None
-    if len(findings) >= 2:
+    n_items = sum(len(anchors(t, packet)) for t in findings.values())
+    if n_items < 2:
+        # NOTHING TO GROUP IS NOT A FAILURE TO GROUP. A unanimous clean bench produces
+        # zero findings, and routing that through the "synthesis unavailable" path marked
+        # a perfect result DEGRADED -- so a council could never report that code is fine.
+        rows = []
+        if findings:
+            print(f"\n   {n_items} finding(s) raised across {len(findings)} seat(s) — "
+                  f"nothing to group, so no synthesis was needed.")
+    elif len(findings) >= 2:
         tries = []
         # OPAQUE, FLAT, SHUFFLED IDS. This started as `S{seat}-{n}`, which round 3 caught
         # leaking the seat via a sorted index, and round 4 caught still leaking two things
         # after the shuffle: which findings shared an author, and HOW MANY each author
         # raised. Grouping needs neither. A flat `F07` carries no seat, no ordering, and
         # no count -- the synthesiser sees one anonymous pile of titles.
-        pairs = [(s, name) for s in sorted(findings) for name in anchors(findings[s])]
+        pairs = [(s, name) for s in sorted(findings)
+                 for name in anchors(findings[s], packet)]
         random.Random(os.urandom(8)).shuffle(pairs)
         items = {f"F{i:02d}": p for i, p in enumerate(pairs, 1)}
         # Prefer a seat that did not vote; never one that spends without being asked.
@@ -575,7 +622,7 @@ async def run_council(brief, material=(), seats=None, rule=3, timeout_s=1800,
               f"differing wording —\n     the exact bug synthesis exists to fix. Treat the "
               f"counts below as a floor, not a result.")
         degraded.append("synthesis unavailable on every candidate seat")
-        rows = tally(findings)
+        rows = tally(findings, packet)
     if audit.get("dropped"):
         print(f"   ⚠ grouping DROPPED {len(audit['dropped'])} finding(s): "
               f"{', '.join(audit['dropped'][:8])}")
@@ -637,9 +684,10 @@ async def run_council(brief, material=(), seats=None, rule=3, timeout_s=1800,
         print(f"   ✗ {s}: {e[:90]}")
 
     if keep_sandboxes:
-        print(f"   sandboxes kept: {sandbox_root}")
+        print(f"   sandboxes kept: {', '.join(sandboxes)}")
     else:
-        shutil.rmtree(sandbox_root, ignore_errors=True)
+        for sb in sandboxes:
+            shutil.rmtree(sb, ignore_errors=True)
     print(f"\n   verdict: {verdict}   artifacts: {rundir}")
     return {"verdict": verdict, "findings": findings, "failures": failures,
             "malformed": malformed, "warns": warns, "tally": rows, "carried": carried,

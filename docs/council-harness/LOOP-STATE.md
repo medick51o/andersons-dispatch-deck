@@ -40,7 +40,20 @@ gemini votes again this round: the agy shell-command auto-deny that killed it in
 | 2 (23:17) | ~10 refusals of round 1's fixes | all | 3/4 — grok killed by my relative `--cwd` |
 | 3 (23:39) | 5 | 3 (+2 documented as limits) | PARTIAL — kimi timed out |
 | 4 (00:58) | 7 | 7 (2 of them by withdrawing a false claim in the BRIEF) | DEGRADED — **5/5 seats, 4 labs, first full attendance** |
-| 5 | *in flight* | | |
+| 5 (01:22) | 4 | 5 | **OK — first clean verdict.** Reserved synth worked; kimi croaked EPERM and the retry saved it |
+| 6 | *in flight — THE LAST ONE* | | |
+
+**Round 5's lesson:** four labs graded my brand-new longest-wins reply parser *false
+assurance* — same grade, same reason as round 2's sandbox: the brief certified a property
+("takes the LAST complete object") that the code did not have. Fixed properly by narrowing
+on SCHEMA before length is ever consulted, so no heuristic decides which text is the
+review. Kimi supplied the general form of the template guard too: reject any anchor name
+that appears verbatim in the packet, rather than chasing bracket styles.
+
+Round 5 fixes: schema-first reply parsing (+ one level of nesting) · packet-echo anchor
+rejection · `[CLEAN]` hardened to line-start plus a substance floor · all-clean councils
+no longer DEGRADED for having nothing to group · each seat gets its own temp root so `..`
+reaches no sibling sandbox. Gate 44 → 52.
 
 **Round 4's lesson:** three seats unanimously flagged "fix #7 claimed read-only
 enforcement" — and the false claim was in `BRIEF-VERIFY.md`, not the code. I had

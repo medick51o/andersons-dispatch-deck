@@ -19,20 +19,33 @@ nothing in the code is worse than the original bug, because it closes the ticket
    not "nothing carried".
 5. **Synthesis is audited.** Findings a seat raised but that landed in no group must be
    reported as a possible drop.
-6. **Reply parsing takes the LAST complete object**, and a nonzero exit code is surfaced.
+6. **Reply parsing is SCHEMA-FIRST**: each transport declares the key it answers under
+   (`grok`→`text`, `cursor`→`result`, `agy`→`response`), only values under that key
+   compete, and the longest of those wins. The other two keys are a fallback. The
+   candidate count is surfaced so a steal is visible. A nonzero exit is surfaced too.
+   *Two earlier versions of this item certified "the LAST complete object" while the code
+   did something else — first last-wins, then longest-across-all-keys. Four labs graded
+   the second false assurance. Check the claim against the code, not against this list.*
 7. **Read-only is NOT claimed as enforced.** Only Grok's transport has real deny-flags;
    the others rest on one vendor mode flag plus a throwaway cwd. `hard_ro` records which
    is which and the run prints the weak ones. *An earlier version of this brief claimed
    the sandbox enforced read-only everywhere. Three councils graded that false assurance,
    correctly. The claim is withdrawn; check that the CODE makes no stronger promise.*
-8. **Blindness survives across runs for RELATIVE paths only** — unique run directory,
-   per-seat throwaway sandboxes outside the repo and outside the artifact tree. An
-   absolute path still defeats it, and that is a documented limit, not a fixed bug.
-9. **Prose with no `[FINDING]` anchor is not turnout — but `[CLEAN]` is.** A seat that
-   reviewed and found nothing votes clean; only a reply that ignored the format is
-   dropped.
-10. **The exit code carries the verdict** — a degraded or inconclusive council must not
-    exit 0.
+8. **The layout does not put answers within reach.** Unique run directory per council;
+   each seat gets its OWN temp root, not a sibling under a shared parent; sandboxes sit
+   outside the repo and outside the artifact tree. **No claim is made that this contains
+   anything** — a seat that constructs a path can still go where the operator can go.
+9. **Prose with no `[FINDING]` anchor is not turnout — but `[CLEAN]` is.** A clean vote
+   must open its own line and carry some substance. Nothing verifies a seat actually
+   looked, and that is stated rather than papered over.
+10. **A council with nothing to group is not DEGRADED.** An all-clean bench produces zero
+    findings; routing that through "synthesis unavailable" once marked a perfect result
+    degraded, so a council could never report that code is fine.
+11. **A template echo is not a finding.** Any anchor whose name appears verbatim in the
+    packet is rejected — the general form of a guard that previously only caught
+    `<angle-bracket>` placeholders and was defeated the moment this brief dropped them.
+12. **The exit code carries the verdict** — a degraded, partial, or inconclusive council
+    must not exit 0.
 
 ## Attack each one
 
