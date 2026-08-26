@@ -41,7 +41,21 @@ gemini votes again this round: the agy shell-command auto-deny that killed it in
 | 3 (23:39) | 5 | 3 (+2 documented as limits) | PARTIAL — kimi timed out |
 | 4 (00:58) | 7 | 7 (2 of them by withdrawing a false claim in the BRIEF) | DEGRADED — **5/5 seats, 4 labs, first full attendance** |
 | 5 (01:22) | 4 | 5 | **OK — first clean verdict.** Reserved synth worked; kimi croaked EPERM and the retry saved it |
-| 6 | *in flight — THE LAST ONE* | | |
+| 6 (01:40) | 7 — **every one a round-5 regression** | 6 fixed + 6 new tests | OK — 4/4, 4 labs |
+
+## LOOP CLOSED 02:00, at the bound I declared
+
+Three rounds run (4, 5, 6), as stated up front. Not stopped because it converged — it did
+not, and it would not. Stopped because the bound was the point.
+
+Round 6's verdict was on me: all seven carried findings were things round 5 broke or
+overclaimed, two of them data-loss (a lone finding silently discarded; a template guard
+rejecting valid findings because the material under review sat inside the packet it
+checked against). **The gate was 52/52 green through both.** Fixed, and six regression
+tests added so they cannot come back quietly. Gate 52 → 58.
+
+**These last fixes are test-verified but NOT council-verified** — the only changes no
+blind seat has looked at. A round 7 would review them. That is Andrew's call, not mine.
 
 **Round 5's lesson:** four labs graded my brand-new longest-wins reply parser *false
 assurance* — same grade, same reason as round 2's sandbox: the brief certified a property

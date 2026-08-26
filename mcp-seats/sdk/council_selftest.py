@@ -334,6 +334,33 @@ r, _ = _council({"grok": CLEAN_REPLY, "composer": CLEAN_REPLY}, "auto", 2,
 chk("an all-clean council is OK, not DEGRADED for failing to group nothing",
     r["verdict"] == "OK" and not r["degraded"] and r["carried"] == [])
 
+# ===================================================================== round 6
+section("ROUND 6 — regressions the ROUND 5 fixes introduced, which the gate missed")
+
+# Every check below passed 52/52 before it existed. The council found these; the tests
+# did not. A gate only covers what someone thought to write down.
+r, _ = _council({"grok": "[FINDING] the only finding raised\nWHY: x\nFIX: y",
+                 "composer": CLEAN_REPLY}, "auto", 2, ["grok", "composer"])
+chk("a council that raised exactly ONE finding still reports it",
+    len(r["tally"]) == 1 and r["tally"][0][0] == "the only finding raised")
+chk("...and does not degrade for having nothing to group",
+    r["verdict"] == "OK" and not r["degraded"])
+
+chk("the template guard reads the BRIEF, not the material under review",
+    c.anchors("[FINDING] def harvest obj depth outer\nWHY: y",
+              "a brief that never mentions that line")
+    == ["def harvest obj depth outer"])
+chk("...while a genuine echo of the brief is still rejected",
+    c.anchors("[FINDING] short name, under 60 chars\nWHY: y",
+              "output format: [FINDING] short name, under 60 chars") == [])
+
+chk("a value nested under the transport's OWN key joins that key's pool",
+    rep('{"result":{"text":"the nested body"},"text":"top-level decoy"}', "cursor")
+    == "the nested body")
+chk("...and the decoy still wins when IT is the transport's key",
+    rep('{"result":{"text":"the nested body"},"text":"top-level decoy"}', "grok")
+    == "top-level decoy")
+
 section("")
 print(f"  {sum(OK)}/{len(OK)} checks pass")
 sys.exit(0 if all(OK) else 1)

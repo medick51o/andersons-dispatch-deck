@@ -1,65 +1,76 @@
-# The council harness reviewing itself — three rounds, 2026-08-25
+# The council harness reviewing itself — six rounds, 2026-08-25/26
 
 `mcp-seats/sdk/council.py` runs this shop's standing pattern: the same question sent blind
 to several models from different labs, tallied against a rule fixed before anyone reports.
 
-It was pointed at itself. Five seats, blind, reviewing the program that dispatched them.
-This is the record of what they found and what was done about it — not the transcripts,
-which are provenance for one shop rather than method anyone else needs to load.
+It was pointed at itself, six times. This is the record of what the seats found and what
+was done about it — not the transcripts, which hold machine paths and are provenance for
+one shop rather than method anyone else needs to load.
 
-## Round 1 — ten carried
+## The rounds
 
-| Finding | Fixed by |
-|---|---|
-| The synthesiser is one of the voting seats | prefer a non-voting seat; when none exists, anonymise |
-| The voting round is blind; the output directory is not | unique run dir; seat sandboxes moved out of the artifact tree |
-| Synthesis failure silently restores the original tally bug | fallback marks the run DEGRADED and says why |
-| Too few seats reports as "nothing carried" | INCONCLUSIVE is its own verdict |
-| Synthesis output is trusted with no verification | every finding gets an ID; placement is audited by identity |
-| The first JSON object can become the vote | last top-level object with content wins |
-| Read-only is enforced on one transport only | see **Known limits** — the honest answer is not a code fix |
-| Prose replies pass as successful turnout | a finding needs an anchor AND a WHY line |
-| The process exits 0 despite seat failures | verdict tiers carried in the exit code |
-| Blind dispatch, meter honesty, pre-committed rule | *declared sound — no change* |
+| # | Attendance | Carried | Outcome |
+|---|---|---|---|
+| 1 | 4/5 — gemini croaked | 10 | all 10 fixed |
+| 2 | 3/4 — grok killed by my own relative `--cwd` | most of round 1's fixes REFUSED | rewritten |
+| 3 | 4/5 — kimi timed out | 5 | 3 fixed, 2 documented as limits |
+| 4 | **5/5, 4 labs — first full attendance** | 7 | all 7 fixed |
+| 5 | 4/4, 4 labs | 4 | all 4 fixed · **first OK verdict** |
+| 6 | 4/4, 4 labs | 7 — *every one a round-5 regression* | fixed; loop stopped here |
 
-**The headline came from a seat auditing its own redundancy.** `cgrok` observed that the
-default bench held xAI **twice** — itself and `grok` — so a carry could be one lab agreeing
-with itself, violating the shop's own "a pool is not a vendor" law inside the tool that
-enforces it. **Carries now count LABS, not seats.**
+## The five findings that changed how the tool works
 
-That finding got **one vote**. Under the counting rule of the day it would have been
-discarded. Vote count measures agreement, not importance; the tally is a noise filter, and
-it is not a ranking of what matters.
+**A pool is not a vendor.** `cgrok` observed that the default bench held xAI **twice** —
+itself and `grok` — so a carry could be one lab agreeing with itself, violating the shop's
+own lineage law inside the tool meant to enforce it. **Carries count LABS, not seats.**
 
-## Round 2 — the council refused the fixes
+That finding got **one vote** and would have been discarded by the counting rule of the
+day. Vote count measures agreement, not importance. The tally is a noise filter and never
+a ranking of what matters.
 
-Three seats independently graded the containment fix **FALSE ASSURANCE**: it set a working
-directory, called that "read-only enforced for every transport," and closed the ticket.
+**Unanimity read as disagreement.** Four seats found the same bug in four different
+sentences; string-matching scored it as four findings with one vote each and reported
+*nothing carried*. Grouping is a semantic judgement — it needs a model, not a regex.
+
+**The synthesiser was a voter counting the ballots.** Unanimous, twice. Anonymising it was
+papering over the real problem: with every free seat dispatched, no non-voter existed. A
+spare is now **reserved** off the voting bench to group, and only when its lab is seated
+twice, so reserving costs no lineage.
+
+**Turnout is not a verdict.** "Nothing carried" and "not enough labs showed up" printed
+identically, so a council that never convened read as a council that disagreed. And the
+inverse: an all-clean bench produced zero findings and got marked DEGRADED, so the tool
+could never report that code is fine.
+
+**FALSE ASSURANCE, twice — the worst grade a guard can get.** Round 2 on the sandbox,
+round 5 on the reply parser. Both times the same shape: the code did something weaker than
+the claim, and the claim closed the ticket.
 
 > *"Containment is exactly where it was before the fix, plus a cosmetic cwd. That is worse
 > than no fix, because it closed the ticket."*
 
-They also caught a hard blocker introduced BY the fix: a relative `--cwd` made one seat
-exit 1 on every dispatch, so a four-seat council silently ran as three.
+## Three lessons that outlived the code
 
-Fixed in round 2: nested JSON objects shadowing the real reply · same-second run
-collisions · an audit that netted a dropped finding against a spurious one to zero · the
-brief's own template line counting as a vote · nonzero-exit seats voting at full strength
-in silence.
+**Claims about the work are part of the work.** Twice the council flagged a false claim
+that lived in `BRIEF-VERIFY.md`, not in `council.py`. I had downgraded the code and left
+the brief asserting the old promise — so the seats were correctly reviewing a lie I was
+still telling them.
 
-## Round 3 — five more; three fixed
+**Fixing fast breaks things quietly.** Every one of round 6's seven carried findings was a
+regression from round 5's batch, including two that lost data: a lone finding silently
+discarded, and a template guard that rejected valid findings because the material under
+review was inside the packet it checked against.
 
-Fixed: the `S1..Sn` index was assigned off a sorted seat list, so the label number itself
-told a synthesiser which findings were its own · the ungrouped fallback printed the same
-`** CARRIED **` marker as a clean tally · the synthesiser pool skipped failed seats, which
-are genuine non-voters, and an explicit `--synth` ended the retry chain after one attempt.
+**The gate passed all of them.** 52/52 green while a data-loss bug sat in the code. Tests
+cover what someone thought to write down; the council found what nobody did. Both are
+needed, and neither substitutes for the other.
 
 ## Known limits — documented, not fixed
 
 **A seat with file tools and an absolute path can read anything the operator can read.**
-Per-seat sandboxes are throwaway directories outside the repo and outside the artifact
-tree, which stops a well-behaved relative write and keeps council answers out of reach of
-a relative path. That is all they do. During review one seat demonstrated the limit by
+Per-seat sandboxes are throwaway temp roots outside the repo and outside the artifact
+tree. They stop a well-behaved relative write and keep council answers out of reach of a
+relative path. That is all they do. During review one seat demonstrated the limit by
 reading a config file well outside its sandbox.
 
 Real containment is an OS-level job — a container, an AppContainer, or dispatching seats
@@ -67,17 +78,20 @@ as a separate low-privilege user. Until that exists, `SEATS[*]["hard_ro"]` recor
 transports have real vendor deny-flags, and every run prints the ones that do not. **The
 harness does not claim containment it does not have.**
 
-## Why this stopped at three rounds
+## Why this stopped at six rounds
 
-Round 1 found ten. Round 2 refused the fixes and found more. Round 3 found five more. A
-council pointed at any artifact will always find another layer — that is what adversarial
-review *is*, not a defect in the artifact.
+Round 1 found ten. Round 2 refused the fixes. Round 6 found seven more. A council pointed
+at any artifact will always find another layer — that is what adversarial review *is*, not
+a defect in the artifact.
 
 The harness's own law says a fan-out must be **BOUNDED — declared before the run, never
 "as many as it takes."** That was applied to the seats and not to the rounds. Bound the
 rounds too, or the loop never closes.
 
+**Round 6's fixes are test-verified but not council-verified.** They are the only changes
+in this file that no blind seat has looked at.
+
 ## Gate
 
-`python mcp-seats/sdk/council_selftest.py` — 33 checks, offline, no model dispatched, one
+`python mcp-seats/sdk/council_selftest.py` — 58 checks, offline, no model dispatched, one
 named test per ruling above. A fix with no test is a fix that quietly reverts.

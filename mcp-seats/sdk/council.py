@@ -182,13 +182,18 @@ def _reply(raw, transport=None):
     want = REPLY_KEY.get(transport)
     onkey, anykey, i, dec, n = [], [], 0, json.JSONDecoder(), len(raw)
 
-    def harvest(obj, depth=0):
+    def harvest(obj, depth=0, outer=None):
         for k in ("text", "result", "response"):
             s = obj.get(k)
+            # A value nested under the transport's OWN key belongs to that key's pool.
+            # Attributing it to the inner name instead sent `{"result": {"text": ...}}`
+            # to the fallback pool for a cursor seat, where any stray top-level `result`
+            # outranked the real reply.
+            owner = outer or k
             if isinstance(s, str) and s.strip():
-                (onkey if k == want else anykey).append(s)
+                (onkey if owner == want else anykey).append(s)
             elif isinstance(s, dict) and depth < 1:
-                harvest(s, depth + 1)      # {"result": {"text": ...}} — one level down
+                harvest(s, depth + 1, outer=owner)
 
     while i < n:
         j = raw.find("{", i)
@@ -209,7 +214,7 @@ def _reply(raw, transport=None):
     return max(pool, key=len), len(pool)
 
 
-def anchors(text, packet=""):
+def anchors(text, brief=""):
     """The findings a reply actually raised.
 
     A bare `[FINDING]` match is not a vote. The brief itself prints a template line, so a
@@ -223,12 +228,13 @@ def anchors(text, packet=""):
         name = m.group(1).strip(" *`")
         if "<" in name or ">" in name or len(name.split()) < 2:
             continue
-        # THE GENERAL FORM OF THE TEMPLATE GUARD: anything the packet already said is not
-        # a finding. The bracket check above only caught `<placeholder>` styles, and when
-        # the brief's own template was rewritten WITHOUT brackets it started scoring as a
-        # vote -- a phantom finding named "short name, under 60 chars" flowing into
-        # synthesis. A seat restating the instructions has not found anything.
-        if packet and name.lower() in packet.lower():
+        # THE TEMPLATE GUARD, SCOPED TO THE BRIEF. A seat restating the instructions has
+        # not found anything. The first version checked the whole PACKET, which includes
+        # the material under review -- so any finding that quoted the code it was about
+        # got silently dropped. Three labs caught it in one round: a guard against false
+        # positives that manufactured false negatives instead, which is the worse trade,
+        # because a rejected finding is invisible and a phantom one is merely wrong.
+        if brief and name.lower() in brief.lower():
             continue
         if not re.search(r"\bWHY\s*:", text[m.end():m.end() + 400], re.I):
             continue
@@ -295,8 +301,11 @@ async def _dispatch_once(seat, packet_path, sandbox, timeout_s):
         rc = f"exit {proc.returncode}. " if proc.returncode else ""
         return seat, "", f"{rc}no parseable reply. {tail}", secs, None
     warn = f"exit {proc.returncode}: {tail[:110]}" if proc.returncode else None
-    if cands > 1 and not warn:
-        warn = f"{cands} candidate replies under its own key — longest taken"
+    if cands > 1:
+        # This used to print only when there was no exit warning, so the two most
+        # suspicious signals a seat can emit hid each other.
+        note = f"{cands} candidate replies under its own key — longest taken"
+        warn = f"{warn}; {note}" if warn else note
     return seat, text, None, secs, warn
 
 
@@ -322,7 +331,7 @@ never the prose. One of these may be yours, and you are not meant to be able to 
 
 ## Output — this exact format, one line per group, and nothing else
 ```
-[GROUP] <name, under 70 chars> | ids: <comma-separated IDs, e.g. S1-2, S3-1>
+[GROUP] <name, under 70 chars> | ids: <comma-separated IDs, e.g. F03, F11>
 ```
 
 ---
@@ -399,7 +408,7 @@ async def synthesize(items, seat, rundir, sandbox_root, timeout_s):
     return sorted(groups, key=lambda g: -len(g[1])), None, audit
 
 
-def tally(findings, packet=""):
+def tally(findings, brief=""):
     """Fallback counter: group on a normalized title and count distinct seats.
 
     Deliberately dumb, and KNOWN INADEQUATE -- it cannot see that two differently-worded
@@ -410,7 +419,7 @@ def tally(findings, packet=""):
     """
     votes = {}
     for seat, text in findings.items():
-        for name in anchors(text, packet):
+        for name in anchors(text, brief):
             key = re.sub(r"[`*_\"']", "", name).strip().lower()[:70]
             votes.setdefault(key, set()).add(seat)
     return sorted(votes.items(), key=lambda x: -len(x[1]))
@@ -514,10 +523,12 @@ async def run_council(brief, material=(), seats=None, rule=3, timeout_s=1800,
 
     jobs = []
     for s in seats:
-        # A SEPARATE TEMP ROOT PER SEAT, not siblings under one parent. Sharing a parent
-        # meant `..` from any sandbox reached every other seat's directory; the packets
-        # are identical so no answer leaked, but the layout invited exactly the traversal
-        # two labs raised. Each seat now sits alone.
+        # A SEPARATE TEMP ROOT PER SEAT, not siblings under one dedicated parent. Sharing
+        # a parent meant `..` from any sandbox listed every other seat's directory by
+        # name. Be exact about the improvement: these roots still sit in the system temp
+        # directory and are still enumerable there by anything that goes looking. What
+        # changed is that a single `..` no longer lands on a purpose-built index of this
+        # council's seats. It raises the cost of looking; it does not prevent it.
         sb = tempfile.mkdtemp(prefix=f"council-{s}-")
         sandboxes.append(sb)
         p = os.path.join(sb, "pkt.md")
@@ -534,7 +545,7 @@ async def run_council(brief, material=(), seats=None, rule=3, timeout_s=1800,
             continue
         io.open(os.path.join(rundir, f"SIGNED-{seat}.md"), "w",
                 encoding="utf-8", newline="").write(text)
-        found = anchors(text, packet)
+        found = anchors(text, brief)
         if not found and is_clean(text):
             # A seat that reviewed and found nothing is a VOTE OF CLEAN, and it counts
             # toward turnout with zero findings. Without this a council can agree
@@ -562,14 +573,19 @@ async def run_council(brief, material=(), seats=None, rule=3, timeout_s=1800,
 
     degraded = [f"{s} exited nonzero but its reply was counted" for s in warns]
     rows, audit, synth_used = None, {}, None
-    n_items = sum(len(anchors(t, packet)) for t in findings.values())
+    lone = [(s, name) for s in sorted(findings) for name in anchors(findings[s], brief)]
+    n_items = len(lone)
     if n_items < 2:
         # NOTHING TO GROUP IS NOT A FAILURE TO GROUP. A unanimous clean bench produces
         # zero findings, and routing that through the "synthesis unavailable" path marked
         # a perfect result DEGRADED -- so a council could never report that code is fine.
-        rows = []
+        # But "nothing to group" is not "nothing to report": the first version of this
+        # skip set rows to [] unconditionally, so a council that raised exactly ONE
+        # finding threw it away and printed no anchors at all. Three labs caught it.
+        # A single finding needs no grouping; it goes straight to the tally.
+        rows = [(name, {s}) for s, name in lone]
         if findings:
-            print(f"\n   {n_items} finding(s) raised across {len(findings)} seat(s) — "
+            print(f"\n   {n_items} finding(s) across {len(findings)} seat(s) — "
                   f"nothing to group, so no synthesis was needed.")
     elif len(findings) >= 2:
         tries = []
@@ -579,7 +595,7 @@ async def run_council(brief, material=(), seats=None, rule=3, timeout_s=1800,
         # raised. Grouping needs neither. A flat `F07` carries no seat, no ordering, and
         # no count -- the synthesiser sees one anonymous pile of titles.
         pairs = [(s, name) for s in sorted(findings)
-                 for name in anchors(findings[s], packet)]
+                 for name in anchors(findings[s], brief)]
         random.Random(os.urandom(8)).shuffle(pairs)
         items = {f"F{i:02d}": p for i, p in enumerate(pairs, 1)}
         # Prefer a seat that did not vote; never one that spends without being asked.
@@ -622,7 +638,7 @@ async def run_council(brief, material=(), seats=None, rule=3, timeout_s=1800,
               f"differing wording —\n     the exact bug synthesis exists to fix. Treat the "
               f"counts below as a floor, not a result.")
         degraded.append("synthesis unavailable on every candidate seat")
-        rows = tally(findings, packet)
+        rows = tally(findings, brief)
     if audit.get("dropped"):
         print(f"   ⚠ grouping DROPPED {len(audit['dropped'])} finding(s): "
               f"{', '.join(audit['dropped'][:8])}")
