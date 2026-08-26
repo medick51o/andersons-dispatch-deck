@@ -6,3 +6,11 @@ docs/*.time
 docs/GROK-selfaudit.md
 docs/POOL-research-grok.md
 mcp-seats/__pycache__/
+
+# Council run artifacts — raw seat replies contain local machine paths, and the
+# transcripts are provenance for this shop, not method anyone else needs to load.
+# The curated record is docs/council-harness/FINDINGS.md.
+docs/council-harness/run-*/
+docs/council-harness/pkt-*.md
+docs/council-harness/SIGNED-*.md
+mcp-seats/sdk/__pycache__/
