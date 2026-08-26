@@ -8,6 +8,8 @@ transport is replaced with canned replies, so this runs offline, in a second, fo
 """
 import asyncio
 import importlib.util
+import io
+import re
 import os
 import shutil
 import sys
@@ -167,13 +169,42 @@ REPLIES = {
     "composer": "[FINDING] result exceeds the limit parameter\nWHY: same defect\nFIX: y",
     "cgrok":    "[FINDING] truncation overshoots\nWHY: same defect\nFIX: z",
 }
-GROUPS = "[GROUP] truncation overshoots the stated limit | ids: S1-1, S2-1, S3-1"
+GROUPS = "auto"     # computed from the packet; labels are randomised per run
+
+
+MERGE_WORDS = ("suffix", "exceeds", "overshoot")
+S1_SEEN = set()
+
+
+def _fake_synth(sandbox):
+    """A stand-in synthesiser that GROUPS BY READING ITS PACKET, the way a real one does.
+
+    It cannot be a hardcoded string. run_council now randomises the seat -> S-label map
+    (the round-3 fix: the index itself used to reveal which findings were the
+    synthesiser's own), so any test that hardcodes `ids: S1-1, S2-1` is asserting against
+    a coin flip. This one passed by luck once and failed the next run, which is exactly
+    how a gate silently stops being a gate.
+    """
+    items = {}
+    for line in io.open(os.path.join(sandbox, "pkt.md"), encoding="utf-8"):
+        m = re.match(r"^(S\d+-\d+)\s+(.+)$", line.strip())
+        if m:
+            items[m.group(1)] = m.group(2)
+    S1_SEEN.update(i.split("-")[0] + ":" + t for i, t in items.items() if i.startswith("S1-"))
+    same = [i for i, t in items.items() if any(w in t.lower() for w in MERGE_WORDS)]
+    out = []
+    if same:
+        out.append(f"[GROUP] truncation overshoots the stated limit | ids: {', '.join(same)}")
+    for i, t in items.items():
+        if i not in same:
+            out.append(f"[GROUP] {t[:60]} | ids: {i}")
+    return "\n".join(out)
 
 
 def _council(replies, groups, rule, seats, warn_seat=None):
-    async def fake(seat, packet_path, sandbox, timeout_s):
+    async def fake(seat, packet_path, sandbox, timeout_s, retries=1):
         if "SYNTH" in sandbox:
-            return seat, groups, None, 0.1, None
+            return seat, (_fake_synth(sandbox) if groups == "auto" else groups), None, 0.1, None
         if seat not in replies:
             return seat, "", "CLI not found", 0.0, None
         return seat, replies[seat], None, 0.1, ("exit 1: noisy" if seat == warn_seat else None)
@@ -200,7 +231,7 @@ LIN_REPLIES = {**REPLIES,
                "kimi": "[FINDING] an unrelated thing\nWHY: on its own\nFIX: q"}
 LIN_GROUPS = ("[GROUP] truncation overshoots the stated limit | ids: S1-1, S2-1, S3-1\n"
               "[GROUP] an unrelated thing | ids: S4-1")
-r, _ = _council(LIN_REPLIES, LIN_GROUPS, 3, ["grok", "composer", "cgrok", "kimi"])
+r, _ = _council(LIN_REPLIES, "auto", 3, ["grok", "composer", "cgrok", "kimi"])
 chk("three seats agreeing does NOT carry at 3 labs when two of them are one lab",
     len(r["carried"]) == 0 and r["verdict"] == "OK")
 chk("...and the tally still shows all three seats on that finding",
@@ -224,11 +255,17 @@ chk("synthesis failure falls back to the dumb counter AND marks DEGRADED",
 chk("the dumb fallback demonstrably cannot merge the wordings — that is why it degrades",
     len(r["carried"]) == 0)
 
-r, _ = _council({**REPLIES, "composer": "Looks fine to me, no notes."},
-                "[GROUP] truncation overshoots | ids: S1-1, S2-1", 2,
+r, _ = _council({**REPLIES, "composer": "Looks fine to me, no notes."}, "auto", 2,
                 ["grok", "composer", "cgrok"])
 chk("a prose-only seat is excluded from turnout, not counted as attendance",
     "composer" in r["malformed"] and "composer" not in r["findings"])
+
+# THE RANDOMISED LABEL MAP, locked down. Six councils; if S1 always landed on the same
+# seat the map would be the sorted index again and the synthesiser could decode itself.
+for _ in range(6):
+    _council(REPLIES, "auto", 2, ["grok", "composer", "cgrok"])
+chk("the seat -> S-label map is randomised per run, not the sorted index",
+    len({x.split(":")[1] for x in S1_SEEN}) > 1)
 
 section("")
 print(f"  {sum(OK)}/{len(OK)} checks pass")

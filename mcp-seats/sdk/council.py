@@ -140,8 +140,16 @@ def _argv(seat, packet_path, sandbox):
                 "--disallowed-tools", "Agent", "--permission-mode", "default",
                 "--no-memory", "--disable-web-search", "--output-format", "json"], None
     if s["transport"] == "agy":
+        # Antigravity auto-denies any tool needing `command` permission in headless mode,
+        # because it cannot prompt for one -- and that killed this seat in two of three
+        # councils on 2026-08-25. Its allow-list already covers read_file/cat/type/rg, so
+        # it was reaching for a shell it did not need. Telling it plainly not to is the
+        # cheap fix; the expensive one is guessing at allow-rules for a tool the log
+        # never named.
         return [exe, "--mode", "plan", "--effort", "high", "--print-timeout", "25m",
-                "-p", ask, "--output-format", "json"], None
+                "-p", ask + " Use your file-reading tool only. Do NOT run shell commands "
+                "of any kind — they are auto-denied here and will end your run.",
+                "--output-format", "json"], None
     # --trust auto-approves inside the cwd, which is why the cwd is a throwaway temp dir
     # holding one packet. Without it the seat stalls on a prompt it cannot answer headless.
     return [exe, "--model", s["model"], "--mode", "ask", "--trust",
@@ -198,10 +206,27 @@ def anchors(text):
     return out
 
 
-async def _run_seat(seat, packet_path, sandbox, timeout_s):
+async def _run_seat(seat, packet_path, sandbox, timeout_s, retries=1):
     """Returns (seat, text, err, secs, warn). `warn` is a nonzero exit that still
     produced parseable text — kept, because the content is usually real, but recorded
-    so it degrades the run instead of voting at full strength in silence."""
+    so it degrades the run instead of voting at full strength in silence.
+
+    ONE RETRY ON A CROAK, none on a timeout. Across three councils every seat croaked at
+    least once and each time a whole LAB left the bench silently, which is far more
+    damaging to a lineage-counted tally than to a seat-counted one. A crash is often
+    transient and worth a second attempt; a timeout already consumed the operator's
+    patience budget and retrying it just spends it twice.
+    """
+    for attempt in range(retries + 1):
+        res = await _dispatch_once(seat, packet_path, sandbox, timeout_s)
+        err = res[2]
+        if not err or "timed out" in err or "not found" in err or attempt == retries:
+            return res
+        print(f"   ↻ {seat} croaked ({err[:52]}) — one retry")
+    return res
+
+
+async def _dispatch_once(seat, packet_path, sandbox, timeout_s):
     argv, err = _argv(seat, packet_path, sandbox)
     if err:
         return seat, "", err, 0.0, None
