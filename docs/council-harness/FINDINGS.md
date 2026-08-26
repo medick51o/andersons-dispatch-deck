@@ -1,9 +1,9 @@
-# The council harness reviewing itself — six rounds, 2026-08-25/26
+# The council harness reviewing itself — seven rounds, 2026-08-25/26
 
 `mcp-seats/sdk/council.py` runs this shop's standing pattern: the same question sent blind
 to several models from different labs, tallied against a rule fixed before anyone reports.
 
-It was pointed at itself, six times. This is the record of what the seats found and what
+It was pointed at itself, seven times. This is the record of what the seats found and what
 was done about it — not the transcripts, which hold machine paths and are provenance for
 one shop rather than method anyone else needs to load.
 
@@ -16,7 +16,8 @@ one shop rather than method anyone else needs to load.
 | 3 | 4/5 — kimi timed out | 5 | 3 fixed, 2 documented as limits |
 | 4 | **5/5, 4 labs — first full attendance** | 7 | all 7 fixed |
 | 5 | 4/4, 4 labs | 4 | all 4 fixed · **first OK verdict** |
-| 6 | 4/4, 4 labs | 7 — *every one a round-5 regression* | fixed; loop stopped here |
+| 6 | 4/4, 4 labs | 7 — *every one a round-5 regression* | all fixed |
+| 7 | 4/4, 4 labs | 5 — *every one a round-6 regression* | all fixed; four fixes confirmed CORRECT |
 
 ## The five findings that changed how the tool works
 
@@ -57,9 +58,16 @@ the brief asserting the old promise — so the seats were correctly reviewing a 
 still telling them.
 
 **Fixing fast breaks things quietly.** Every one of round 6's seven carried findings was a
-regression from round 5's batch, including two that lost data: a lone finding silently
-discarded, and a template guard that rejected valid findings because the material under
-review was inside the packet it checked against.
+regression from round 5's batch, and every one of round 7's five was a regression from
+round 6's. Both batches lost data the same way — by rejecting real findings.
+
+**One guard took four attempts.** The template-echo check rejected `<angle brackets>`
+(defeated when a brief dropped them), then any name appearing in the packet (which
+contains the material, so findings quoting the code vanished), then the same substring
+match scoped to the brief (so any short name occurring in the brief's prose vanished), and
+finally an exact match against the brief's own anchor lines. Each version was written
+confidently. A guard against phantom findings that instead deletes real ones is the worse
+trade every time: a phantom is merely wrong, a deletion is invisible.
 
 **The gate passed all of them.** 52/52 green while a data-loss bug sat in the code. Tests
 cover what someone thought to write down; the council found what nobody did. Both are
@@ -78,9 +86,9 @@ as a separate low-privilege user. Until that exists, `SEATS[*]["hard_ro"]` recor
 transports have real vendor deny-flags, and every run prints the ones that do not. **The
 harness does not claim containment it does not have.**
 
-## Why this stopped at six rounds
+## Why this stopped at seven rounds
 
-Round 1 found ten. Round 2 refused the fixes. Round 6 found seven more. A council pointed
+Round 1 found ten. Round 2 refused the fixes. Round 7 found five more. A council pointed
 at any artifact will always find another layer — that is what adversarial review *is*, not
 a defect in the artifact.
 
@@ -88,10 +96,12 @@ The harness's own law says a fan-out must be **BOUNDED — declared before the r
 "as many as it takes."** That was applied to the seats and not to the rounds. Bound the
 rounds too, or the loop never closes.
 
-**Round 6's fixes are test-verified but not council-verified.** They are the only changes
-in this file that no blind seat has looked at.
+**Round 7's fixes are test-verified but not council-verified.** They are the only changes
+in this file that no blind seat has looked at. Round 7 did, however, confirm four earlier
+fixes as CORRECT on the record: carries-count-labs, turnout-versus-verdict separation,
+read-only honesty, and the per-seat sandbox roots.
 
 ## Gate
 
-`python mcp-seats/sdk/council_selftest.py` — 58 checks, offline, no model dispatched, one
+`python mcp-seats/sdk/council_selftest.py` — 65 checks, offline, no model dispatched, one
 named test per ruling above. A fix with no test is a fix that quietly reverts.

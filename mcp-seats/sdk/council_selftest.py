@@ -361,6 +361,36 @@ chk("...and the decoy still wins when IT is the transport's key",
     rep('{"result":{"text":"the nested body"},"text":"top-level decoy"}', "grok")
     == "top-level decoy")
 
+# ===================================================================== round 7
+section("ROUND 7 — the template guard's third form, and four smaller repairs")
+
+BRIEF7 = ("Report findings in this format:\n[FINDING] short name, under 60 chars\n"
+          "WHY: one or two sentences\nRank by real impact and name the line.")
+chk("the brief's own template line is still rejected",
+    c.anchors("[FINDING] short name, under 60 chars\nWHY: y", BRIEF7) == [])
+chk("a real finding is NOT dropped for being a substring of the brief",
+    c.anchors("[FINDING] rank by real impact\nWHY: y", BRIEF7) == ["rank by real impact"])
+chk("...nor for sharing words with the brief's prose",
+    c.anchors("[FINDING] name the line that fails\nWHY: y", BRIEF7)
+    == ["name the line that fails"])
+
+r, _ = _council({"grok": ("[FINDING] first thing wrong\nWHY: a\nFIX: b\n"
+                          "[FINDING] second thing wrong\nWHY: c\nFIX: d")},
+                "auto", 1, ["grok"])
+chk("ONE seat with two findings is not a fabricated synthesis failure",
+    not any("synthesis" in d.lower() for d in r["degraded"]))
+chk("...and both of its findings still reach the tally", len(r["tally"]) == 2)
+
+r, _ = _council({"grok": "[FINDING] the only finding raised\nWHY: x\nFIX: y",
+                 "composer": CLEAN_REPLY}, "auto", 2, ["grok", "composer"])
+chk("a skipped-because-unnecessary grouping is not marked DEGRADED",
+    r["verdict"] == "OK" and not r["degraded"])
+
+r, _ = _council({"grok": CLEAN_REPLY, "composer": CLEAN_REPLY}, "auto", 2,
+                ["grok", "composer"])
+chk("an all-clean bench is a result, not a malformed run",
+    r["verdict"] == "OK" and r["tally"] == [] and not r["malformed"])
+
 section("")
 print(f"  {sum(OK)}/{len(OK)} checks pass")
 sys.exit(0 if all(OK) else 1)

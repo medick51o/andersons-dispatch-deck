@@ -214,6 +214,20 @@ def _reply(raw, transport=None):
     return max(pool, key=len), len(pool)
 
 
+def _template_names(brief):
+    """The anchor names the BRIEF itself prints — the only strings that can be echoes.
+
+    Cached per brief text, because this runs once per anchor per seat and the brief does
+    not change inside a run.
+    """
+    if brief not in _TEMPLATE_CACHE:
+        _TEMPLATE_CACHE[brief] = {n.strip(" *`").lower() for n in ANCHOR.findall(brief)}
+    return _TEMPLATE_CACHE[brief]
+
+
+_TEMPLATE_CACHE = {}
+
+
 def anchors(text, brief=""):
     """The findings a reply actually raised.
 
@@ -228,13 +242,17 @@ def anchors(text, brief=""):
         name = m.group(1).strip(" *`")
         if "<" in name or ">" in name or len(name.split()) < 2:
             continue
-        # THE TEMPLATE GUARD, SCOPED TO THE BRIEF. A seat restating the instructions has
-        # not found anything. The first version checked the whole PACKET, which includes
-        # the material under review -- so any finding that quoted the code it was about
-        # got silently dropped. Three labs caught it in one round: a guard against false
-        # positives that manufactured false negatives instead, which is the worse trade,
-        # because a rejected finding is invisible and a phantom one is merely wrong.
-        if brief and name.lower() in brief.lower():
+        # THE TEMPLATE GUARD, THIRD FORM: match the brief's OWN ANCHOR LINES exactly.
+        #   v1 rejected `<angle brackets>` -- defeated the moment a brief dropped them.
+        #   v2 rejected any name appearing in the PACKET -- which contains the material,
+        #      so findings that quoted the code they were about vanished.
+        #   v3 scoped that to the brief but kept SUBSTRING matching, so any short name
+        #      that happened to occur anywhere in the brief's prose was dropped. All four
+        #      labs caught it. A guard against phantom findings that instead deletes real
+        #      ones is the worse trade every time: a phantom is merely wrong, a deletion
+        #      is invisible.
+        # Only the literal template lines can be echoes, so only those are rejected.
+        if name.strip().lower() in _template_names(brief):
             continue
         if not re.search(r"\bWHY\s*:", text[m.end():m.end() + 400], re.I):
             continue
@@ -551,8 +569,14 @@ async def run_council(brief, material=(), seats=None, rule=3, timeout_s=1800,
             # toward turnout with zero findings. Without this a council can agree
             # unanimously that something is fine and report INCONCLUSIVE.
             findings[seat] = text
+            # A clean vote still carries its warnings. The first version returned before
+            # recording them, so a seat that exited nonzero, or whose reply had rival
+            # candidates, voted CLEAN with both signals swallowed -- the quietest possible
+            # path through the harness was also the least scrutinised.
+            if warn:
+                warns[seat] = warn
             print(f"   {SEATS[seat]['mark']} {seat:10} {len(text):>7,} chars  {secs:>5.0f}s"
-                  f"   CLEAN — no findings raised")
+                  f"   CLEAN — no findings raised" + (f"  ⚠ {warn[:40]}" if warn else ""))
             continue
         if not found:
             # A seat that answers in prose has not voted. It used to count as turnout and
@@ -572,22 +596,24 @@ async def run_council(brief, material=(), seats=None, rule=3, timeout_s=1800,
           f"({len(heard)} labs) in {time.perf_counter() - t0:.0f}s")
 
     degraded = [f"{s} exited nonzero but its reply was counted" for s in warns]
-    rows, audit, synth_used = None, {}, None
+    rows, audit, synth_used, group_state = None, {}, None, "pending"
     lone = [(s, name) for s in sorted(findings) for name in anchors(findings[s], brief)]
     n_items = len(lone)
-    if n_items < 2:
-        # NOTHING TO GROUP IS NOT A FAILURE TO GROUP. A unanimous clean bench produces
-        # zero findings, and routing that through the "synthesis unavailable" path marked
-        # a perfect result DEGRADED -- so a council could never report that code is fine.
-        # But "nothing to group" is not "nothing to report": the first version of this
-        # skip set rows to [] unconditionally, so a council that raised exactly ONE
-        # finding threw it away and printed no anchors at all. Three labs caught it.
-        # A single finding needs no grouping; it goes straight to the tally.
+    # WHEN GROUPING CANNOT CHANGE THE ANSWER, DO NOT ATTEMPT IT -- and do not report the
+    # non-attempt as a failure. Two states qualify: fewer than two findings exist, or only
+    # ONE seat voted, in which case no cross-seat agreement is possible whatever grouping
+    # would do. The previous condition tested `len(findings) >= 2` on the synthesis branch
+    # only, so a lone seat raising several findings fell through every branch and printed
+    # SYNTHESIS FAILED -- a fabricated failure for a council that was simply small.
+    if n_items < 2 or len(findings) < 2:
         rows = [(name, {s}) for s, name in lone]
+        group_state = "not needed"
         if findings:
+            why = ("only one seat voted, so no agreement is possible"
+                   if len(findings) < 2 else "nothing to group")
             print(f"\n   {n_items} finding(s) across {len(findings)} seat(s) — "
-                  f"nothing to group, so no synthesis was needed.")
-    elif len(findings) >= 2:
+                  f"{why}. Synthesis skipped, not failed.")
+    else:
         tries = []
         # OPAQUE, FLAT, SHUFFLED IDS. This started as `S{seat}-{n}`, which round 3 caught
         # leaking the seat via a sorted index, and round 4 caught still leaking two things
@@ -657,11 +683,18 @@ async def run_council(brief, material=(), seats=None, rule=3, timeout_s=1800,
     # printed the identical "** CARRIED **" marker, so a degraded run read exactly like a
     # clean one two lines below the warning that said it wasn't -- and the warning is the
     # part a tired operator skips.
-    grouped = synth_used is not None
-    mark = "** CARRIED **" if grouped else "~~ CARRIED, UNGROUPED ~~"
+    # THREE STATES, NOT TWO. A tally that skipped grouping because grouping could not
+    # change the answer is COMPLETE; a tally that fell back to string matching after
+    # synthesis died is a floor. Collapsing those into "not grouped" printed the scary
+    # UNGROUPED banner over perfectly good results.
+    if synth_used:
+        group_state = "grouped"
+    elif group_state != "not needed":
+        group_state = "fallback"
+    mark = "~~ CARRIED, UNGROUPED ~~" if group_state == "fallback" else "** CARRIED **"
     carried = []
     if rows:
-        if not grouped:
+        if group_state == "fallback":
             print(f"\n   (counts below are RAW TITLE MATCHES. Seats that found the same "
                   f"thing in different\n    words appear as separate rows, each undercounted. "
                   f"This is a floor, not a result.)")
@@ -675,6 +708,11 @@ async def run_council(brief, material=(), seats=None, rule=3, timeout_s=1800,
             print(f"   … {len(rows) - 25} further rows not shown; {len(hidden)} of them "
                   f"CARRIED. Full list in the artifacts.")
         carried = [i for i, ss in rows if len(_labs(ss)) >= rule]
+    elif findings:
+        # An all-clean bench found nothing BY DESIGN. Telling its operator the brief was
+        # written wrong is the harness misreading its own best possible outcome.
+        print(f"\n   ✅ {len(findings)} seat(s) across {len(heard)} lab(s) reviewed and "
+              f"raised NOTHING. That is a result, not a malformed run.")
     else:
         print("\n   No usable [FINDING] anchors — the brief should ask for them, with a "
               "WHY line, if you want an automatic tally.")
