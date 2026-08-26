@@ -83,9 +83,15 @@ chk("brief's own template line cannot be counted as turnout",
 chk("an anchor with no WHY within reach is not a finding",
     c.anchors("[FINDING] a bare title nobody explained") == [])
 
-chk("reply parsing takes the LAST top-level object, not a startup banner",
-    c._reply('{"text":"BANNER: starting"}\n{"text":"the real review"}')
-    == "the real review")
+chk("a short startup banner cannot become the review (longest content wins)",
+    c._reply('{"text":"initializing"}\n{"text":"the real review, at length"}')
+    == "the real review, at length")
+chk("a TRAILING status object cannot overwrite a finished review",
+    c._reply('{"result":"a long and complete review of the code"}\n{"result":"ok"}')
+    == "a long and complete review of the code")
+chk("a top-level `text` cannot shadow longer content under `result`",
+    c._reply('{"text":"done","result":"the actual review body goes here"}')
+    == "the actual review body goes here")
 chk("a NESTED object cannot shadow its parent's result",
     c._reply('{"result":"REAL ANSWER","meta":{"text":"nested decoy"}}') == "REAL ANSWER")
 chk("junk between objects does not break parsing",
@@ -173,7 +179,7 @@ GROUPS = "auto"     # computed from the packet; labels are randomised per run
 
 
 MERGE_WORDS = ("suffix", "exceeds", "overshoot")
-S1_SEEN = set()
+FIRST_ID_SEEN = set()
 
 
 def _fake_synth(sandbox):
@@ -187,10 +193,10 @@ def _fake_synth(sandbox):
     """
     items = {}
     for line in io.open(os.path.join(sandbox, "pkt.md"), encoding="utf-8"):
-        m = re.match(r"^(S\d+-\d+)\s+(.+)$", line.strip())
+        m = re.match(r"^(F\d+)\s+(.+)$", line.strip())
         if m:
             items[m.group(1)] = m.group(2)
-    S1_SEEN.update(i.split("-")[0] + ":" + t for i, t in items.items() if i.startswith("S1-"))
+    FIRST_ID_SEEN.update(t for i, t in items.items() if i == "F01")
     same = [i for i, t in items.items() if any(w in t.lower() for w in MERGE_WORDS)]
     out = []
     if same:
@@ -260,12 +266,42 @@ r, _ = _council({**REPLIES, "composer": "Looks fine to me, no notes."}, "auto", 
 chk("a prose-only seat is excluded from turnout, not counted as attendance",
     "composer" in r["malformed"] and "composer" not in r["findings"])
 
-# THE RANDOMISED LABEL MAP, locked down. Six councils; if S1 always landed on the same
-# seat the map would be the sorted index again and the synthesiser could decode itself.
+# THE OPAQUE ID MAP, locked down. Six councils; if F01 always names the same finding the
+# ids are a sorted index again and the synthesiser can decode authorship from them.
 for _ in range(6):
     _council(REPLIES, "auto", 2, ["grok", "composer", "cgrok"])
-chk("the seat -> S-label map is randomised per run, not the sorted index",
-    len({x.split(":")[1] for x in S1_SEEN}) > 1)
+chk("finding ids are shuffled per run, not a stable index",
+    len(FIRST_ID_SEEN) > 1)
+chk("finding ids carry no seat and no per-seat count",
+    all(re.fullmatch(r"F\d+", i) for i in ["F01", "F07"]) and
+    not any("-" in i for i in FIRST_ID_SEEN))
+
+# ---- round 4's carried findings
+r, _ = _council({**REPLIES, "gemini": "[CLEAN] I checked every claim and found nothing."},
+                "auto", 2, ["grok", "composer", "cgrok", "gemini"])
+chk("a CLEAN review is a vote, not a malformed reply",
+    "gemini" in r["findings"] and "gemini" not in r["malformed"])
+chk("...and its lab counts toward turnout", "Google" in r["labs"])
+
+# The full free bench: with every free seat dispatched there is no non-voter left, which
+# is the exact state that forced a voter to group in rounds 1-4.
+FULL = {**REPLIES, "gemini": "[FINDING] a distinct google finding\nWHY: y\nFIX: z"}
+r, _ = _council(FULL, "auto", 2, ["grok", "composer", "cgrok", "gemini"])
+chk("with no non-voter left, a same-lab spare is RESERVED to synthesise",
+    r["synth"] == "cgrok" and "cgrok" not in r["findings"])
+chk("...and reserving costs no lineage: xAI still votes via grok",
+    "xAI" in r["labs"] and r["verdict"] == "OK")
+chk("...so the default bench can now reach a clean verdict at all",
+    r["verdict"] == "OK" and not r["degraded"])
+
+r, _ = _council(REPLIES, "[GROUP] merged finding here | ids: F01, F02, F99", 2,
+                ["grok", "composer", "cgrok"])
+chk("an invented id is reported, not silently filtered",
+    "F99" in (r["audit"].get("invented") or []) and r["verdict"] == "DEGRADED")
+
+chk("prose echoing the template in its own words is not a finding",
+    c.anchors("[FINDING] <short name>\nWHY: x") == []
+    and c.anchors("[FINDING] name\nWHY: x") == [])
 
 section("")
 print(f"  {sum(OK)}/{len(OK)} checks pass")

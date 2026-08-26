@@ -39,7 +39,20 @@ gemini votes again this round: the agy shell-command auto-deny that killed it in
 | 1 (22:53) | 10 | 10 | 4/5 seats — gemini croaked |
 | 2 (23:17) | ~10 refusals of round 1's fixes | all | 3/4 — grok killed by my relative `--cwd` |
 | 3 (23:39) | 5 | 3 (+2 documented as limits) | PARTIAL — kimi timed out |
-| 4 | *in flight* | | |
+| 4 (00:58) | 7 | 7 (2 of them by withdrawing a false claim in the BRIEF) | DEGRADED — **5/5 seats, 4 labs, first full attendance** |
+| 5 | *in flight* | | |
+
+**Round 4's lesson:** three seats unanimously flagged "fix #7 claimed read-only
+enforcement" — and the false claim was in `BRIEF-VERIFY.md`, not the code. I had
+downgraded the code and left the brief asserting the old promise, so the council was
+correctly reviewing a lie I was still telling it. Briefs are part of the artifact.
+
+Round 4 fixes: reserved synthesiser (a same-lab spare is pulled off the voting bench, so
+no voter groups and no lineage is lost) · opaque flat shuffled finding ids, which no
+longer leak authorship or per-seat counts · `[CLEAN]` is now a real vote, so a unanimous
+"nothing wrong" cannot report INCONCLUSIVE · longest-content JSON parsing, so a trailing
+status object cannot overwrite a finished review · invented ids reported instead of
+silently filtered · tighter template-echo rejection.
 
 ## Standing facts a resumed session needs
 

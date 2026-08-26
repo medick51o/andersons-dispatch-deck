@@ -161,14 +161,19 @@ def _reply(raw):
     hand-run version paid six times a day, in my head, with a fresh mistake available
     each time.
 
-    Scans TOP-LEVEL objects only, keeping the last one that carries content. Two separate
-    bugs live here and both were found by review, not by me:
+    Scans TOP-LEVEL objects only and keeps the LONGEST content found, across objects and
+    across the three keys. Three separate bugs lived here, all found by review:
       * taking the FIRST match let a startup banner become a seat's entire review;
       * scanning every `{` let a NESTED object shadow its parent, because the child
         starts later than the parent does. Advancing past each decoded object — rather
-        than one character — makes nested objects unreachable.
+        than one character — makes nested objects unreachable;
+      * then taking the LAST match let a trailing status or telemetry object overwrite a
+        finished review with "ok".
+    Longest-wins is a heuristic, and it is named as one: it assumes a review is the
+    largest thing a seat emits, which is true of every transport here and would not
+    survive a vendor that padded its status frames. Ties go to the later object.
     """
-    out, i, dec, n = None, 0, json.JSONDecoder(), len(raw)
+    best, i, dec, n = "", 0, json.JSONDecoder(), len(raw)
     while i < n:
         j = raw.find("{", i)
         if j == -1:
@@ -178,12 +183,13 @@ def _reply(raw):
         except json.JSONDecodeError:
             i = j + 1
             continue
-        if isinstance(v, dict) and (v.get("text") or v.get("result") or v.get("response")):
-            out = v
+        if isinstance(v, dict):
+            for k in ("text", "result", "response"):
+                s = v.get(k)
+                if isinstance(s, str) and len(s) >= len(best):
+                    best = s
         i = max(end, j + 1)
-    if not out:
-        return ""
-    return str(out.get("text") or out.get("result") or out.get("response") or "")
+    return best
 
 
 def anchors(text):
@@ -198,12 +204,25 @@ def anchors(text):
     out = []
     for m in ANCHOR.finditer(text):
         name = m.group(1).strip(" *`")
-        if name.startswith("<") or "under 60 chars" in name.lower():
-            continue                                     # the brief's own example line
+        # Reject the brief's own template however it is echoed. Matching only the exact
+        # phrase let a seat quoting the instructions in its own words score a vote.
+        if "<" in name or ">" in name or len(name.split()) < 2:
+            continue
         if not re.search(r"\bWHY\s*:", text[m.end():m.end() + 400], re.I):
             continue
         out.append(name)
     return out
+
+
+def is_clean(text):
+    """A review that found nothing is a VOTE, not a malformed reply.
+
+    Excluding anchor-less replies from turnout was right for prose that ignored the
+    format and wrong for a seat reporting clean code -- two labs caught it. Left as it
+    was, a council could agree unanimously that something is fine and report INCONCLUSIVE,
+    which is the turnout-vs-verdict confusion all over again, inverted.
+    """
+    return bool(re.search(r"\[(?:CLEAN|NO FINDINGS|NOTHING FOUND)\]", text, re.I))
 
 
 async def _run_seat(seat, packet_path, sandbox, timeout_s, retries=1):
@@ -257,9 +276,9 @@ one per line, each with an ID. **Your only job is to say which IDs name THE SAME
 You are not deciding what is right, what matters, or what should be done. You are not
 adding findings. You are not dropping findings. You are grouping.
 
-Reviewers are anonymous, in an order chosen at random, and you are given only their
-finding TITLES — never their prose. One of them may be you, and you are not meant to be
-able to tell.
+The IDs are opaque and shuffled. They tell you nothing about who wrote a finding, which
+findings share an author, or how many each author raised. You are given titles only,
+never the prose. One of these may be yours, and you are not meant to be able to tell.
 
 ## Rules
 - **Every ID below must appear in exactly one group.** If an ID matches nothing else, it
@@ -267,7 +286,7 @@ able to tell.
 - Group only when the titles name the SAME underlying problem. Two findings about the
   same function naming different defects are TWO groups.
 - Name each group in the clearest words any reviewer used, not a blend of all of them.
-- **Never invent an ID.** Only IDs printed below exist.
+- **Never invent an ID.** Only IDs printed below exist, and invented ones are logged.
 
 ## Output — this exact format, one line per group, and nothing else
 ```
@@ -321,11 +340,12 @@ async def synthesize(items, seat, rundir, sandbox_root, timeout_s):
         # clean grouping, because the exit code was never threaded through to here.
         return None, f"synthesiser exited nonzero ({warn})", {}
 
-    groups, placed = [], {}
+    groups, placed, invented = [], {}, set()
     for m in re.finditer(r"\[GROUP\]\s*([^|\n]{4,90})\|\s*ids:\s*([^\n]+)", text):
         gname = m.group(1).strip(" *`")
         raw = {x.strip().upper() for x in m.group(2).split(",") if x.strip()}
         real = {x for x in raw if x in items}       # invented IDs cannot vote
+        invented |= (raw - real)
         if not gname or not real:
             continue
         for x in real:
@@ -338,8 +358,11 @@ async def synthesize(items, seat, rundir, sandbox_root, timeout_s):
     # raised against how many groups mentioned it -- so a dropped finding plus one
     # spurious placement netted to zero and printed nothing. IDs make it exact: every ID
     # must be placed exactly once, and both directions are reported.
+    # Invented ids were filtered but never REPORTED, so a synthesiser hallucinating votes
+    # looked identical to one that behaved. Filtering silently is how you stop noticing.
     audit = {"dropped": sorted(i for i in items if i not in placed),
-             "duplicated": sorted(i for i, n in placed.items() if n > 1)}
+             "duplicated": sorted(i for i, n in placed.items() if n > 1),
+             "invented": sorted(invented)}
     audit = {k: v for k, v in audit.items() if v}
     return sorted(groups, key=lambda g: -len(g[1])), None, audit
 
@@ -369,7 +392,7 @@ def _labs(seat_set):
 
 
 async def run_council(brief, material=(), seats=None, rule=3, timeout_s=1800,
-                      outdir=None, synth=None, keep_sandboxes=False):
+                      outdir=None, synth=None, keep_sandboxes=False, reserve_synth=True):
     """Dispatch a blind council and tally it against a rule fixed before the run."""
     seats = list(seats or FREE)
     unknown = [s for s in seats if s not in SEATS]
@@ -385,6 +408,24 @@ async def run_council(brief, material=(), seats=None, rule=3, timeout_s=1800,
             f"rule {rule} is unreachable: this bench holds {len(labs)} distinct lab(s) "
             f"({', '.join(sorted(labs))}). Carries count labs, not seats.")
     metered = [s for s in seats if SEATS[s]["meter"] == "credit"]
+
+    # RESERVE A SYNTHESISER. Five seats, four labs, unanimous: with every free seat
+    # dispatched, no non-voter exists and a voter always groups -- so the default bench
+    # could never reach a clean verdict, and the anonymisation was papering over a
+    # structural problem rather than fixing one.
+    # A seat is only pulled when its lab is seated TWICE, so reserving costs no lineage.
+    # Be exact about what that buys: the reserved seat did not vote, but it still shares a
+    # lab with one that did. That is a weaker tie than being the author, and it is a real
+    # one, so it is printed rather than called neutral.
+    reserved, same_lab = None, False
+    if reserve_synth and not [k for k in SEATS
+                              if k not in seats and SEATS[k]["meter"] != "credit"]:
+        dup = [s for s in seats
+               if sum(1 for x in seats if SEATS[x]["vendor"] == SEATS[s]["vendor"]) > 1]
+        if dup:
+            reserved, same_lab = dup[-1], True
+            seats = [s for s in seats if s != reserved]
+    labs = _labs(seats)
 
     # ARTIFACTS and SANDBOXES live in different trees, on purpose. When seat working
     # directories sat inside the artifact tree, a seat's own file tools could walk up to
@@ -418,6 +459,12 @@ async def run_council(brief, material=(), seats=None, rule=3, timeout_s=1800,
         print(f"   {d['mark']} {s:10} {d['vendor']:10} "
               f"{'💸 CREDIT' if d['meter'] == 'credit' else d['meter']}"
               f"{'' if d['hard_ro'] else '   (no vendor read-only flags)'}")
+    if reserved:
+        print(f"   {SEATS[reserved]['mark']} {reserved} RESERVED as synthesiser — not "
+              f"voting, so grouping is done by a seat with\n     no findings of its own. "
+              f"Its lab ({SEATS[reserved]['vendor']}) is still seated, so no lineage is "
+              f"lost —\n     but the grouper does share a lab with a voter. Named, not "
+              f"neutral.")
     if dupes:
         print(f"   ⚠ same lab seated twice: {', '.join(sorted(dupes))} — those seats share "
               f"a lineage\n     and count as ONE vote toward a carry.")
@@ -451,10 +498,18 @@ async def run_council(brief, material=(), seats=None, rule=3, timeout_s=1800,
         io.open(os.path.join(rundir, f"SIGNED-{seat}.md"), "w",
                 encoding="utf-8", newline="").write(text)
         found = anchors(text)
+        if not found and is_clean(text):
+            # A seat that reviewed and found nothing is a VOTE OF CLEAN, and it counts
+            # toward turnout with zero findings. Without this a council can agree
+            # unanimously that something is fine and report INCONCLUSIVE.
+            findings[seat] = text
+            print(f"   {SEATS[seat]['mark']} {seat:10} {len(text):>7,} chars  {secs:>5.0f}s"
+                  f"   CLEAN — no findings raised")
+            continue
         if not found:
             # A seat that answers in prose has not voted. It used to count as turnout and
             # contribute nothing, quietly inflating how well-attended a council was.
-            malformed[seat] = "replied without a usable [FINDING] anchor"
+            malformed[seat] = "replied without a usable [FINDING] anchor or [CLEAN] marker"
             print(f"   {SEATS[seat]['mark']} {seat:10} {len(text):>7,} chars  {secs:>5.0f}s"
                   f"  ⚠ NO FINDINGS — not counted")
             continue
@@ -471,17 +526,15 @@ async def run_council(brief, material=(), seats=None, rule=3, timeout_s=1800,
     degraded = [f"{s} exited nonzero but its reply was counted" for s in warns]
     rows, audit, synth_used = None, {}, None
     if len(findings) >= 2:
-        items, tries = {}, []
-        # THE SEAT INDEX ITSELF IS A TELL. Round 2 randomised the ORDER the findings are
-        # printed in, but kept `S{i}` numbered off `sorted(findings)` -- so S1 was always
-        # the alphabetically-first seat, and a synthesiser that knows the bench could
-        # decode its own label from the number alone. Three seats caught it. The seat ->
-        # index map is now itself randomised per run.
-        snames = sorted(findings)
-        random.Random(os.urandom(8)).shuffle(snames)
-        for si, s in enumerate(snames, 1):
-            for ai, name in enumerate(anchors(findings[s]), 1):
-                items[f"S{si}-{ai}"] = (s, name)
+        tries = []
+        # OPAQUE, FLAT, SHUFFLED IDS. This started as `S{seat}-{n}`, which round 3 caught
+        # leaking the seat via a sorted index, and round 4 caught still leaking two things
+        # after the shuffle: which findings shared an author, and HOW MANY each author
+        # raised. Grouping needs neither. A flat `F07` carries no seat, no ordering, and
+        # no count -- the synthesiser sees one anonymous pile of titles.
+        pairs = [(s, name) for s in sorted(findings) for name in anchors(findings[s])]
+        random.Random(os.urandom(8)).shuffle(pairs)
+        items = {f"F{i:02d}": p for i, p in enumerate(pairs, 1)}
         # Prefer a seat that did not vote; never one that spends without being asked.
         # If the preferred synthesiser dies, TRY THE NEXT rather than dropping straight
         # to the broken string counter -- gemini's headless croak took out a whole tally
@@ -499,10 +552,15 @@ async def run_council(brief, material=(), seats=None, rule=3, timeout_s=1800,
         tries = [k for k in tries if not (k in seen or seen.add(k))]
         for cand in tries:
             voted = cand in findings
-            print(f"\n   {SEATS[cand]['mark']} synthesising with {cand}"
-                  + (" — A VOTER; titles only, labels randomised, so it should not be able"
-                     " to\n     recognise its own findings. Bias reduced, not removed."
-                     if voted else " — did not vote (neutral)"))
+            if voted:
+                note = (" — A VOTER; opaque ids and titles only, so it should not be able"
+                        " to\n     recognise its own findings. Bias reduced, not removed.")
+            elif cand == reserved and same_lab:
+                note = (f" — reserved non-voter, but shares a lab "
+                        f"({SEATS[cand]['vendor']}) with a voter")
+            else:
+                note = " — did not vote, different lab (neutral)"
+            print(f"\n   {SEATS[cand]['mark']} synthesising with {cand}{note}")
             rows, synth_err, audit = await synthesize(items, cand, rundir,
                                                       sandbox_root, timeout_s)
             if rows:
@@ -526,6 +584,11 @@ async def run_council(brief, material=(), seats=None, rule=3, timeout_s=1800,
         print(f"   ⚠ grouping placed {len(audit['duplicated'])} finding(s) in more than one "
               f"group: {', '.join(audit['duplicated'][:8])}")
         degraded.append(f"{len(audit['duplicated'])} findings double-placed in grouping")
+    if audit.get("invented"):
+        print(f"   ⚠ grouping cited {len(audit['invented'])} id(s) that do not exist: "
+              f"{', '.join(audit['invented'][:8])} — filtered, but the synthesiser was "
+              f"hallucinating")
+        degraded.append(f"{len(audit['invented'])} invented ids cited in grouping")
 
     # An UNGROUPED tally must not wear the grouped tally's clothes. The fallback counter
     # printed the identical "** CARRIED **" marker, so a degraded run read exactly like a
@@ -598,6 +661,8 @@ def main():
                     help="seat that groups the findings (default: a free non-voter)")
     ap.add_argument("--keep-sandboxes", action="store_true",
                     help="do not delete the per-seat temp working directories")
+    ap.add_argument("--no-reserve-synth", action="store_true",
+                    help="let every seat vote, even if that forces a voter to group")
     a = ap.parse_args()
     try:
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -605,7 +670,8 @@ def main():
         pass
     brief = io.open(a.brief, encoding="utf-8").read()
     out = asyncio.run(run_council(brief, a.material, a.seats, a.rule, a.timeout,
-                                  a.outdir, a.synth, a.keep_sandboxes))
+                                  a.outdir, a.synth, a.keep_sandboxes,
+                                  not a.no_reserve_synth))
     # The exit code carries the verdict. A council that never convened, whose grouping was
     # degraded, or that lost part of its bench must not look like a clean pass downstream.
     return 0 if out["verdict"] == "OK" else 1

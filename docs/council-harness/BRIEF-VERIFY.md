@@ -20,11 +20,17 @@ nothing in the code is worse than the original bug, because it closes the ticket
 5. **Synthesis is audited.** Findings a seat raised but that landed in no group must be
    reported as a possible drop.
 6. **Reply parsing takes the LAST complete object**, and a nonzero exit code is surfaced.
-7. **Read-only is enforced for every transport**, via a per-seat sandbox directory used
-   as the working directory, not via one vendor's flags.
-8. **Blindness survives across runs** — a unique run directory per council, private
-   packet directory per seat.
-9. **Prose replies with no `[FINDING]` anchor are not counted as turnout.**
+7. **Read-only is NOT claimed as enforced.** Only Grok's transport has real deny-flags;
+   the others rest on one vendor mode flag plus a throwaway cwd. `hard_ro` records which
+   is which and the run prints the weak ones. *An earlier version of this brief claimed
+   the sandbox enforced read-only everywhere. Three councils graded that false assurance,
+   correctly. The claim is withdrawn; check that the CODE makes no stronger promise.*
+8. **Blindness survives across runs for RELATIVE paths only** — unique run directory,
+   per-seat throwaway sandboxes outside the repo and outside the artifact tree. An
+   absolute path still defeats it, and that is a documented limit, not a fixed bug.
+9. **Prose with no `[FINDING]` anchor is not turnout — but `[CLEAN]` is.** A seat that
+   reviewed and found nothing votes clean; only a reply that ignored the format is
+   dropped.
 10. **The exit code carries the verdict** — a degraded or inconclusive council must not
     exit 0.
 
@@ -44,9 +50,13 @@ everything is as useless as one that objects to nothing.
 ## Output — this exact anchor format
 
 ```
-[FINDING] <short name, under 60 chars>
-WHY: <one or two sentences, naming the line or construct>
-FIX: <what to change>
+[FINDING] short name, under 60 chars
+WHY: one or two sentences, naming the line or construct
+FIX: what to change
 ```
+
+If you reviewed everything above and genuinely found nothing worth raising, say so with a
+single `[CLEAN]` line and a sentence on what you checked. That is a real vote and it is
+counted. Do not manufacture a finding to look thorough.
 
 Do not write any file. Report only.
