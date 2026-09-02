@@ -4,81 +4,68 @@ description: "ANDERSON'S DISPATCH DECK (ADD) — heavy multi-model agentic orche
 ---
 # Anderson's Dispatch Deck — ADD  (/dispatch) — heavy orchestration, straight-faced
 
-**This SKILL is a thin loader.** The method is not in this file — it is in **SPINE.md**, which this
-tier loads and renders **plain**: no cat, no Jessie/James/Butch/Cassidy, no episodes, no "prepare for
-trouble." The Deck is SPINE with model names and a gold baton. Refer to workers by their MODEL
-(Codex, Gemini Flash, Grok, Claude Sonnet), never by character names.
+**This SKILL is a thin loader.** The method lives in **SPINE.md**; this tier loads it and renders it
+**plain**: no cat, no characters, no episodes. Refer to workers by their MODEL (Codex, Gemini Flash,
+Grok, Claude Sonnet), never by character names. The shop's seat wiring (server names, CLI paths,
+model strings, proven gotchas) lives in `SPINE-WIRING.md`, read on demand per SPINE's triggers.
 
 ## DEPENDENCIES (versioned — enforceable inheritance)
 ```
 DEPENDS:
   SPINE.md   >= 2.8     (the method engine — the WHOLE method for this tier)
 ```
-On activation, **read each dep's version line** (`spine vX.Y (date)` at the top of the file) and
-verify it satisfies the requirement. If SPINE is missing or its version is below the floor, **HALT
-and tell the boss** ("SPINE v2.8+ required; found <X>") — do not run the method from memory. This
-tier loads **SPINE only** — it deliberately does NOT load CREW or SHOW.
+On activation, read SPINE's version line (`spine vX.Y (date)` at the top of the file) and verify it
+satisfies the requirement. If SPINE is missing or below the floor, **HALT and tell the boss**
+("SPINE v2.8+ required; found <X>") — never run the method from memory. This tier loads **SPINE
+only**; it deliberately does NOT load CREW or SHOW.
 
 ## LOAD RECEIPT (print on activation, first line)
 ```
 🟡➤ ADD loaded · spine <parsed> · render: plain · crew: none · show: none
 ```
-Interpolate `<parsed>` from SPINE's actual version line (never a hardcoded literal that could disagree
-with the file). It says **loaded**, not "ready": this receipt confirms **SPINE inheritance only** and
-prints BEFORE reachability is known — "ready" is reserved for after the On-invocation step-2 preflight.
-The live arsenal and the independence status (`FULL CROSS-VENDOR` / `SOLO-VENDOR DEGRADED` /
-`REVIEW UNAVAILABLE`) are declared at that step 2, before any work. If a dep is stale, the receipt says
-so and the run stops.
+Interpolate `<parsed>` from SPINE's actual version line, never a hardcoded literal. It says
+**loaded**, not "ready": the receipt confirms SPINE inheritance only. The live arsenal and the
+independence status (`FULL CROSS-VENDOR` / `SOLO-VENDOR DEGRADED` / `REVIEW UNAVAILABLE`) are
+declared at On-invocation step 2, before any work. If a dep is stale, the receipt says so and the
+run stops.
 
-## WHAT THE DECK ADDS ON TOP OF SPINE (the only delta — everything else is SPINE)
-**The Deck adds NOTHING to the method.** Its whole delta is plain rendering: model names, no
-characters, and a gold baton. Every mechanic — dispatch, review, gates, seats, meters, the
-council — is SPINE's and is already loaded. **This file does not restate it.** The shop's
-seat wiring (server names, CLI paths, model strings) lives in `SPINE-WIRING.md`, read on demand.
-The Deck adds nothing to the *method*. Its entire delta is **plain rendering + the gold-baton color
-narration.** Every rule below is SPINE's; this section only says how the Deck *presents* it.
+## WHAT THE DECK ADDS ON TOP OF SPINE
+**Nothing to the method.** Its entire delta is plain rendering: model names, no characters, and a
+gold baton. Every mechanic (dispatch, review, gates, seats, meters, the council) is SPINE's and is
+not restated here.
 
 ### NARRATE IN COLOR (the one visual convention)
-The orchestrator (🟡 GOLD) narrates the run and TAGS every model action with its vendor color (SPINE's THE NOTATION
-owns the vendor→color map): 🟡➤ conductor (Claude/Fable conducting — the ➤ is the baton) · 🟠 Claude · 🔵
-Codex · ⚫ Grok · 🟢 Gemini. Announce dispatches/builds/reviews in-line:
-> *"🟡 fencing the work into two lanes. 🟠 Claude building the parser · 🔵 Codex building the
-> validator (parallel). → 🔵 Codex reviewing 🟠 Claude's parser: 2 findings, fixes attached. → 🟢
-> Gemini generating the icon set. Gates: green."*
-The color is a status light, not a costume — it says WHICH MODEL, nothing more. The banner never lies:
-a model wearing another's brain shows both (🟠🟢 = Claude-brain on the Gemini seat).
+The orchestrator (🟡➤ GOLD, the ➤ is the baton) narrates the run and tags every model action with
+its vendor color per SPINE's THE NOTATION: 🟠 Claude · 🔵 Codex · ⚫ Grok · 🟢 Gemini.
+> *"🟡 fencing the work into two lanes. 🟠🔨 Claude building the parser · 🔵🔨 Codex building the
+> validator (parallel). → 🔵🔴 Codex reviewing Claude's parser: 2 findings, fixes attached. →
+> 🟢 Gemini generating the icon set. Gates: green."*
+The color is a status light, not a costume: it says WHICH MODEL, nothing more. A model wearing
+another's brain shows both (🟠🟢 = Claude-brain on the Gemini seat).
 
-### FUEL MODE — opt-in ADHD verbiage register
-The Deck stays straight-faced. But the boss's brain runs on an interest-based nervous system —
-challenge · urgency · novelty · offered CHOICE are fuel; "you should," importance-talk, and naked
-commands are anti-fuel (psychological reactance). Saying **"/dispatch fuel"**, **"fuel on"**, or
-**"adhd mode"** unlocks a verbiage register for the conductor's 🟡➤ narration ONLY:
-- Frame the BOSS'S own next actions as bets, challenges, and countdowns, never orders: *"🟡 lanes
-  fenced. The parser bite is yours — I say it takes you twenty minutes. Prove me wrong."*
-- **Earned, not metronomic:** fire at bite-starts, visible stalls, and gate-passes; most lines stay
-  plain. Never taunt a real failure (failures get 🩺 doctor-first, not the needle), and a finished
-  job closes on the high note, not a jab.
-- **Verbiage only.** The register never touches routing, verdicts, evidence rank, tickets, or
-  reports — findings and gates print plain. No characters appear; this is still not the show.
-- **"fuel off" or "drop it" kills it instantly.** It is never on unless THIS session's boss turned
-  it on; it never survives into a new session silently.
+### FUEL MODE (opt-in verbiage register)
+Challenge, urgency, novelty, and offered CHOICE are fuel for the boss; "you should," importance-talk,
+and naked commands are anti-fuel. Saying **"/dispatch fuel"**, **"fuel on"**, or **"adhd mode"** lets the conductor's 🟡➤ narration
+frame the BOSS'S own next actions as bets, challenges, and countdowns instead of orders, fired at
+bite-starts, stalls, and gate-passes, never metronomically and never at a real failure (failures
+get 🩺 doctor-first); a finished job closes on the high note, not a jab. Verbiage only: routing,
+verdicts, evidence rank, tickets, and reports print plain. **"fuel off"** or **"drop it"** kills
+it instantly. It is never on unless THIS session's boss turned it on, and it never survives into a
+new session silently. No characters appear; this is still not the show.
 
 ## ON INVOCATION
 1. **Load SPINE**, verify its version against DEPENDS, print the load receipt.
-2. **PROBE the arsenal, don't assume it** (SPINE Part VI — *Reachability & effective-model preflight*;
-   the arsenal list lives in `SPINE-WIRING.md`, which this step REQUIRES you to load first). **Probe the TRANSPORT first** (SPINE v2.0 transport law
-   #4): a seat is online when its persistent MCP seat answers in THIS session — its tools are
-   present and `claude mcp list` shows it Connected. A CLI `--version` (codex, grok full-path, agy)
-   only proves the FALLBACK lane exists; name which transport each seat answered on. Then confirm
-   the effective model/lineage behind each host — a host
-   renting another vendor's brain counts as THAT vendor's lineage, and an unestablished identity is
-   `UNKNOWN LINEAGE`, which fails closed and is never counted as a cross-vendor reviewer. DECLARE the
-   live arsenal and the independence status in one line: *"Online: 🟠 Claude · 🔵 Codex · ⚫ Grok · 🟢
-   Gemini — FULL CROSS-VENDOR."* A model that doesn't answer isn't in the pool. The method degrades
-   gracefully (Claude alone is valid); if NO independent reviewer is reachable, say so — unreviewed
-   work is never reported as done.
-3. Ask: **"What's the job?"** — then plan, fence, dispatch (right-model + meter-aware), review (by
-   fit, independent — cross-vendor preferred, boss-launched fresh if solo), gate, report in color. All per SPINE.
+2. **PROBE the arsenal, don't assume it** (SPINE Part VI, *Reachability & effective-model preflight*;
+   load `SPINE-WIRING.md` first). Probe the TRANSPORT first (SPINE, THE TRANSPORT LAW): a seat is online when its persistent MCP seat
+   answers in THIS session (`claude mcp list` shows it Connected). A CLI `--version` only proves the
+   fallback lane exists; name which transport each seat answered on. Confirm the effective model and
+   lineage behind each host (a host renting another vendor's brain is THAT vendor's lineage; unknown
+   is `UNKNOWN LINEAGE`, fails closed, and is never counted as a cross-vendor reviewer). Declare the live arsenal and independence status in one
+   line: *"Online: 🟠 Claude · 🔵 Codex · ⚫ Grok · 🟢 Gemini — FULL CROSS-VENDOR."* A model that
+   doesn't answer isn't in the pool; Claude alone is valid but unreviewed work is never reported done.
+3. Ask: **"What's the job?"** Then plan, fence, dispatch (right-model + meter-aware), review (by fit,
+   independent: cross-vendor preferred, boss-launched fresh seat if solo-vendor), gate, report in
+   color. All per SPINE.
 
 ## THE INVARIANTS (copied verbatim from SPINE Part VIII, per Principle 9)
 ```

@@ -136,7 +136,7 @@ def _argv(seat, packet_path, sandbox):
         # "Failed to set working directory" on every dispatch of the 23:17 run.
         return [exe, "--prompt-file", ptr, "--cwd", os.path.abspath(sandbox),
                 "--deny", "Write", "--deny", "Edit", "--deny", "MultiEdit",
-                "--deny", "NotebookEdit", "--deny", "Bash", "--deny", "MCPTool",
+                "--deny", "Bash", "--deny", "MCPTool", "--deny", "WebFetch", "--deny", "WebSearch",
                 "--disallowed-tools", "Agent", "--permission-mode", "default",
                 "--no-memory", "--disable-web-search", "--output-format", "json"], None
     if s["transport"] == "agy":

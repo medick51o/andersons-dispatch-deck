@@ -75,7 +75,7 @@ Nano Banana) · cheap cold reviews / sweeps · overflow capacity · a 4th indepe
 brain dir + generate images fine) · review-independence only counts when it runs a GEMINI
 model (agy-wearing-Claude is NOT a second Claude opinion) · **promo $4.99/mo → $19.99
 ~mid-Oct 2026** (keep/cancel decision).
-**Mechanism:** `"C:\Users\<you>\AppData\Local\agy\bin\agy.exe" -p "<prompt>" --model "Gemini 3.5 Flash (High)"`
+**Mechanism:** `"C:\Users\<you>\AppData\Local\agy\bin\agy.exe" -p "<prompt>" --model "<exact string from agy models>"`
 (tiers: Flash Low/Med/High, Gemini 3.1 Pro Low/High, Claude Sonnet/Opus 4.6, GPT-OSS 120B).
 Generated images land in `C:\Users\<you>\.gemini\antigravity-cli\brain\<uuid>\*.jpg` — fish
 them out from there.

@@ -48,9 +48,9 @@ it. Nothing to install for ADD itself beyond dropping the `/dispatch` skill in
   with Google" individuals OAuth — Google retired it (IneligibleTierError); Antigravity is
   the living path. *(Pricing/promos change over time — that's a current detail, not a
   requirement of the method. ADD treats every vendor as optional; use what you have.)*
-- **Dispatch pattern:** `"<...>\agy.exe" -p "<prompt>" --model "Gemini 3.5 Flash (High)"`
-  - Models under the sub: Gemini 3.5 Flash (Low/Med/High) · Gemini 3.1 Pro (Low/High) ·
-    Claude Sonnet 4.6 · Claude Opus 4.6 · GPT-OSS 120B.
+- **Dispatch pattern:** `"<...>\agy.exe" -p "<prompt>" --model "<exact string from agy models>"`
+  - Models under the sub: run `agy models` for the live roster (Gemini Flash/Pro tiers, Claude
+    tiers, GPT-OSS). Strings are exact-match and the roster changes; never quote one from memory.
   - **Image gen (Nano Banana):** ask it to generate an image — runs on the SUB (no card
     needed); output lands in `~/.gemini/antigravity-cli/brain/<uuid>/*.jpg`.
 - **GOTCHAS:**

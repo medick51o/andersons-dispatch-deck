@@ -47,7 +47,7 @@ from claude_agent_sdk import tool, create_sdk_mcp_server     # noqa: E402
 GROK_TIMEOUT_S = 3600
 # The deny list is the load-bearing one: MCPTool stops a read-only seat asking a
 # NEIGHBOURING seat to write for it, which was reproduced live on 2026-08-23.
-DENY_RULES = ("Write", "Edit", "MultiEdit", "NotebookEdit", "Bash",
+DENY_RULES = ("Write", "Edit", "MultiEdit", "Bash",
               "MCPTool", "WebFetch", "WebSearch")
 
 

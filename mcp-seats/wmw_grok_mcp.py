@@ -7,8 +7,10 @@ import tempfile
 import seat_core as core
 
 GROK_TIMEOUT_S = 3600
-DENY_RULES = ("Write", "Edit", "MultiEdit", "NotebookEdit", "Bash",
+DENY_RULES = ("Write", "Edit", "MultiEdit", "Bash",
               "MCPTool", "WebFetch", "WebSearch")
+# NotebookEdit dropped 2026-09-01: grok 1.0.13 rejects it as an "unsupported tool prefix" and the
+# whole call dies before the prompt is sent. Re-add only if a future CLI lists it again.
 
 
 def find_grok():

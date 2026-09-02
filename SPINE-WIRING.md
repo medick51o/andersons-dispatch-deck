@@ -1,6 +1,6 @@
 # SPINE — WIRING & FIELD NOTES
 
-**Version line (machine-readable):** `spine-wiring v1.0 (2026-08-24)`
+**Version line (machine-readable):** `spine-wiring v1.2 (2026-09-01)`
 **Owner:** this file owns the shop's arsenal, paths, model strings and proven gotchas.
 SPINE owns the *duty* to read it. Neither restates the other.
 **Any content change bumps the version line** — a stale rendering grows exactly where
@@ -139,3 +139,13 @@ a surcharged tier · 💸 credits · 🚨💳 credits and surcharged · ⚠️ u
 and what it has proven · `MEASURING-POOLS.md` for how to size an unpublished pool ·
 `mcp-seats/read-meters.py` and `bench-burn.py` for the readings themselves.
 
+- **wmw-grok MCP seat can deliver files but never send its reply** (2026-08-26, channel-factory
+  T-001): build completed on disk at ~20:26, seat stayed silent until the 1800s idle timeout
+  killed the call. Gate on ARTIFACTS (files + render), not on the seat's reply; check the fence
+  directory before re-dispatching a "failed" Grok build. Consider per-server timeout in MCP
+  settings if long builds recur.
+- **grok 1.0.13 rejects `--deny NotebookEdit`** (2026-09-01 self-audit): "unsupported tool prefix", exit 1
+  before the prompt is sent, so the whole seat read as dead. A vendor CLI update can invalidate a deny
+  prefix silently; when a seat dies with no output, run the raw CLI once and read stderr. The wrapper
+  deny set is now Write/Edit/MultiEdit/Bash/MCPTool/WebFetch/WebSearch. Also noted: the grok CLI reads
+  `~/.claude/CLAUDE.md` into every call (~15K input tokens for a one-word prompt).
