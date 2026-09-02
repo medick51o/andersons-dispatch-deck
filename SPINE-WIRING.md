@@ -1,6 +1,6 @@
 # SPINE — WIRING & FIELD NOTES
 
-**Version line (machine-readable):** `spine-wiring v1.3 (2026-09-01)`
+**Version line (machine-readable):** `spine-wiring v1.4 (2026-09-01)`
 **Owner:** this file owns the shop's arsenal, paths, model strings and proven gotchas.
 SPINE owns the *duty* to read it. Neither restates the other.
 **Any content change bumps the version line** — a stale rendering grows exactly where
@@ -149,7 +149,7 @@ and what it has proven · `MEASURING-POOLS.md` for how to size an unpublished po
   prefix silently; when a seat dies with no output, run the raw CLI once and read stderr. The wrapper
   deny set is now Write/Edit/MultiEdit/Bash/MCPTool/WebFetch/WebSearch. Also noted: the grok CLI reads
   `~/.claude/CLAUDE.md` into every call (~15K input tokens for a one-word prompt).
-- **Render gates never reach the conductor as pixels** (2026-09-01, Andrew's ruling). Playwright MCP
+- **Render gates never reach the conductor as pixels** (2026-09-01, the boss's ruling). Playwright MCP
   (`playwright`, user scope) is the headless browser for screenshot/DOM gates during autonomous hours,
   since claude-in-chrome needs Chrome open. The frontier conductor does NOT call it: it dispatches a
   FAST/WORKHORSE Claude subagent (Agent tool, `model: sonnet` or `haiku`) that drives Playwright, reads
