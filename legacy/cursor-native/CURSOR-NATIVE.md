@@ -2,7 +2,7 @@
 
 Built-in models only. No `claude.exe`, `agy.exe`, `grok.exe`, or Codex plugin unless the boss names a CLI.
 
-**Current plan file:** `C:\Users\andre\.cursor\cursor-plan`  
+**Current plan file:** `C:\Users\<you>\.cursor\cursor-plan`  
 **Live posture (2026-08-21):** `pro-20` — Cursor **Pro $20**. Other Models included = **$20**. Soak **Cursor Models** (Grok + Composer). Do not "practice ADD" by lighting Claude/GPT.
 
 ## Plan ladder (the boss's, not a recommendation to spend)

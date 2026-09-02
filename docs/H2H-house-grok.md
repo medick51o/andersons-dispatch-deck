@@ -13,12 +13,12 @@ What actually restrains a default call is Antigravity’s workspace-trust policy
 | Probe (no `--dangerously-skip-permissions`) | Result |
 |---|---|
 | `write_to_file` under this repo (`C:\Sync\Projects\andersons-dispatch-deck\…`) | `status: ERROR`, “user denied permission”, file absent |
-| `write_to_file` under `C:\Users\andre\AppData\Local\Temp` | **`status: SUCCESS`, file written with the exact token**, then deleted |
+| `write_to_file` under `C:\Users\<you>\AppData\Local\Temp` | **`status: SUCCESS`, file written with the exact token**, then deleted |
 | Same trusted write with `--mode plan` | **still SUCCESS, file written** |
 | `run_command echo …` | `status: CANCELED`, stderr: tool auto-denied |
 | `git status --short` | `status: ERROR`, “user denied permission” |
 
-This box’s `~\.gemini\antigravity-cli\settings.json` lists `trustedWorkspaces`: `C:\Users\andre` (the whole profile) and `C:\Sync\Projects\madman-kontroller`. Official headless docs say workspace file writes are auto-allowed; shell/MCP/web default to Ask. `--mode plan` only prepends a `/plan` instruction; it does not structurally block writes (live proof). GitHub issue #548’s “`--mode plan` blocks mutation” workaround is **false on 1.1.19**.
+This box’s `~\.gemini\antigravity-cli\settings.json` lists `trustedWorkspaces`: `C:\Users\<you>` (the whole profile) and `C:\Sync\Projects\madman-kontroller`. Official headless docs say workspace file writes are auto-allowed; shell/MCP/web default to Ask. `--mode plan` only prepends a `/plan` instruction; it does not structurally block writes (live proof). GitHub issue #548’s “`--mode plan` blocks mutation” workaround is **false on 1.1.19**.
 
 SKILL.md (“omit always_approve = read-only”), mcp-seats README (“default call passes deny rules”), and the tool text (“set always_approve when Gemini must edit files”) are therefore wrong for any cwd inside a trusted workspace. A “review” pointed at home, Temp, Documents, or madman-kontroller **will write**.
 
@@ -32,7 +32,7 @@ SKILL.md (“omit always_approve = read-only”), mcp-seats README (“default c
 
 **What is wrong.** Guard runs only when `always_approve` **and** `cwd is not None`. It exact-matches `realpath` against home / drive root / `SystemRoot` / `ProgramFiles` / `USERPROFILE`, plus a basename substring for six secret dirnames. Empirically, with `always_approve=true`, **ALLOWED**:
 
-- `C:\Users\andre\Documents`, `C:\Users\andre\AppData\Roaming`, `C:\Users\andre\AppData\Local\Temp` (we wrote a canary there)
+- `C:\Users\<you>\Documents`, `C:\Users\<you>\AppData\Roaming`, `C:\Users\<you>\AppData\Local\Temp` (we wrote a canary there)
 - `C:\Windows\System32`
 - `C:\Program Files\Git`
 - `cwd=None` (inherits the MCP process cwd)

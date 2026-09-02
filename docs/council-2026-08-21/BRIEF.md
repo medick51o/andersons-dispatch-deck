@@ -10,7 +10,7 @@ He is **frugal**: Cursor **Pro $20** now (Other Models = $20 — treat as radioa
 ## What already exists
 
 1. **Trunk ADD** (this git repo, Claude-as-gold): Claude conducts; Codex builds/reviews; Grok = UI; Gemini = cheap extra vote / builder / Nano Banana / overflow valve (agy can wear Claude brains — that is Google bill, Claude lineage).
-2. **Cursor-native draft** at `C:\Users\andre\.cursor\skills\dispatch\` (NOT committed here): Grok conducts; Composer = Cursor-pool builder; Claude Task = architect/judge (Other Models); GPT-5.6 Sol Task = Codex-shaped (Other Models); Gemini Task = extra vote; Grok worker cannot review Grok conductor. On Pro $20 those Other Models seats are **parked**.
+2. **Cursor-native draft** at `C:\Users\<you>\.cursor\skills\dispatch\` (NOT committed here): Grok conducts; Composer = Cursor-pool builder; Claude Task = architect/judge (Other Models); GPT-5.6 Sol Task = Codex-shaped (Other Models); Gemini Task = extra vote; Grok worker cannot review Grok conductor. On Pro $20 those Other Models seats are **parked**.
 3. **CLI seats still alive on this box** (billed to those subs, not Cursor): `claude.exe` Max · `codex` 0.145.0 · `agy.exe` with **Gemini 3.7 Flash (High)** on the roster · `grok.exe` Super Grok.
 
 ## Numbered points EVERY seat must answer

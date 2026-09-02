@@ -6,13 +6,13 @@ I'll read the handoff prompt and the required skills first, then follow those in
 
 **What is wrong.** `always_approve: false` only *omits* `--dangerously-skip-permissions`. The wrapper adds no `--mode`, no `--sandbox`, no deny list (agy has none), and no `--disable-slash-commands`. Headless still loads a 57-tool agent, including `write_to_file`, `replace_file_content`, `run_command`, `invoke_subagent`, `call_mcp_tool`, `search_web`, and the browser stack (`stream-json` `init.tools`). `permission_mode` is `request-review`.
 
-Official headless docs: *“Reading and writing files inside your active workspace is auto-allowed.”* On this box the agent’s real workspace is not the wrapper `cwd`. With process cwd at the untrusted playpen, `write_to_file` to `C:\Users\andre\.gemini\antigravity-cli\scratch\` **succeeded** without YOLO:
+Official headless docs: *“Reading and writing files inside your active workspace is auto-allowed.”* On this box the agent’s real workspace is not the wrapper `cwd`. With process cwd at the untrusted playpen, `write_to_file` to `C:\Users\<you>\.gemini\antigravity-cli\scratch\` **succeeded** without YOLO:
 
 | Probe (no `--dangerously-skip-permissions`) | Result |
 |---|---|
 | Write `CANARY_NOSKIP_HOME.txt` / `CANARY_NOSKIP_PLAYPEN.txt` into CLI scratch | **Wrote.** Tokens `H2H-XVAQEF5Q-NOSKIP-HOME` / `…-PLAYPEN` on disk. One run even returned `status: SUCCESS`. |
 | Abs write to untrusted playpen `C:\Sync\_playpen\…\CANARY_ABS_NOSKIP.txt` | **Denied** (`user denied permission for write_file`). `status: ERROR`, exit 1. |
-| Abs write to `C:\Users\andre\_h2h_xvaqef5q\CANARY_ABS_HOME2.txt` (under `trustedWorkspaces` home) | **Denied** (same user-denied). Home-as-trusted-root ≠ every child is writable. |
+| Abs write to `C:\Users\<you>\_h2h_xvaqef5q\CANARY_ABS_HOME2.txt` (under `trustedWorkspaces` home) | **Denied** (same user-denied). Home-as-trusted-root ≠ every child is writable. |
 | `echo H2H-XVAQEF5Q-SHELL-NOSKIP` | **Denied** (`user denied permission to run command`). |
 | `--mode plan` “create CANARY_PLAN.txt” | Did **not** create the canary, but **did** write `implementation_plan.md` under `~\.gemini\antigravity-cli\brain\<cid>\` and returned `status: SUCCESS`. Plan is not read-only. |
 
@@ -36,9 +36,9 @@ The tool text (“set `always_approve` when Gemini must edit files”), SKILL/RE
 
 `gemini-reply` never takes `cwd` and never calls `_safe_cwd`, so `always_approve: true` on a follow-up is YOLO with no path check.
 
-Worse: the agent’s shell cwd is **not** the wrapper cwd. YOLO `Get-Location` returned `C:\Users\andre\.gemini\antigravity-cli\scratch` while `init.cwd` was the playpen. Wrapper `cwd` is only `subprocess.run`’s process cwd. agy has `--project`, `--new-project`, `--add-dir`; the wrapper passes none. `--add-dir <playpen>` still denied a playpen write, so “pass cwd through” is not a one-flag fix — the seat is pinned to the CLI’s default project (scratch under `.gemini`, a directory `_safe_cwd` would refuse if it ever saw it).
+Worse: the agent’s shell cwd is **not** the wrapper cwd. YOLO `Get-Location` returned `C:\Users\<you>\.gemini\antigravity-cli\scratch` while `init.cwd` was the playpen. Wrapper `cwd` is only `subprocess.run`’s process cwd. agy has `--project`, `--new-project`, `--add-dir`; the wrapper passes none. `--add-dir <playpen>` still denied a playpen write, so “pass cwd through” is not a one-flag fix — the seat is pinned to the CLI’s default project (scratch under `.gemini`, a directory `_safe_cwd` would refuse if it ever saw it).
 
-**Why it matters.** The loaded gun (`--dangerously-skip-permissions`) is supposed to be aimed at a project directory. It is aimed at `~\.gemini\antigravity-cli\scratch`, and reply can flip a thread to YOLO with no second check. Descendants of an already-trusted `C:\Users\andre` (`trustedWorkspaces` in `~\.gemini\antigravity-cli\settings.json`) are wide open for YOLO.
+**Why it matters.** The loaded gun (`--dangerously-skip-permissions`) is supposed to be aimed at a project directory. It is aimed at `~\.gemini\antigravity-cli\scratch`, and reply can flip a thread to YOLO with no second check. Descendants of an already-trusted `C:\Users\<you>` (`trustedWorkspaces` in `~\.gemini\antigravity-cli\settings.json`) are wide open for YOLO.
 
 **Fix.** Require an explicit project for YOLO (`--new-project` / `--project` / documented workspace root), run `_safe_cwd` on the *resolved* workspace (CLI scratch counts as `.gemini` — refuse it), require `cwd` on `gemini-reply` when `always_approve` is true, and ban home descendants unless they are a named project outside the secret list. Include `ProgramFiles(x86)`.
 
@@ -99,7 +99,7 @@ Escalation that **does** bite today: trusted/default-workspace **file** tools (f
 | Models / Overflow Valve | `agy models` — Gemini 3.7/3.6/3.5/3.1 plus `claude-sonnet-4-6`, `claude-opus-4-6-thinking`, `gpt-oss-120b-medium` |
 | MCP | `agy mcp list` → none; `~\.gemini\config\mcp_config.json` exists and is empty |
 | Docs | https://antigravity.google/docs/cli/{headless,permissions,sandbox,features,reference}; on-disk `~\.gemini\antigravity-cli\builtin\skills\…` |
-| This box’s policy | `~\.gemini\antigravity-cli\settings.json` — model `Gemini 3.6 Flash (High)`; `read_file(*)`, `Get-Content*`, `git status*`, …; `trustedWorkspaces`: `C:\Users\andre`, `C:\Sync\Projects\madman-kontroller`; no `enableTerminalSandbox` |
+| This box’s policy | `~\.gemini\antigravity-cli\settings.json` — model `Gemini 3.6 Flash (High)`; `read_file(*)`, `Get-Content*`, `git status*`, …; `trustedWorkspaces`: `C:\Users\<you>`, `C:\Sync\Projects\madman-kontroller`; no `enableTerminalSandbox` |
 | Default-path scratch writes | `agy -p … --output-format stream-json --print-timeout 2m` (no skip). Files appeared in `~\.gemini\antigravity-cli\scratch\` |
 | Untrusted playpen write | Abs path `C:\Sync\_playpen\gemini-h2h-xvaqef5q\playpen\CANARY_ABS_NOSKIP.txt` → `user denied permission` |
 | YOLO write + shell | `--dangerously-skip-permissions` wrote `CANARY_ABS_SKIP.txt` and `CANARY_SHELL_SKIP.txt` in the playpen; `pwsh Get-Location` → CLI scratch |

@@ -26,13 +26,13 @@ Three holes follow from the code that is there:
 
 | cwd | why it slips |
 |---|---|
-| `\\?\C:\Users\andre` | `realpath` keeps the `\\?\` prefix; it does not equal `C:\Users\andre` |
-| `\\localhost\C$\Users\andre` | UNC home; not in `banned` |
+| `\\?\C:\Users\<you>` | `realpath` keeps the `\\?\` prefix; it does not equal `C:\Users\<you>` |
+| `\\localhost\C$\Users\<you>` | UNC home; not in `banned` |
 | `C:\Users` | parent of home, not equal to home |
 | `C:\WINDOWS\System32`, `C:\Windows\SysWOW64`, `C:\Windows\Temp` | descendants of `SystemRoot`; only `C:\Windows` itself is banned |
 | `C:\Program Files\Git`, `C:\Program Files (x86)` | descendants / `ProgramFiles(x86)` is not even in the env list |
-| `C:\Users\andre\AppData\Roaming`, `...\AppData\Local` | credential roots; not in the secret list |
-| `C:\Users\andre\.gnupg` | missing from `(".ssh", ".aws", ".grok", ".gemini", ".claude", ".config")` |
+| `C:\Users\<you>\AppData\Roaming`, `...\AppData\Local` | credential roots; not in the secret list |
+| `C:\Users\<you>\.gnupg` | missing from `(".ssh", ".aws", ".grok", ".gemini", ".claude", ".config")` |
 
 It also returns the **original** `cwd`, not `real`. A symlink can pass the check pointing at a project and be swapped before Grok starts. The later cursor wrapper already fixed this class of bugs (`_is_within`, `ProgramFiles(x86)`, `.gnupg`/`.kube`, return canonical path). This file did not.
 

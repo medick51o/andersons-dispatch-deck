@@ -8,10 +8,10 @@ and ship it unreviewed while citing SPINE for the right to do so.
 import io
 import shutil
 
-BASE = r"C:\Users\andre\.claude\skills\team-rocket-takes-over\SPINE.md"
+BASE = r"C:\Users\<you>\.claude\skills\team-rocket-takes-over\SPINE.md"
 TARGETS = [
-    r"C:\Users\andre\.claude\skills\trm\SPINE.md",
-    r"C:\Users\andre\.claude\skills\dispatch\SPINE.md",
+    r"C:\Users\<you>\.claude\skills\trm\SPINE.md",
+    r"C:\Users\<you>\.claude\skills\dispatch\SPINE.md",
     r"C:\Sync\Projects\andersons-dispatch-deck\SPINE.md",
     r"C:\Sync\Projects\team-rocket-method-public\SPINE.md",
     r"C:\Sync\Projects\team-rocket-takes-over\SPINE.md",

@@ -71,4 +71,4 @@ When Other Models are parked, **Cursor cannot provide genuine cross-vendor indep
 
 ### 9. Confidence & Verification
 - **Confidence:** **High** on Gemini 3.7 Flash capabilities, Antigravity integration, and token economics.
-- **Unverified:** Unpasted contents of trunk SPINE and uncommitted files in `C:\Users\andre\.cursor\skills\dispatch\`.
+- **Unverified:** Unpasted contents of trunk SPINE and uncommitted files in `C:\Users\<you>\.cursor\skills\dispatch\`.

@@ -27,7 +27,7 @@ Verified on this machine:
 
 - Guard is skipped when `always_approve` is false **or** `cwd is None` (`L145–146`). Schema `required` is still only `["prompt"]`. `always_approve: true` with no cwd is legal; `subprocess.run(..., cwd=None)` inherits the MCP server’s process directory.
 - `gemini-reply` accepts `always_approve`, never takes `cwd`, never calls `_safe_cwd`. Live CLI logs show `--conversation=` resumes the stored thread (`Print mode: resuming conversation 28321cbc-…`) while `workspaceDirs` comes from **process cwd**. A start in a sensitive tree, then `gemini-reply(always_approve=true)`, never re-checks the path.
-- Banned set is an exact, case-sensitive `realpath` match on home / drive root / a few env dirs. Descendants are allowed: `C:\Users\andre\Documents`, `C:\Windows\System32`, `C:\Program Files\…`. `os.path.abspath(os.sep)` is only the **current** drive’s root. `.SSH` vs `.ssh` bypasses the secret substring on Windows.
+- Banned set is an exact, case-sensitive `realpath` match on home / drive root / a few env dirs. Descendants are allowed: `C:\Users\<you>\Documents`, `C:\Windows\System32`, `C:\Program Files\…`. `os.path.abspath(os.sep)` is only the **current** drive’s root. `.SSH` vs `.ssh` bypasses the secret substring on Windows.
 - After resolving, it **returns the original `cwd`**, not `real`. The Cursor sibling returns the canonical path and uses `_is_within`.
 - `~\.gemini\antigravity-cli\settings.json` already lists `C:\\Users\\andre` under `trustedWorkspaces`. The wrapper never reads or overrides that file. `last_conversations.json` already has a conversation keyed at `C:\\Users\\andre`.
 
@@ -93,7 +93,7 @@ There is no spend/audit log (the Cursor seat has `_log_spend`). `usage` is sitti
 - `~\.gemini\antigravity-cli\settings.json` — default model, allow-list, `trustedWorkspaces` includes home.
 - `~\.gemini\config\config.json` — `command(agy)` grant.
 - CLI logs under `~\.gemini\antigravity-cli\log\` — skip-permissions vs auto-deny `write_file`; workspaceDirs from process cwd; resume via `--conversation=`; model label from settings, not JSON; empty `mcp_servers` / `terminal_sandbox` prompt sections; Playwright/webm_encoder side effects.
-- `~\.gemini\antigravity-cli\cache\last_conversations.json` — conversations keyed by cwd, including `C:\Users\andre`.
+- `~\.gemini\antigravity-cli\cache\last_conversations.json` — conversations keyed by cwd, including `C:\Users\<you>`.
 - Captured JSON: `docs/council-2026-08-23-cursor-bench/SIGNED-gemini.json` (SUCCESS, no model key, has `usage`) and `docs/council-2026-08-22-persistent-seats/SIGNED-R2-gemini.json` (ERROR + full response + 138k tokens).
 - On-disk CLI docs: `~\.gemini\antigravity-cli\builtin\skills\antigravity_guide\references\cli.md`, `agy-customizations/docs/mcp_servers.md`. No `--prompt-file` in that tree.
 - `%LOCALAPPDATA%\agy` empty. UUID / `--conversation=` equals-form / stdin `DEVNULL` / `status != SUCCESS` → `isError` still match the 2026-08-22 hardening.

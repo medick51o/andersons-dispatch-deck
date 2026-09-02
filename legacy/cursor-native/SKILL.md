@@ -35,7 +35,7 @@ Then run the arsenal preflight (step 2). "Ready" only after that.
 |---|---|---|---|
 | ⚫➤ | Orchestrator | **This chat** (Cursor Grok). | Cursor Models |
 | 🟣 | Composer | Task · `composer-2.5-fast` | Cursor Models ♾️ |
-| 🟠 | **Fable / Claude** | **`claude.exe --model opus` only** (`C:\Users\andre\.local\bin\claude.exe`, Anthropic Max) | ♾️ Max sub |
+| 🟠 | **Fable / Claude** | **`claude.exe --model opus` only** (`C:\Users\<you>\.local\bin\claude.exe`, Anthropic Max) | ♾️ Max sub |
 | 🔵 | Codex | `codex` CLI from this Shell when he names a Codex job. OpenAI's plugin (`/codex:rescue`) is **Claude Code only** — it does not attach to this Grok chat. Never Task slug `gpt-5.6-sol-*`. | ♾️ Codex sub |
 | 🟢 | Gemini | **`agy.exe` only** via `scripts/gemini.ps1`. Never Task slug `gemini-3.7-flash-high` / `gemini-3.1-pro`. | ♾️ Google sub |
 
@@ -59,7 +59,7 @@ Format: `🟠🔨 ♾️ Fable designing the chip via claude.exe opus ♾️`
 
 ## Cursor-meter lock
 
-Read `C:\Users\andre\.cursor\cursor-plan`. Missing → `pro-20`.
+Read `C:\Users\<you>\.cursor\cursor-plan`. Missing → `pro-20`.
 
 | Who decides | What may run |
 |---|---|
@@ -91,7 +91,7 @@ Plan first · WRITE SET fence · right-model + meter-aware · builder never appr
 | `/dispatch-cli` | Composer + `claude.exe` + Codex + agy. Cursor Other Models off. |
 | `/dispatch` | Load the deck and ask for the job. Does not flip the switch. |
 
-File: `C:\Users\andre\.cursor\dispatch-mode` (`cursor` · `off` · `cli`).
+File: `C:\Users\<you>\.cursor\dispatch-mode` (`cursor` · `off` · `cli`).
 
 ## Non-negotiables
 
