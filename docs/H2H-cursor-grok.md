@@ -105,7 +105,7 @@ There is no spend/audit log (the Cursor seat has `_log_spend`). `usage` is sitti
 - Whether a JSON flag exists that would emit `model`.
 - Empirically exploding `list2cmdline` at 25k; reasoned from the documented 32,767 WCHAR `CreateProcess` cap.
 - What `trustedWorkspaces` changes at runtime (present in settings; no matching log line).
-- Whether `command(agy)` from `config.json` is merged into the printed Allow list (applyUserSettings logs `allow=1`, then a different Allow snapshot).
+- Whether `command(agy)` from `config.json` is merged into the printed Allow list (applyUserSe<you>ttings logs `allow=1`, then a different Allow snapshot).
 
 **None found:** flag-smuggling on `conversationId` (UUID + `--conversation=` still binds); a SUCCESS footer on `status: "ERROR"`; fresh `-p` calls silently resuming a prior thread when `conversationID=""`.
 

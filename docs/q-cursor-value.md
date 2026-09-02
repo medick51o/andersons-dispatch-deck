@@ -14,7 +14,7 @@ is right, then a user paying $40 more per month gets **the same free Grok/Compos
 credits, and nothing else except Grok Bot. Verify or refute that, hard. Look at:
 - the pricing page, the docs pricing page, usage-limits help pages
 - release notes or changelogs that changed plan limits
-- Cursor forum posts from STAFF (not users) about Cursor Models limits per tier
+- Cursor forum posts from STAFF (not users)<you> about Cursor Models limits per tier
 - anything that states an actual number, rate, or ratio for the included pool at any tier
 
 If Cursor genuinely does not differentiate the included pool by tier, say so plainly. If they do,
