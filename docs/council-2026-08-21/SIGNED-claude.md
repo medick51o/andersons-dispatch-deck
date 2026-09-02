@@ -4,7 +4,7 @@ SIGNED: Anthropic Claude Opus 5 (1M) ┬╖ ≡ƒö╡ blue ┬╖ CLI (Max)
 
 **Grok conducts in Cursor. I do not contest the gold seat ΓÇö I contest the reason.** The right reason is billing topology, not "Grok got better." On Pro $20, every non-Cursor-pool model is Other Models = radioactive. A conductor must be the seat you can call a hundred times a day without metering anxiety. That is Grok (and Composer). It is not me. **A seat that is billed out of reach is not a seat, it is a memorial.** Put the gold where the free calls are.
 
-Second-best gold is *human-switches-the-picker*, and it is closer than the draft admits. Do not let "orchestrator" become a job Grok bills for on tasks Andrew could route in two clicks.
+Second-best gold is *human-switches-the-picker*, and it is closer than the draft admits. Do not let "orchestrator" become a job Grok bills for on tasks the boss could route in two clicks.
 
 ## What must NOT stay
 

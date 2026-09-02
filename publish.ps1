@@ -63,4 +63,21 @@ foreach ($f in "$Deck\SPINE.md", "$Deck\SKILL.md", "$Deck\CLAUDE.md", "$Hub\SKIL
 if (($blocks.Values | Sort-Object -Unique).Count -ne 1) { $drift++; "  DRIFT: invariant blocks differ" }
 
 ""
+"IDENTITY SWEEP (terms come from a LOCAL denylist that never enters a repo)"
+$deny = Join-Path $HOME ".anderson-method\publish-denylist.txt"
+if (Test-Path $deny) {
+    $terms = Get-Content $deny | Where-Object { $_.Trim() -ne "" }
+    foreach ($repo in $Deck, $Hub, $Trto) {
+        $tracked = & git -C $repo ls-files
+        foreach ($rel in $tracked) {
+            $f = Join-Path $repo $rel
+            if (-not (Test-Path $f -PathType Leaf)) { continue }
+            $hit = Select-String -Path $f -SimpleMatch -Pattern $terms -List -ErrorAction SilentlyContinue
+            if ($hit) { $drift++; "  LEAK  {0}" -f ($f -replace [regex]::Escape((Split-Path $Deck)), ".") }
+        }
+    }
+    "  swept {0} term(s) across tracked files" -f $terms.Count
+} else { "  (no denylist at $deny; sweep skipped)" }
+
+""
 if ($drift) { "PARITY: $drift problem(s)"; exit 1 } else { "PARITY: clean"; exit 0 }

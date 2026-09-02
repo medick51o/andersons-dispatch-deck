@@ -39,7 +39,7 @@ Then run the arsenal preflight (step 2). "Ready" only after that.
 | 🔵 | Codex | `codex` CLI from this Shell when he names a Codex job. OpenAI's plugin (`/codex:rescue`) is **Claude Code only** — it does not attach to this Grok chat. Never Task slug `gpt-5.6-sol-*`. | ♾️ Codex sub |
 | 🟢 | Gemini | **`agy.exe` only** via `scripts/gemini.ps1`. Never Task slug `gemini-3.7-flash-high` / `gemini-3.1-pro`. | ♾️ Google sub |
 
-**FABLE LAW (2026-08-22, boss, not overridable):** 🟠 is Anthropic CLI. **Never** Cursor Claude. **Never** Task slug `claude-opus-5-thinking-high` or any `claude-*` Cursor model. **This conductor launches CLIs via its own Shell** (`claude.exe`, `codex`, `agy`) — do not ask Andrew to open a terminal. If `claude.exe` will not spawn, **stop and say so**. Do not "help" by switching this chat to Claude or spawning Cursor Claude. That tank is what he cannot afford.
+**FABLE LAW (2026-08-22, boss, not overridable):** 🟠 is Anthropic CLI. **Never** Cursor Claude. **Never** Task slug `claude-opus-5-thinking-high` or any `claude-*` Cursor model. **This conductor launches CLIs via its own Shell** (`claude.exe`, `codex`, `agy`) — do not ask the boss to open a terminal. If `claude.exe` will not spawn, **stop and say so**. Do not "help" by switching this chat to Claude or spawning Cursor Claude. That tank is what he cannot afford.
 
 **GEMINI LAW (2026-08-22):** 🟢 is `agy.exe` (Google AI Pro). **Never** Cursor Gemini. Launch via `& "C:\Sync\Projects\mk3\scripts\gemini.ps1"`. Default model `Gemini 3.7 Flash (High)`. Wear Claude/GPT on agy only if he names the Overflow Valve.
 
@@ -66,9 +66,9 @@ Read `C:\Users\andre\.cursor\cursor-plan`. Missing → `pro-20`.
 | Deck **`cli`** (shop default) | ⚫➤ Grok · 🟣 Composer · 🟠 `claude.exe --model opus` · 🔵 Codex CLI · 🟢 agy. **Cursor Other Models off, including Cursor Claude.** |
 | Deck **`cursor` / `on`** | ⚫➤ + 🟣 only. **Cursor Claude still banned.** Fable still `claude.exe` if he asks for Claude. |
 | Deck **`off`** | This Grok chat only. |
-| Andrew says "Claude" / "Fable" | **`claude.exe --model opus`**. Never Cursor Claude. |
-| Andrew says "Gemini" / "agy" | **`agy.exe`** via `scripts/gemini.ps1`. Never Cursor Gemini. |
-| Andrew says "Codex" in this chat | **`codex` CLI** from this Shell. The Codex plugin does not hook Grok. Never Task `gpt-5.6-sol-*`. |
+| the boss says "Claude" / "Fable" | **`claude.exe --model opus`**. Never Cursor Claude. |
+| the boss says "Gemini" / "agy" | **`agy.exe`** via `scripts/gemini.ps1`. Never Cursor Gemini. |
+| the boss says "Codex" in this chat | **`codex` CLI** from this Shell. The Codex plugin does not hook Grok. Never Task `gpt-5.6-sol-*`. |
 
 Never invent a model slug. Do not cancel his other subscriptions.
 
@@ -99,4 +99,4 @@ File: `C:\Users\andre\.cursor\dispatch-mode` (`cursor` · `off` · `cli`).
 - Unreviewed work is never "done."
 - Straight-faced. Model names, not characters.
 - **No Cursor Claude. Fable = `claude.exe --model opus`.**
-- Do not cancel Andrew's other subscriptions for him. Report burn; he decides.
+- Do not cancel the boss's other subscriptions for him. Report burn; he decides.
