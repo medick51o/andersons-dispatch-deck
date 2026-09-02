@@ -4,7 +4,7 @@ This repo IS the `/dispatch` skill: `~/.claude/skills/dispatch` is a directory j
 folder, so SKILL.md, SPINE.md and SPINE-WIRING.md here are the single source. Edit them here and
 bump the version line on any content change. Seat wrappers live in `mcp-seats/`.
 
-Doctrine: `SPINE.md` — `spine v2.8 (2026-08-24)`. Keep this line in step with SPINE's version line.
+Doctrine: `SPINE.md` — `spine v2.9 (2026-09-01)`. Keep this line in step with SPINE's version line.
 
 ```
 TRM INVARIANTS (v2026-07-22 r2 · doctrine: SPINE.md)

@@ -1,0 +1,8 @@
+# 🟣➤🔵 gpt-5.3-codex via Cursor — structure/topology lens · signed read (condensed from the verbatim reply)
+
+Q1: BLOCKER owner split blurred: SPINE→deck; CREW+SHOW→trto; hub = publish mirror, pull-only. BLOCKER skills are copy-forks: a build-skills pipeline emits self-contained folders; no hand edits in installed skills. MATERIAL: dev-machine junctions; cross-repo scripted vendor/sync or subtree; CI parity check (version/hash) before a release tag. Failure: broken junction, stale subtree, script not run → caught by the parity gate.
+Q2: BLOCKER cat-in-charge as an active branch → archive, remove the summon path. MATERIAL goteamrocket → thin alias only. MATERIAL stale footers → render parsed versions at runtime. MATERIAL "No meter wrap" → "meter marks follow SPINE; billing class is environment-specific". MATERIAL plan-card wording tied to the missing interview → re-anchor to an explicit declaration schema or restore the section. MINOR trim SHOW/CREW overlap prose.
+Q3: trim repeated plan-first/ask/verify mandates. MUST STAY: cross-vendor reviewer independence, write-set fence, spend/meter disclosure, the SPINE-vs-SHOW ownership firewall, cast-map + reachability/lineage preflight.
+Q4: BLOCKER one owner: CREW canonical; SHOW dramatizes only; launchers link; deck keeps a neutral pointer.
+Q5: MATERIAL version-floor mismatch observable (SHOW v1.0 hub vs v1.1 trto). MATERIAL release pipeline gap (owner→mirror→packaged skills with parity). NOT PROVEN: whether legacy branches remain summonable.
+Evidence cited: SPINE.md L305–312 (ghost interview), CREW.md L80–86 (meter wrap), SPINE.md L633–638 (meter marks mandatory), SHOW.md L1–4 in both repos (v1.1 vs v1.0).

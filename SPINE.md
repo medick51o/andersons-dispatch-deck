@@ -1,6 +1,6 @@
 # SPINE — the method engine (single owner, all tiers inherit)
 
-**Version line (machine-readable):** `spine v2.8 (2026-08-24)`
+**Version line (machine-readable):** `spine v2.9 (2026-09-01)`
 **Any content change bumps this line** — a silent edit under an old tag is banned. Git and
 the versioned owner headings below carry the history; each law is owned by its own section.
 
@@ -303,8 +303,8 @@ never the thing you cut** — cut builds, cut fan-outs, cut orchestration, never
 channel. Pretending a mid-tier seat is frontier does not save money, it lowers the bar.
 
 ### Reachability & effective-model preflight (declaration ≠ detection)
-The three-question interview above is a **declaration** — it records the billing bands the boss
-*states*, and nothing more. It is NOT detection: it cannot tell you which seats actually answer or
+The plan card is a **declaration** — it records the billing bands and casting the boss *states*, and
+nothing more (SPINE names no interview; the crew tier's cast-map writes the card). It is NOT detection: it cannot tell you which seats actually answer or
 which model is really behind a host. Independence and reviewer-counting require a separate
 **preflight**, run before any seat is cast or counted as a reviewer:
 - **Reachability.** Probe each candidate seat (e.g. a `--version` or trivial call on each vendor CLI
